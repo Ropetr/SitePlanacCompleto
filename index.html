@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planac Distribuidora - Forros e Divisórias</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 10px;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            overflow-x: hidden;
+            padding-bottom: 120px;
+        }
+
+        .container {
+            max-width: 1410px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 999;
+            background: transparent;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .header-logo {
+            background: #fff;
+            width: 32%;
+            min-width: 280px;
+            max-width: 450px;
+            height: 100px;
+            border-bottom-right-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 50px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .header-logo img {
+            width: 200px;
+            height: auto;
+        }
+
+        .header-nav {
+            background: #AA000E;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 25px;
+            height: 50px;
+            flex: 1;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.6rem;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .nav-links a:hover::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: #fff;
+        }
+
+        /* Dropdown Menu */
+        .dropdown {
+            position: relative;
+            list-style: none;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #96181c;
+            list-style: none;
+            padding: 10px 0;
+            margin-top: 0;
+            min-width: 200px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li {
+            margin: 0;
+        }
+
+        .dropdown-menu a {
+            padding: 12px 20px;
+            display: block;
+            font-size: 1.5rem;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .dropdown-menu a:hover::after {
+            display: none;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .phone-btn {
+            background: transparent;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            transition: 0.3s;
+        }
+
+        .phone-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .whatsapp-btn {
+            background: transparent;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            transition: 0.3s;
+        }
+
+        .whatsapp-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .instagram-btn {
+            background: transparent;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.6rem;
+            transition: 0.3s;
+        }
+
+        .instagram-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Banner */
+        .banner {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-image: url('https://painel-planac.codiehost.com.br/uploads/133473966882981354.jpeg');
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            padding-top: 100px;
+        }
+
+        .banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .banner-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .banner h1 {
+            font-size: clamp(3rem, 8vw, 8rem);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
+            width: 100%;
+        }
+
+        .banner p {
+            font-size: clamp(1.8rem, 3vw, 3.6rem);
+            margin-bottom: 50px;
+            filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: #ec3237;
+            color: #fff;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #96181c;
+        }
+
+        /* Cards Section */
+        .cards-section {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .card {
+            background: #fff;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 3px rgba(0,0,0,0.16);
+            text-align: center;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 20px;
+        }
+
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .card h4 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #3d3d3d;
+        }
+
+        /* Services Section */
+        .services-section {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .section-title {
+            font-size: clamp(3rem, 4.8vw, 4.8rem);
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .service-card {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 50px 30px 30px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.48);
+            z-index: 1;
+        }
+
+        .service-content {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            text-align: center;
+        }
+
+        .service-card h2 {
+            font-size: clamp(2.4rem, 4vw, 4rem);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .service-card h6 {
+            font-size: 2rem;
+            margin-bottom: 50px;
+        }
+
+        .service-card .btn-primary {
+            border: 2px solid #fff;
+            background: transparent;
+            margin: 0 auto;
+        }
+
+        .service-card .btn-primary:hover {
+            background: #ec3237;
+            border-color: #ec3237;
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 80px 0;
+            background: #f6f8fb;
+        }
+
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .about-text h5 {
+            color: #AA000E;
+            font-size: 1.6rem;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        .about-text h2 {
+            font-size: 4.8rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .about-text p {
+            font-size: 1.6rem;
+            line-height: 1.6;
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .values-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .value-card {
+            border: 1px solid #AA000E;
+            padding: 30px;
+            border-radius: 10px;
+            background: #fff;
+        }
+
+        .value-card h4 {
+            color: #AA000E;
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .value-card p {
+            font-size: 1.6rem;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            padding: 100px 0;
+            background: linear-gradient(180deg, #c52328 0%, #96181c 100%);
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 50px;
+        }
+
+        .contact-info {
+            color: #fff;
+        }
+
+        .contact-info h3 {
+            font-size: 4.8rem;
+            margin-bottom: 40px;
+            text-transform: uppercase;
+        }
+
+        .contact-info p {
+            font-size: 1.6rem;
+            margin-bottom: 40px;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .contact-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .contact-form {
+            background: rgba(255,255,255,0.1);
+            padding: 40px;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            font-size: 1.6rem;
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group button {
+            width: 100%;
+            max-width: 250px;
+            margin: 0 auto;
+            display: block;
+            background: #fff;
+            color: #AA000E;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.6rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .form-group button:hover {
+            background: #ec3237;
+            color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #AA000E;
+            padding: 24px 0 12px;
+            color: #fff;
+            z-index: 998;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 16px;
+        }
+
+        .footer-icons-mobile {
+            display: none;
+        }
+
+        .footer-icon-btn {
+            background: transparent;
+            padding: 10px;
+            border-radius: 50%;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .footer-icon-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.1);
+        }
+
+        .footer-column h4 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.6rem;
+            transition: 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: #002e59;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            font-size: 1.4rem;
+        }
+
+        .heart-icon {
+            display: inline-block;
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            animation: heart-pulse 2s infinite;
+        }
+
+        @keyframes heart-pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* WhatsApp Float */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            animation: whatsapp-pulse 2s infinite;
+            transition: 0.3s;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+
+        @keyframes whatsapp-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        .whatsapp-float img {
+            width: 60px;
+            height: 60px;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: #fff;
+            font-size: 2.7rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            line-height: 40px;
+            border-radius: 50%;
+            transition: 0.3s;
+            animation: hamburger-pulse 2s infinite;
+        }
+
+        .mobile-menu-btn.clicked {
+            animation: none;
+        }
+
+        .mobile-menu-btn:hover,
+        .mobile-menu-btn:active {
+            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.05);
+        }
+
+        @keyframes hamburger-pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+            }
+        }
+
+        /* Responsive */
+
+        /* Desktop: Ajusta altura do banner */
+        @media (min-width: 1025px) {
+            .banner {
+                height: 75vh;
+                min-height: 600px;
+            }
+
+            .banner-content {
+                margin-top: 0;
+            }
+        }
+
+        /* Tela média: Esconde números dos telefones, mantém ícones e nav-links */
+        @media (max-width: 1600px) {
+            .phone-number {
+                display: none;
+            }
+
+            .phone-btn,
+            .whatsapp-btn,
+            .instagram-btn {
+                padding: 10px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .nav-links a {
+                font-size: 1.4rem;
+            }
+        }
+
+        /* Tela pequena: Menu hamburguer, mas ícones de telefone permanecem */
+        @media (max-width: 1024px) {
+            body {
+                padding-bottom: 80px;
+            }
+
+            .header-logo {
+                width: 40% !important;
+                min-width: unset !important;
+                max-width: 40% !important;
+                padding-right: 0;
+                padding-left: 0;
+                height: 80px;
+                justify-content: center;
+            }
+
+            .header-logo img {
+                width: 127px;
+            }
+
+            .header-nav {
+                padding: 10px 15px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .dropdown-menu {
+                display: none !important;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .header-buttons {
+                gap: 10px;
+            }
+
+            .phone-btn,
+            .whatsapp-btn,
+            .instagram-btn {
+                padding: 8px;
+            }
+
+            .banner {
+                min-height: 60vh;
+                height: auto;
+                padding: 100px 20px 50px;
+                justify-content: center;
+            }
+
+            .cards-grid,
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-container,
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+
+            .whatsapp-float {
+                bottom: 90px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+            }
+
+            footer {
+                padding: 5px 0 5px;
+            }
+
+            .footer-text-desktop {
+                display: none !important;
+            }
+
+            .footer-icons-mobile {
+                display: flex !important;
+                justify-content: center;
+                align-items: center;
+                gap: 15px;
+                margin-bottom: 3px;
+            }
+
+            .footer-bottom {
+                padding-top: 8px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                margin-bottom: 0;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="styles-components.css">
+</head>
+<body>
+    <!-- Header Container -->
+    <div id="header-container"></div>
+
+    <!-- Banner -->
+    <section class="banner" id="inicio">
+        <div class="banner-content">
+            <h1>Forros e Divisórias</h1>
+            <p>Precisando de Materiais ou Serviços?<br>Fale conosco Agora!</p>
+            <a href="https://api.whatsapp.com/send/?phone=5543984182582&text=Olá,%20Planac!%20Gostaria%20de%20solicitar%20um%20orçamento." target="_blank" class="btn-primary">
+                Solicite um orçamento
+            </a>
+        </div>
+    </section>
+
+    <!-- Cards Section -->
+    <section class="cards-section">
+        <div class="container">
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon">
+                        <img src="https://painel-planac.codiehost.com.br/uploads/133465396479346008.png" alt="ABNT">
+                    </div>
+                    <h4>NORMATIZAÇÃO ABNT DOS MATERIAIS</h4>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <img src="https://painel-planac.codiehost.com.br/uploads/133465396617971941.png" alt="Atendimento">
+                    </div>
+                    <h4>ATENDIMENTO HUMANIZADO</h4>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <img src="https://painel-planac.codiehost.com.br/uploads/133465396723233554.png" alt="Produtos">
+                    </div>
+                    <h4>PRODUTOS A PRONTA ENTREGA</h4>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <img src="https://painel-planac.codiehost.com.br/uploads/133465396865785915.png" alt="Agilidade">
+                    </div>
+                    <h4>AGILIDADE DE ATENDIMENTO</h4>
+                </div>
+                <div class="card">
+                    <div class="card-icon">
+                        <img src="https://painel-planac.codiehost.com.br/uploads/133465396975722242.png" alt="Pagamento">
+                    </div>
+                    <h4>FLEXIBILIDADE DE PAGAMENTO</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Divisórias Section -->
+    <section class="services-section" id="divisorias">
+        <div class="container">
+            <h2 class="section-title">Divisórias</h2>
+            <div class="services-grid">
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133603401096191514.jpg')">
+                    <div class="service-content">
+                        <h2>Divisória Naval</h2>
+                        <h6>Resistência extrema</h6>
+                        <a href="divisoria-naval-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133608846438594959.png')">
+                    <div class="service-content">
+                        <h2>Divisória de Gesso Acartonado</h2>
+                        <h6>Versatilidade e rapidez</h6>
+                        <a href="drywall-divisoria-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Drywall Section -->
+    <section class="services-section" id="drywall" style="background: #f6f8fb;">
+        <div class="container">
+            <h2 class="section-title">Drywall</h2>
+            <div class="services-grid">
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471436401074071.jpg')">
+                    <div class="service-content">
+                        <h2>Parede de Gesso Acartonado</h2>
+                        <h6>Divisórias rápidas e versáteis</h6>
+                        <a href="drywall-divisoria-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133737433241995141.jpg')">
+                    <div class="service-content">
+                        <h2>Forro de Gesso Acartonado</h2>
+                        <h6>Acabamento perfeito</h6>
+                        <a href="planac-forro-gesso-completo.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Forros Section -->
+    <section class="services-section" id="forros">
+        <div class="container">
+            <h2 class="section-title">Forros</h2>
+            <div class="services-grid">
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133737433241995141.jpg')">
+                    <div class="service-content">
+                        <h2>Gesso Acartonado</h2>
+                        <h6>Drywall é para você!</h6>
+                        <a href="planac-forro-gesso-completo.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>PVC Branco</h2>
+                        <h6>Resistência e beleza</h6>
+                        <a href="pvc-branco-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>PVC Amadeirado</h2>
+                        <h6>Beleza natural</h6>
+                        <a href="pvc-amadeirado-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600')">
+                    <div class="service-content">
+                        <h2>Forro Vinílico REVID</h2>
+                        <h6>Alta tecnologia Plasbil</h6>
+                        <a href="forro-vinilico-revid.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Forros Modulares Section -->
+    <section class="services-section" id="forros-modulares" style="background: #f6f8fb;">
+        <div class="container">
+            <h2 class="section-title">Forros Modulares</h2>
+            <div class="services-grid">
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471436835853780.jpg')">
+                    <div class="service-content">
+                        <h2>Gesso Modular</h2>
+                        <h6>Elegância modular</h6>
+                        <a href="planac-gesso-modular.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>PVC Modular</h2>
+                        <h6>Praticidade em placas</h6>
+                        <a href="pvc-modular-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Forrovid</h2>
+                        <h6>Alta durabilidade</h6>
+                        <a href="forrovid-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Mineral</h2>
+                        <h6>Resistência e acústica</h6>
+                        <a href="mineral-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Isopor</h2>
+                        <h6>Leveza e isolamento</h6>
+                        <a href="isopor-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Termoacústica Section -->
+    <section class="services-section" id="termoacustica">
+        <div class="container">
+            <h2 class="section-title">Termoacústica</h2>
+            <div class="services-grid">
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Lã de Rocha</h2>
+                        <h6>Isolamento térmico e acústico</h6>
+                        <a href="la-rocha-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Lã de Vidro</h2>
+                        <h6>Máximo isolamento</h6>
+                        <a href="la-vidro-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Lã de PET</h2>
+                        <h6>Sustentável e eficiente</h6>
+                        <a href="la-pet-page.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Manta Térmica</h2>
+                        <h6>Proteção térmica eficiente</h6>
+                        <a href="manta-termica.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Kit Portas Section -->
+    <section class="services-section" id="portas" style="background: #f6f8fb;">
+        <div class="container">
+            <h2 class="section-title">Kit Portas</h2>
+            <div class="services-grid">
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Kit Porta de Giro</h2>
+                        <h6>Tradicional e prático</h6>
+                        <a href="kit-porta.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Kit Porta de Correr</h2>
+                        <h6>Economia de espaço</h6>
+                        <a href="kit-porta-correr.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Portas Sanfonadas</h2>
+                        <h6>Versatilidade total</h6>
+                        <a href="portas-sanfonadas.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Rodapés Section -->
+    <section class="services-section" id="rodapes">
+        <div class="container">
+            <h2 class="section-title">Rodapés</h2>
+            <div class="services-grid">
+                <div class="service-card" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471437270525667.jpg')">
+                    <div class="service-content">
+                        <h2>Rodapés</h2>
+                        <h6>Acabamento perfeito para sua obra</h6>
+                        <a href="rodapes.html" class="btn-primary">Saiba Mais</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="sobre">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-text">
+                    <h5>A Planac</h5>
+                    <h2>Sobre Nós</h2>
+                    <p><strong>A PLANAC: Empresa com PROPÓSITO!</strong></p>
+                    <p>A PLANAC Acabamentos foi fundada em 04 de fevereiro de 2011 a partir de um SONHO meu Rodrigo e da minha esposa Deyse.</p>
+                    <p>O nome PLANAC nos foi revelado neste sonho, e vem da junção das palavras PLANejamento & ACabamento. Dois conceitos importantíssimos para construções e reformas de QUALIDADE.</p>
+                    <p>Atuar como DISTRIBUIDOR nos possibilitou a venda direta de produtos a clientes FÍSICOS e JURÍDICOS, com preços de ATACADO além de abrir acesso a bons PROFISSIONAIS para indicação na montagem.</p>
+                    <p><strong>Se você procura produtos de QUALIDADE, atendimento ÁGIL e pagamento FLEXÍVEL</strong></p>
+                    <p><strong>A PLANAC DISTRIBUIDORA é o lugar CERTO!</strong></p>
+                </div>
+                <div class="values-cards">
+                    <div class="value-card">
+                        <h4>Missão</h4>
+                        <p>Superar as expectativas de cada cliente através do atendimento e produtos certificados!</p>
+                    </div>
+                    <div class="value-card">
+                        <h4>Visão</h4>
+                        <p>Através do posicionamento legal e consistente no mercado, sermos a mais completa distribuidora de materiais do Brasil.</p>
+                    </div>
+                    <div class="value-card">
+                        <h4>Valores</h4>
+                        <p>Prezamos o respeito, ética e clareza nos relacionamentos pessoais e comerciais.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact-section" id="contato">
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Entre em Contato</h3>
+                    <p>Preencha o formulário ao lado ou entre em contato conosco pelas informações abaixo.</p>
+                    <div class="contact-links">
+                        <a href="https://api.whatsapp.com/send/?phone=5543984182582" target="_blank">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor"><path d="M15.064 13.442c-.231.573-1.276 1.096-1.737 1.12-.46.024-.474.357-2.984-.734-2.51-1.09-4.02-3.743-4.14-3.914-.118-.17-.971-1.386-.925-2.61.046-1.223.716-1.8.955-2.04a.961.961 0 0 1 .68-.287c.198-.003.326-.006.472 0 .146.005.366-.031.556.474.19.506.645 1.748.703 1.875.058.127.094.273.004.436-.09.163-.135.265-.266.406-.13.14-.275.314-.392.422-.13.118-.267.248-.13.503.137.254.61 1.087 1.33 1.774.925.882 1.723 1.175 1.968 1.308.247.134.394.12.546-.041.152-.16.654-.703.83-.945.177-.243.342-.195.57-.104.226.091 1.435.739 1.681.873.246.133.41.202.47.308.058.106.04.604-.191 1.176zM10.18 0C4.76 0 .363 4.362.363 9.742c0 1.841.515 3.563 1.409 5.031L0 20l5.436-1.727a9.838 9.838 0 0 0 4.745 1.212c5.423 0 9.819-4.362 9.819-9.742C20 4.362 15.604 0 10.181 0z"></path></svg>
+                            (43) 98418-2582
+                        </a>
+                        <a href="https://maps.app.goo.gl/onPsZDVG3PADVN6Y9" target="_blank">
+                            📍 Av. Abelio Benatti, 4912 - Londrina-PR
+                        </a>
+                        <a href="mailto:contato@planacdivisorias.com.br">
+                            ✉️ contato@planacdivisorias.com.br
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome aqui" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" name="email" placeholder="Digite seu email aqui" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone</label>
+                        <input type="tel" id="telefone" name="telefone" placeholder="(DDD) 0 0000-0000" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensagem">Mensagem</label>
+                        <textarea id="mensagem" name="mensagem" placeholder="O que deseja nos dizer?" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- WhatsApp Float Container -->
+    <div id="whatsapp-float-container"></div>
+
+    <script>
+        // Form handling
+        function handleSubmit(e) {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const telefone = document.getElementById('telefone').value;
+            const mensagem = document.getElementById('mensagem').value;
+            
+            const whatsappMsg = `Olá! Vim pelo site.\n\nNome: ${nome}\nTelefone: ${telefone}\nMensagem: ${mensagem}`;
+            const whatsappURL = `https://api.whatsapp.com/send/?phone=5543984182582&text=${encodeURIComponent(whatsappMsg)}`;
+            
+            window.open(whatsappURL, '_blank');
+            e.target.reset();
+            alert('Obrigado! Você será redirecionado para o WhatsApp.');
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Phone mask
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            if (value.length > 10) {
+                value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+            } else if (value.length > 6) {
+                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+            } else {
+                value = value.replace(/^(\d*)/, '($1');
+            }
+            
+            e.target.value = value;
+        });
+
+        // Mobile menu (simplified) - Será inicializado pelo load-components.js
+    </script>
+
+    <!-- Load Header and Footer Components -->
+    <script src="load-components.js?v=2"></script>
+</body>
+</html>
