@@ -1,0 +1,11 @@
+# Dependências Python para Scripts de Imagens da Planac
+# Instale com: pip install -r requirements.txt
+
+# Download de imagens
+requests>=2.31.0
+
+# Otimização de imagens
+Pillow>=10.0.0
+
+# Análise e processamento
+pillow-heif>=0.13.0  # Suporte para HEIF/HEIC (opcional)

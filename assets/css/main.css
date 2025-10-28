@@ -1,0 +1,407 @@
+/* ========================================
+   PLANAC DISTRIBUIDORA - MAIN STYLES
+   ======================================== */
+
+/* === RESET E BASE === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 10px;
+}
+
+body {
+    font-family: 'Barlow', sans-serif;
+    overflow-x: hidden;
+    padding-bottom: 120px;
+}
+
+.container {
+    max-width: 1410px;
+    width: 90%;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* === BANNER === */
+.banner {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding-top: 100px;
+}
+
+.banner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+
+.banner-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.banner h1 {
+    font-size: clamp(3rem, 8vw, 8rem);
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
+    width: 100%;
+}
+
+.banner p {
+    font-size: clamp(1.8rem, 3vw, 3.6rem);
+    margin-bottom: 50px;
+    filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
+    width: 100%;
+}
+
+.btn-primary {
+    background: #ec3237;
+    color: #fff;
+    padding: 15px 40px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 700;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background: #96181c;
+}
+
+/* === CARDS SECTION === */
+.cards-section {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 60px;
+}
+
+.card {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 3px rgba(0,0,0,0.16);
+    text-align: center;
+}
+
+.card-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+}
+
+.card-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.card h4 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #3d3d3d;
+}
+
+/* === SERVICES SECTION === */
+.services-section {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.section-title {
+    font-size: clamp(3rem, 4.8vw, 4.8rem);
+    text-transform: uppercase;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.service-card {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 50px 30px 30px;
+    background-size: cover;
+    background-position: center;
+}
+
+.service-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.48);
+    z-index: 1;
+}
+
+.service-content {
+    position: relative;
+    z-index: 2;
+    color: #fff;
+    text-align: center;
+}
+
+.service-card h2 {
+    font-size: clamp(2.4rem, 4vw, 4rem);
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.service-card h6 {
+    font-size: 2rem;
+    margin-bottom: 50px;
+}
+
+.service-card .btn-primary {
+    border: 2px solid #fff;
+    background: transparent;
+    margin: 0 auto;
+}
+
+.service-card .btn-primary:hover {
+    background: #ec3237;
+    border-color: #ec3237;
+}
+
+/* === ABOUT SECTION === */
+.about-section {
+    padding: 80px 0;
+    background: #f6f8fb;
+}
+
+.about-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+.about-text h5 {
+    color: #AA000E;
+    font-size: 1.6rem;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+}
+
+.about-text h2 {
+    font-size: 4.8rem;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+}
+
+.about-text p {
+    font-size: 1.6rem;
+    line-height: 1.6;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+.values-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.value-card {
+    border: 1px solid #AA000E;
+    padding: 30px;
+    border-radius: 10px;
+    background: #fff;
+}
+
+.value-card h4 {
+    color: #AA000E;
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.value-card p {
+    font-size: 1.6rem;
+}
+
+/* === CONTACT SECTION === */
+.contact-section {
+    padding: 100px 0;
+    background: linear-gradient(180deg, #c52328 0%, #96181c 100%);
+}
+
+.contact-container {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 50px;
+}
+
+.contact-info {
+    color: #fff;
+}
+
+.contact-info h3 {
+    font-size: 4.8rem;
+    margin-bottom: 40px;
+    text-transform: uppercase;
+}
+
+.contact-info p {
+    font-size: 1.6rem;
+    margin-bottom: 40px;
+}
+
+.contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.contact-form {
+    background: rgba(255,255,255,0.1);
+    padding: 40px;
+    border-radius: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 1.6rem;
+    font-family: 'Barlow', sans-serif;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: rgba(255,255,255,0.7);
+}
+
+.form-group textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.form-group button {
+    width: 100%;
+    max-width: 250px;
+    margin: 0 auto;
+    display: block;
+    background: #fff;
+    color: #AA000E;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.6rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.form-group button:hover {
+    background: #ec3237;
+    color: #fff;
+}
+
+/* === RESPONSIVE === */
+
+/* Desktop: Ajusta altura do banner */
+@media (min-width: 1025px) {
+    .banner {
+        height: 75vh;
+        min-height: 600px;
+    }
+
+    .banner-content {
+        margin-top: 0;
+    }
+}
+
+/* Tela média */
+@media (max-width: 1024px) {
+    body {
+        padding-bottom: 80px;
+    }
+
+    .banner {
+        min-height: 60vh;
+        height: auto;
+        padding: 100px 20px 50px;
+        justify-content: center;
+    }
+
+    .cards-grid,
+    .services-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .about-container,
+    .contact-container {
+        grid-template-columns: 1fr;
+    }
+}
