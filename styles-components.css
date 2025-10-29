@@ -166,13 +166,15 @@ header {
     position: absolute;
     top: -1px;
     left: calc(100% - 2px);
-    background: #7d1317;
+    background: rgba(125, 19, 23, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     list-style: none;
     padding: 10px 0;
     min-width: 180px;
     border-radius: 0 5px 5px 0;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    border: 1.5px solid #fff;
+    border: 1.5px solid rgba(255, 255, 255, 0.3);
     z-index: 1001;
 }
 
