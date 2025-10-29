@@ -164,7 +164,7 @@ header {
 .dropdown-menu-sub {
     display: none;
     position: absolute;
-    top: 0;
+    top: -1px;
     left: calc(100% - 2px);
     background: #7d1317;
     list-style: none;
