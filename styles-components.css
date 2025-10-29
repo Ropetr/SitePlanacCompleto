@@ -101,9 +101,9 @@ header {
     position: absolute;
     top: calc(100% + 3.5px);
     left: 0;
-    background: rgba(50, 55, 65, 0.95);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    background: rgba(50, 55, 65, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     list-style: none;
     padding: 10px 0;
     padding-top: 7px;
@@ -111,7 +111,7 @@ header {
     min-width: 200px;
     border-radius: 0 0 5px 5px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
     z-index: 1000;
 }
 
@@ -172,16 +172,16 @@ header {
     position: absolute;
     top: -1px;
     left: calc(100% - 2px);
-    background: rgba(50, 55, 65, 0.95);
-    backdrop-filter: blur(20px) saturate(150%);
-    -webkit-backdrop-filter: blur(20px) saturate(150%);
+    background: rgba(50, 55, 65, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     list-style: none;
     padding: 10px 0;
     padding-top: 7px;
     min-width: 180px;
     border-radius: 0 5px 5px 0;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    border: 1.5px solid rgba(255, 255, 255, 0.3);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
     z-index: 1001;
 }
 
