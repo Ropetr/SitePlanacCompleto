@@ -11,7 +11,9 @@ header {
 }
 
 .header-logo {
-    background: #fff;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     width: 32%;
     min-width: 280px;
     max-width: 450px;
