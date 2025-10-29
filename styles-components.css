@@ -124,6 +124,7 @@ header {
     display: flex;
     gap: 10px;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .phone-btn {
@@ -137,6 +138,8 @@ header {
     gap: 10px;
     font-size: 1.6rem;
     transition: 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .phone-btn:hover {
@@ -154,6 +157,8 @@ header {
     gap: 10px;
     font-size: 1.6rem;
     transition: 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .whatsapp-btn:hover {
@@ -171,10 +176,16 @@ header {
     gap: 10px;
     font-size: 1.6rem;
     transition: 0.3s;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .instagram-btn:hover {
     background: rgba(255, 255, 255, 0.1);
+}
+
+.phone-number {
+    white-space: nowrap;
 }
 
 /* Footer */
@@ -346,10 +357,10 @@ footer {
 
 /* Responsive */
 
-/* Tela grande: Reduz o gap entre os links para telas menores */
-@media (max-width: 1800px) {
+/* Tela grande: Ajustes iniciais */
+@media (max-width: 1900px) {
     .nav-links {
-        gap: 20px;
+        gap: 25px;
     }
 
     .nav-links a {
@@ -357,8 +368,26 @@ footer {
     }
 }
 
-/* Tela média: Esconde números dos telefones, mantém ícones e nav-links */
-@media (max-width: 1600px) {
+/* Tela média-grande: Mais ajustes antes de esconder números */
+@media (max-width: 1750px) {
+    .nav-links {
+        gap: 20px;
+    }
+
+    .nav-links a {
+        font-size: 1.45rem;
+    }
+
+    .phone-btn,
+    .whatsapp-btn,
+    .instagram-btn {
+        font-size: 1.5rem;
+        padding: 10px 15px;
+    }
+}
+
+/* Tela média: Esconde números dos telefones ANTES de quebrarem */
+@media (max-width: 1650px) {
     .phone-number {
         display: none !important;
     }
@@ -368,6 +397,7 @@ footer {
     .instagram-btn {
         padding: 10px;
         gap: 0;
+        font-size: 1.6rem;
     }
 
     .nav-links {
