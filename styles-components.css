@@ -346,24 +346,72 @@ footer {
 
 /* Responsive */
 
+/* Tela grande: Reduz o gap entre os links para telas menores */
+@media (max-width: 1800px) {
+    .nav-links {
+        gap: 20px;
+    }
+
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+}
+
 /* Tela média: Esconde números dos telefones, mantém ícones e nav-links */
 @media (max-width: 1600px) {
     .phone-number {
-        display: none;
+        display: none !important;
     }
 
     .phone-btn,
     .whatsapp-btn,
     .instagram-btn {
         padding: 10px;
+        gap: 0;
     }
 
     .nav-links {
-        gap: 20px;
+        gap: 18px;
     }
 
     .nav-links a {
         font-size: 1.4rem;
+    }
+}
+
+/* Tela média menor: Ajusta ainda mais os espaçamentos */
+@media (max-width: 1400px) {
+    .nav-links {
+        gap: 15px;
+    }
+
+    .nav-links a {
+        font-size: 1.3rem;
+    }
+
+    .header-buttons {
+        gap: 8px;
+    }
+
+    .phone-btn,
+    .whatsapp-btn,
+    .instagram-btn {
+        padding: 8px;
+    }
+}
+
+/* Transição para mobile: Reduz ainda mais antes do menu hamburguer */
+@media (max-width: 1200px) {
+    .nav-links {
+        gap: 12px;
+    }
+
+    .nav-links a {
+        font-size: 1.2rem;
+    }
+
+    .header-buttons {
+        gap: 6px;
     }
 }
 
