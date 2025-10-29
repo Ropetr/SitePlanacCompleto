@@ -60,10 +60,10 @@ header {
 .nav-links a:hover::after {
     content: '';
     position: absolute;
-    bottom: -5px;
+    bottom: -3.5px;
     left: 0;
     width: 100%;
-    height: 1px;
+    height: 2px;
     background: #fff;
 }
 
