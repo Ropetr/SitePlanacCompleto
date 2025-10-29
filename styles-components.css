@@ -35,7 +35,9 @@ header {
 }
 
 .header-nav {
-    background: #AA000E;
+    background: rgba(170, 0, 14, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     display: flex;
     align-items: center;
     justify-content: space-between;
