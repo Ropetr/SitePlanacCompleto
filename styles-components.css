@@ -78,18 +78,19 @@ header {
     display: flex;
     align-items: center;
     gap: 5px;
+    padding-bottom: 10px;
 }
 
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: calc(100% - 2px);
+    top: 100%;
     left: 0;
     background: #96181c;
     list-style: none;
     padding: 10px 0;
     padding-top: 7px;
-    margin-top: 5px;
+    margin-top: 0;
     min-width: 200px;
     border-radius: 0 0 5px 5px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -98,6 +99,11 @@ header {
 }
 
 .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+/* Mantém o dropdown aberto quando o mouse está sobre ele */
+.dropdown-menu:hover {
     display: block;
 }
 
