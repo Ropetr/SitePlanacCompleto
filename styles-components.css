@@ -130,17 +130,28 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+}
+
+/* Cria uma área invisível para manter o hover ativo durante a transição */
+.dropdown-toggle-sub::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 10px;
+    height: 100%;
+    background: transparent;
 }
 
 .dropdown-menu-sub {
     display: none;
     position: absolute;
     top: -10px;
-    left: 100%;
+    left: calc(100% - 2px);
     background: #7d1317;
     list-style: none;
     padding: 10px 0;
-    margin-left: -2px;
     min-width: 180px;
     border-radius: 0 5px 5px 0;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
@@ -149,6 +160,11 @@ header {
 }
 
 .dropdown-submenu:hover .dropdown-menu-sub {
+    display: block;
+}
+
+/* Mantém o submenu aberto quando o mouse está sobre ele */
+.dropdown-menu-sub:hover {
     display: block;
 }
 
