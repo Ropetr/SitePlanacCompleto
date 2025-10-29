@@ -78,7 +78,18 @@ header {
     display: flex;
     align-items: center;
     gap: 5px;
-    padding-bottom: 10px;
+    position: relative;
+}
+
+/* Cria área invisível de ponte entre o link e o dropdown */
+.dropdown-toggle::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: transparent;
 }
 
 .dropdown-menu {
