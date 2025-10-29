@@ -168,15 +168,15 @@ header {
     position: absolute;
     top: -1px;
     left: calc(100% - 2px);
-    background: rgba(200, 200, 210, 0.4);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(70, 70, 80, 0.85);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
     list-style: none;
     padding: 10px 0;
     min-width: 180px;
     border-radius: 0 5px 5px 0;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    border: 1.5px solid rgba(255, 255, 255, 0.5);
+    border: 1.5px solid rgba(255, 255, 255, 0.2);
     z-index: 1001;
 }
 
