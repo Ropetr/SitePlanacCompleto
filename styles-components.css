@@ -95,7 +95,7 @@ header {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: calc(100% + 2.5px);
+    top: calc(100% + 3px);
     left: 0;
     background: #96181c;
     list-style: none;
