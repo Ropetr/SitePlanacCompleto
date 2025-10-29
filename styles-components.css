@@ -183,7 +183,7 @@ header {
             rgba(0, 0, 0, 0.03) 2px,
             rgba(0, 0, 0, 0.03) 4px
         ),
-        rgba(70, 70, 80, 0.95);
+        rgba(50, 55, 65, 0.95);
     backdrop-filter: blur(25px) saturate(150%);
     -webkit-backdrop-filter: blur(25px) saturate(150%);
     list-style: none;
