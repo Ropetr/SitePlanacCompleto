@@ -164,12 +164,17 @@ header {
     position: absolute;
     top: calc(100% + 3.5px);
     left: 0;
-    /* Efeito fumê S23 - vidro com vinheta e grão */
+    /* Efeito vitral S23 - vidro com gradiente colorido */
     background:
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.24 + 0.04)),
             rgba(255,255,255, 0.24)
+        ),
+        linear-gradient(
+            135deg,
+            rgba(50, 55, 65, 0.88),
+            rgba(50, 55, 65, 0.78)
         ),
         hsla(210, 18%, 52%, 0.10);  /* tint frio Samsung */
     backdrop-filter: blur(28px) saturate(220%);
@@ -182,6 +187,7 @@ header {
     border-radius: 0 0 18px 18px;
     box-shadow:
         inset 0 0 1px rgba(255,255,255, 0.34),
+        inset -2px -2px 8px rgba(255,255,255, 0.15),
         0 22px 54px rgba(0,0,0, 0.26);
     border: 1px solid rgba(255, 255, 255, 0.46);
     z-index: 1000;
@@ -270,12 +276,17 @@ header {
     position: absolute;
     top: -1px;
     left: calc(100% - 2px);
-    /* Efeito fumê S23 - vidro com vinheta e grão */
+    /* Efeito vitral S23 - vidro com gradiente colorido */
     background:
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.24 + 0.04)),
             rgba(255,255,255, 0.24)
+        ),
+        linear-gradient(
+            135deg,
+            rgba(50, 55, 65, 0.88),
+            rgba(50, 55, 65, 0.78)
         ),
         hsla(210, 18%, 52%, 0.10);  /* tint frio Samsung */
     backdrop-filter: blur(28px) saturate(220%);
@@ -287,6 +298,7 @@ header {
     border-radius: 0 18px 18px 0;
     box-shadow:
         inset 0 0 1px rgba(255,255,255, 0.34),
+        inset -2px -2px 8px rgba(255,255,255, 0.15),
         0 22px 54px rgba(0,0,0, 0.26);
     border: 1px solid rgba(255, 255, 255, 0.46);
     z-index: 1001;
