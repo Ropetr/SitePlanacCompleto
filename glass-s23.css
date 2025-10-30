@@ -1,0 +1,157 @@
+/* ===========================
+   1) Tokens (ajuste fino aqui)
+   =========================== */
+:root {
+  /* Base neutra Samsung (leve tom frio) */
+  --glass-bg-a: 0.24;         /* opacidade do vidro lock */
+  --glass-bg-a-pin: 0.28;     /* opacidade do vidro pin */
+  --glass-blur: 28px;         /* blur forte, estilo desbloqueio */
+  --glass-sat: 220%;          /* saturação para "realçar" as cores de trás */
+
+  /* Borda/brilho e sombras */
+  --glass-border-a: 0.45;     /* brilho da borda */
+  --glass-inner-a: 0.35;      /* brilho interno sutil */
+  --glass-shadow-a: 0.25;     /* sombra externa */
+  --glass-radius: 28px;       /* cantos grandes, look One UI */
+
+  /* Tinte fria discreta (ajuda a "Samsung feel") */
+  --glass-tint-r: 210;   /* hue azul */
+  --glass-tint-s: 18%;
+  --glass-tint-l: 52%;
+  --glass-tint-a: 0.10;  /* baixa — só um suspiro de cor */
+
+  /* Vermelho (Planac): elegante, sem "flambar" */
+  --glass-red-h: 355;         /* rubi/carmesim */
+  --glass-red-s: 78%;
+  --glass-red-l: 52%;
+  --glass-red-a: 0.16;        /* vidro vermelho */
+
+  /* Branco (clean) — mantém leitura em bg escuro/claro */
+  --glass-white-a: 0.22;
+}
+
+/* Modo escuro: vidro ligeiramente mais opaco pra legibilidade */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --glass-bg-a: 0.26;
+    --glass-bg-a-pin: 0.30;
+    --glass-shadow-a: 0.28;
+  }
+}
+
+/* ===========================
+   2) Mixin base (via classes)
+   =========================== */
+.glass-s23,
+.glass-s23--pin,
+.glass-s23--red,
+.glass-s23--white {
+  position: relative;
+  border-radius: var(--glass-radius);
+  /* Fundo: branco translúcido + TINT frio muito sutil */
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255, calc(var(--glass-bg-a) + 0.04)),
+      rgba(255,255,255, var(--glass-bg-a))
+    ),
+    hsla(var(--glass-tint-r), var(--glass-tint-s), var(--glass-tint-l), var(--glass-tint-a));
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-sat));
+  border: 1px solid rgba(255,255,255, var(--glass-border-a));
+  /* Borda brilhante (ring interno leve) + sombra ambiente */
+  box-shadow:
+    inset 0 0 1px rgba(255,255,255, var(--glass-inner-a)),
+    0 20px 48px rgba(0,0,0, var(--glass-shadow-a));
+  /* Espaçamento padrão de widget Samsung */
+  padding: 24px;
+  /* Suaviza flicker em scroll/parallax */
+  will-change: transform, backdrop-filter;
+}
+
+/* ===========================
+   3) Intensidade PIN (mais leitoso)
+   =========================== */
+.glass-s23--pin {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255, calc(var(--glass-bg-a-pin) + 0.06)),
+      rgba(255,255,255, var(--glass-bg-a-pin))
+    ),
+    hsla(var(--glass-tint-r), var(--glass-tint-s), var(--glass-tint-l), var(--glass-tint-a));
+  border: 1.2px solid rgba(255,255,255, 0.48);
+  box-shadow:
+    inset 0 0 1.2px rgba(255,255,255, 0.38),
+    0 24px 56px rgba(0,0,0, 0.28);
+  padding: 28px;
+  border-radius: calc(var(--glass-radius) + 4px);
+}
+
+/* ===========================
+   4) Variação Vermelha (Planac)
+   =========================== */
+.glass-s23--red {
+  /* Mantém o vidro branco, mas aplica TINT vermelho sutil */
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255, calc(var(--glass-bg-a) + 0.04)),
+      rgba(255,255,255, var(--glass-bg-a))
+    ),
+    hsla(var(--glass-red-h), var(--glass-red-s), var(--glass-red-l), var(--glass-red-a));
+  border: 1px solid rgba(255,255,255, 0.42);
+  box-shadow:
+    inset 0 0 1px rgba(255,255,255, 0.34),
+    0 20px 48px rgba(0,0,0, 0.26);
+}
+
+/* ===========================
+   5) Variação Branca (clean)
+   =========================== */
+.glass-s23--white {
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(255,255,255, calc(var(--glass-white-a) + 0.06)),
+      rgba(255,255,255, var(--glass-white-a))
+    );
+  /* Sem TINT; vidro "leite" puro */
+  border: 1px solid rgba(255,255,255, 0.46);
+  box-shadow:
+    inset 0 0 1px rgba(255,255,255, 0.36),
+    0 22px 54px rgba(0,0,0, 0.26);
+}
+
+/* ===========================
+   6) Botões (estilo teclado PIN)
+   =========================== */
+.pin-button {
+  width: 64px; height: 64px; border-radius: 50%;
+  display: inline-grid; place-items: center;
+  font: 600 22px/1 system-ui, -apple-system, "Segoe UI", Roboto, Inter, sans-serif;
+  color: white;
+
+  background:
+    radial-gradient(120% 120% at 30% 20%, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.10) 70%),
+    rgba(255,255,255, 0.16);
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255,255,255, 0.28);
+  box-shadow:
+    inset 0 0 1px rgba(255,255,255, 0.22),
+    0 8px 16px rgba(0,0,0,0.22);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.pin-button:active { transform: scale(0.98); box-shadow: 0 4px 10px rgba(0,0,0,0.22); }
+
+/* ===========================
+   7) Fallback (sem suporte a backdrop-filter)
+   =========================== */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .glass-s23, .glass-s23--pin, .glass-s23--red, .glass-s23--white, .pin-button {
+    /* Aumenta opacidade e usa sombras para simular profundidade */
+    background: rgba(255,255,255, 0.65);
+    filter: saturate(105%);
+  }
+}
