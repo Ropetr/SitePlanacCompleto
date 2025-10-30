@@ -126,7 +126,7 @@ header {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 100%;
+    top: 50px;
     left: 0;
     list-style: none;
     margin-top: 0;
