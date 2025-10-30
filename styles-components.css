@@ -164,17 +164,12 @@ header {
     position: absolute;
     top: calc(100% + 3.5px);
     left: 0;
-    /* Efeito vitral S23 - vidro com gradiente colorido */
+    /* Glassmorphism Samsung S23 original */
     background:
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.24 + 0.04)),
             rgba(255,255,255, 0.24)
-        ),
-        linear-gradient(
-            135deg,
-            rgba(50, 55, 65, 0.88),
-            rgba(50, 55, 65, 0.78)
         ),
         hsla(210, 18%, 52%, 0.10);  /* tint frio Samsung */
     backdrop-filter: blur(28px) saturate(220%);
@@ -184,13 +179,13 @@ header {
     padding-top: 12px;
     margin-top: 0;
     min-width: 200px;
-    border-radius: 0 0 18px 18px;
+    border-radius: 0 0 28px 28px;
     box-shadow:
-        inset 0 0 1px rgba(255,255,255, 0.34),
-        inset -2px -2px 8px rgba(255,255,255, 0.15),
-        0 22px 54px rgba(0,0,0, 0.26);
-    border: 1px solid rgba(255, 255, 255, 0.46);
+        inset 0 0 1px rgba(255,255,255, 0.35),
+        0 20px 48px rgba(0,0,0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.45);
     z-index: 1000;
+    will-change: transform, backdrop-filter;
 }
 
 /* Camadas FUMÊ: vinheta + névoa */
@@ -230,7 +225,6 @@ header {
 
 .dropdown-menu li {
     margin: 0;
-    position: relative;
 }
 
 .dropdown-menu a {
@@ -238,30 +232,10 @@ header {
     display: block;
     font-size: 1.5rem;
     white-space: nowrap;
-    position: relative;
-    z-index: 2;
-    /* Camada de vidro translúcido leitoso por cima do vitral */
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(255,255,255, calc(0.28 + 0.06)),
-            rgba(255,255,255, 0.28)
-        );
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border-radius: 10px;
-    margin: 4px 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dropdown-menu a:hover {
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(255,255,255, calc(0.35 + 0.06)),
-            rgba(255,255,255, 0.35)
-        );
-    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .dropdown-menu a:hover::after {
@@ -297,17 +271,12 @@ header {
     position: absolute;
     top: -1px;
     left: calc(100% - 2px);
-    /* Efeito vitral S23 - vidro com gradiente colorido */
+    /* Glassmorphism Samsung S23 original */
     background:
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.24 + 0.04)),
             rgba(255,255,255, 0.24)
-        ),
-        linear-gradient(
-            135deg,
-            rgba(50, 55, 65, 0.88),
-            rgba(50, 55, 65, 0.78)
         ),
         hsla(210, 18%, 52%, 0.10);  /* tint frio Samsung */
     backdrop-filter: blur(28px) saturate(220%);
@@ -316,13 +285,13 @@ header {
     padding: 10px 0;
     padding-top: 12px;
     min-width: 180px;
-    border-radius: 0 18px 18px 0;
+    border-radius: 0 28px 28px 0;
     box-shadow:
-        inset 0 0 1px rgba(255,255,255, 0.34),
-        inset -2px -2px 8px rgba(255,255,255, 0.15),
-        0 22px 54px rgba(0,0,0, 0.26);
-    border: 1px solid rgba(255, 255, 255, 0.46);
+        inset 0 0 1px rgba(255,255,255, 0.35),
+        0 20px 48px rgba(0,0,0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.45);
     z-index: 1001;
+    will-change: transform, backdrop-filter;
 }
 
 /* Camadas FUMÊ EXTRAS no submenu Modulares - mais intenso */
@@ -370,7 +339,6 @@ header {
 
 .dropdown-menu-sub li {
     margin: 0;
-    position: relative;
 }
 
 .dropdown-menu-sub a {
@@ -378,30 +346,10 @@ header {
     display: block;
     font-size: 1.4rem;
     white-space: nowrap;
-    position: relative;
-    z-index: 2;
-    /* Camada de vidro translúcido leitoso por cima do vitral */
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(255,255,255, calc(0.28 + 0.06)),
-            rgba(255,255,255, 0.28)
-        );
-    backdrop-filter: blur(40px) saturate(200%);
-    -webkit-backdrop-filter: blur(40px) saturate(200%);
-    border-radius: 10px;
-    margin: 4px 8px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dropdown-menu-sub a:hover {
-    background:
-        linear-gradient(
-            to bottom,
-            rgba(255,255,255, calc(0.35 + 0.06)),
-            rgba(255,255,255, 0.35)
-        );
-    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .dropdown-menu-sub a:hover::after {
