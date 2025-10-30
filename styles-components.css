@@ -11,13 +11,14 @@ header {
 }
 
 .header-logo {
-    /* Glassmorphism Samsung S23 - Branco */
+    /* Glassmorphism Samsung S23 - Branco com fundo */
     background:
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.22 + 0.06)),
             rgba(255,255,255, 0.22)
-        );
+        ),
+        rgba(255, 255, 255, 0.75);  /* Fundo branco opaco */
     backdrop-filter: blur(28px) saturate(220%);
     -webkit-backdrop-filter: blur(28px) saturate(220%);
     border: 1px solid rgba(255,255,255, 0.46);
@@ -50,14 +51,15 @@ header {
 }
 
 .header-nav {
-    /* Glassmorphism Samsung S23 - Vermelho Planac */
+    /* Glassmorphism Samsung S23 - Vermelho Planac com fundo */
     background:
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.24 + 0.04)),
             rgba(255,255,255, 0.24)
         ),
-        hsla(355, 78%, 52%, 0.16);
+        hsla(355, 78%, 52%, 0.16),
+        rgba(170, 0, 14, 0.75);  /* Fundo vinho opaco */
     backdrop-filter: blur(28px) saturate(220%);
     -webkit-backdrop-filter: blur(28px) saturate(220%);
     border: 1px solid rgba(255,255,255, 0.42);
