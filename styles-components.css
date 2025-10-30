@@ -230,6 +230,7 @@ header {
 
 .dropdown-menu li {
     margin: 0;
+    position: relative;
 }
 
 .dropdown-menu a {
@@ -237,10 +238,30 @@ header {
     display: block;
     font-size: 1.5rem;
     white-space: nowrap;
+    position: relative;
+    z-index: 2;
+    /* Camada de vidro translúcido leitoso por cima do vitral */
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255, calc(0.28 + 0.06)),
+            rgba(255,255,255, 0.28)
+        );
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-radius: 10px;
+    margin: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dropdown-menu a:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255, calc(0.35 + 0.06)),
+            rgba(255,255,255, 0.35)
+        );
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .dropdown-menu a:hover::after {
@@ -349,6 +370,7 @@ header {
 
 .dropdown-menu-sub li {
     margin: 0;
+    position: relative;
 }
 
 .dropdown-menu-sub a {
@@ -356,10 +378,30 @@ header {
     display: block;
     font-size: 1.4rem;
     white-space: nowrap;
+    position: relative;
+    z-index: 2;
+    /* Camada de vidro translúcido leitoso por cima do vitral */
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255, calc(0.28 + 0.06)),
+            rgba(255,255,255, 0.28)
+        );
+    backdrop-filter: blur(40px) saturate(200%);
+    -webkit-backdrop-filter: blur(40px) saturate(200%);
+    border-radius: 10px;
+    margin: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .dropdown-menu-sub a:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(255,255,255, calc(0.35 + 0.06)),
+            rgba(255,255,255, 0.35)
+        );
+    border-color: rgba(255, 255, 255, 0.45);
 }
 
 .dropdown-menu-sub a:hover::after {
