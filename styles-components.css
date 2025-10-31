@@ -1,3 +1,10 @@
+/* Banners - Garantir alinhamento ao topo */
+.banner,
+.service-banner {
+    padding-top: 100px !important;
+    margin-top: 0 !important;
+}
+
 /* Header */
 header {
     position: fixed;
@@ -473,6 +480,7 @@ footer .container {
     gap: 15px;
     align-items: center;
     position: relative;
+    top: 10px;
 }
 
 .footer-phone-btn,
@@ -966,6 +974,13 @@ footer .container {
 @media (max-width: 1024px) {
     body {
         padding-bottom: 80px;
+    }
+
+    /* Ajusta banners para mobile */
+    .banner,
+    .service-banner {
+        padding-top: 80px !important;
+        margin-top: 0 !important;
     }
 
     .header-logo {
