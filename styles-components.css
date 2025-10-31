@@ -473,6 +473,8 @@ footer .container {
     display: flex;
     gap: 15px;
     align-items: center;
+    position: relative;
+    top: 5px;
 }
 
 .footer-phone-btn,
