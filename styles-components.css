@@ -363,6 +363,13 @@ header {
     white-space: nowrap;
 }
 
+/* Ícones do header desktop - 30% maior + brilho branco */
+.header-buttons img {
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.6))
+            drop-shadow(0 0 8px rgba(255,255,255,0.4))
+            drop-shadow(0 0 12px rgba(255,255,255,0.2));
+}
+
 /* Footer */
 footer {
     position: fixed;
