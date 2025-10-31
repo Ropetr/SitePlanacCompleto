@@ -108,7 +108,16 @@
             if (toggle && menu) {
                 dropdown.addEventListener('mouseenter', function() {
                     const rect = toggle.getBoundingClientRect();
-                    menu.style.left = rect.left + 'px';
+                    const leftPos = rect.left + 'px';
+                    const width = rect.width + 'px';
+
+                    // Posiciona o dropdown
+                    menu.style.left = leftPos;
+                    menu.style.minWidth = width;
+
+                    // Atualiza o overlay escuro para seguir o dropdown
+                    menu.style.setProperty('--dropdown-left', leftPos);
+                    menu.style.setProperty('--dropdown-width', width);
                 });
             }
         });

@@ -192,19 +192,19 @@ header {
     will-change: transform, backdrop-filter;
     padding: 10px 0;
     padding-top: 12px;
-    position: relative;
+    overflow: hidden;
 }
 
-/* Overlay escuro no dropdown (igual header) */
+/* Overlay escuro no dropdown (igual header) - DEVE vir antes do conteúdo */
 .dropdown-menu::before {
     content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+    position: fixed;
+    top: 210px;
+    left: var(--dropdown-left, 0);
+    width: var(--dropdown-width, 200px);
     height: 100%;
     background: rgba(0,0,0,0.48);
-    z-index: 0;
+    z-index: -1;
     pointer-events: none;
     border-radius: 0 0 28px 28px;
 }
