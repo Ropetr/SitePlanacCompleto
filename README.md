@@ -61,12 +61,23 @@ Site institucional e catálogo de produtos da Planac Distribuidora - distribuido
 - **Branco**: `#fff`
 - **Chumbo (Menus)**: `rgba(50, 55, 65, 0.5)`
 
-### Efeitos Glassmorphism
+### Efeitos Visuais
 
 **Header - Box da Logo**
 ```css
-background: rgba(255, 255, 255, 0.85);
-backdrop-filter: blur(10px);
+background: linear-gradient(to bottom, #fff 0%, #fff 50%, rgba(170,0,14,0.1) 100%);
+box-shadow: 0 -2px 5px rgba(0,0,0,0.1), 2px 0 5px rgba(0,0,0,0.1), 0 2px 5px rgba(0,0,0,0.1);
+```
+
+**Text Shadow (Títulos e Textos)**
+```css
+text-shadow:
+    0 0 10px rgba(0,0,0,0.8),
+    0 0 20px rgba(0,0,0,0.6),
+    0 0 30px rgba(0,0,0,0.4),
+    0 0 40px rgba(0,0,0,0.3),
+    0 0 50px rgba(0,0,0,0.2),
+    2px 2px 4px rgba(0,0,0,0.9);
 ```
 
 **Dropdowns Principais**
@@ -119,6 +130,14 @@ border: 1.5px solid rgba(255, 255, 255, 0.4);
 - Desktop: Menu completo com dropdowns
 - Tablet/Mobile: Menu hambúrguer + ícones de contato
 
+**Layout Mobile (≤1024px):**
+- Grid de 2 colunas para cards e services
+- Container com 95% de largura
+- Cards compactos: padding 20px 15px
+- Ícones reduzidos: 40px (de 60px)
+- Textos menores: 1.4rem (de 2.4rem)
+- Gap reduzido: 15px
+
 ## 📞 Contatos
 
 - **Telefone**: (43) 3028-5316
@@ -168,8 +187,12 @@ SitePlanacCompleto/
 ├── styles-components.css
 ├── load-components.js
 ├── Logo.svg
+├── Logo 2.svg
 ├── coracao.svg
-├── localizacao.svg
+├── Telefone.svg
+├── Whats.svg
+├── Instagram.svg
+├── Localização Atualizado.svg
 ├── whatsapp-float.svg
 └── [páginas de produtos]
 ```
@@ -183,18 +206,28 @@ SitePlanacCompleto/
 - ✅ Alinhamento perfeito do dropdown com sublinhado
 - ✅ Números de telefone escondem em telas menores
 
-### Visual e Estética
-- ✅ Efeito vidro fosco (glassmorphism) no header
-- ✅ Tom chumbo padronizado nos menus
-- ✅ Box da logo com glass effect branco (85% opacidade)
+### Visual e Estética (Janeiro 2025)
+- ✅ Text-shadow com efeito degradê/glow em todos os textos
+- ✅ Gradiente sutil no box da logo (branco → avermelhado)
+- ✅ Ícones SVG externos para header e footer
+- ✅ Box-shadow ajustada no header para melhor integração
 - ✅ Sublinhado customizado (2px, -3.5px)
 - ✅ Bordas translúcidas e sombras
+
+### Mobile e Responsividade (Janeiro 2025)
+- ✅ Layout de 2 colunas para cards no mobile
+- ✅ Redução proporcional de ícones (60px → 40px)
+- ✅ Redução de fontes nos cards (2.4rem → 1.4rem)
+- ✅ Padding otimizado para mobile (40px → 20px)
+- ✅ Container expandido (95% largura) para melhor uso do espaço
+- ✅ Gap reduzido (30px → 15px) entre elementos
 
 ### UX/UI
 - ✅ Ponte invisível para hover nos dropdowns
 - ✅ Transição suave entre menus
 - ✅ Feedback visual em todos os elementos clicáveis
 - ✅ Consistência visual em toda a navegação
+- ✅ Cache-busting no header para atualizações instantâneas
 
 ## 📦 Dependências Externas
 
