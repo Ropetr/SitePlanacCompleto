@@ -42,11 +42,28 @@ header {
     border-bottom: 1.5px solid #AA000E;
     border-right: 1.5px solid #AA000E;
     flex-shrink: 0;
+    position: relative;
+}
+
+/* Overlay escuro no header-logo (igual footer) */
+.header-logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.48);
+    z-index: 0;
+    pointer-events: none;
+    border-bottom-right-radius: 28px;
 }
 
 .header-logo img {
     width: 200px;
     height: auto;
+    position: relative;
+    z-index: 1;
 }
 
 .header-nav {
@@ -71,6 +88,20 @@ header {
     padding: 10px 25px;
     height: 50px;
     flex: 1;
+    position: relative;
+}
+
+/* Overlay escuro no header-nav (igual footer) */
+.header-nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.48);
+    z-index: 0;
+    pointer-events: none;
 }
 
 .nav-links {
@@ -78,6 +109,8 @@ header {
     gap: 30px;
     list-style: none;
     align-items: center;
+    position: relative;
+    z-index: 1;
 }
 
 .nav-links a {
@@ -267,6 +300,8 @@ header {
     gap: 10px;
     align-items: center;
     flex-shrink: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .phone-btn {
@@ -516,6 +551,8 @@ footer .container {
     border-radius: 50%;
     transition: 0.3s;
     animation: hamburger-pulse 2s infinite;
+    position: relative;
+    z-index: 1;
 }
 
 .mobile-menu-btn.clicked {
