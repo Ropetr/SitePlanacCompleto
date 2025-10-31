@@ -417,10 +417,12 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 18px 0 8px;
+    padding: 0;
     color: #fff;
     z-index: 998;
     height: 70px;
+    display: flex;
+    align-items: center;
     /* Glassmorphism Samsung S23 - IGUAL ao box da logo */
     background:
         linear-gradient(
@@ -460,9 +462,10 @@ footer .container {
     position: relative;
     z-index: 1;
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
-    padding-right: 25px;
+    padding-left: 25px;
+    width: 100%;
 }
 
 /* Botões desktop do footer com números */
