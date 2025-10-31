@@ -144,9 +144,9 @@ header {
     background: #fff;
 }
 
-/* Desabilita o efeito hover nos links do dropdown para evitar movimento */
-.dropdown-toggle:hover::after {
-    display: none;
+/* Desabilita completamente o efeito hover underline nos dropdowns */
+.dropdown-toggle::after {
+    display: none !important;
 }
 
 /* Dropdown Menu */
@@ -163,22 +163,22 @@ header {
     position: relative;
 }
 
-/* Cria área invisível de ponte entre o link e o dropdown */
-.dropdown-toggle::after {
+/* Área invisível para manter o dropdown ativo durante a transição do mouse */
+.dropdown::before {
     content: '';
     position: absolute;
     top: 100%;
     left: 0;
     width: 100%;
-    height: 71px;
+    height: 10px;
     background: transparent;
-    pointer-events: auto;
+    z-index: 999;
 }
 
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 70px;
+    top: calc(100% + 10px);
     left: 0;
     list-style: none;
     margin-top: 0;
