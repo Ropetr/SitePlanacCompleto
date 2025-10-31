@@ -341,7 +341,7 @@ footer {
     z-index: 998;
 }
 
-/* Camada 1: Fundo cinza claro (simula conteúdo de página) */
+/* Camada 1: Overlay escuro (igual divisória naval) */
 footer::before {
     content: '';
     position: absolute;
@@ -349,11 +349,11 @@ footer::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #e0e0e0;
+    background: rgba(0,0,0,0.48);
     z-index: 0;
 }
 
-/* Camada 2: Overlay escuro (igual divisória naval) */
+/* Camada 2: Glassmorphism Samsung S23 */
 footer::after {
     content: '';
     position: absolute;
@@ -361,23 +361,6 @@ footer::after {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.48);
-    z-index: 1;
-}
-
-/* Camada 3: Glassmorphism Samsung S23 no container */
-footer .container {
-    position: relative;
-    z-index: 2;
-}
-
-footer .container::before {
-    content: '';
-    position: absolute;
-    top: -24px;
-    left: -100vw;
-    width: 200vw;
-    height: calc(100% + 36px);
     /* Glassmorphism Samsung S23 - IGUAL ao box da logo */
     background:
         linear-gradient(
@@ -392,8 +375,14 @@ footer .container::before {
         inset 0 0 1px rgba(255,255,255, 0.36),
         0 22px 54px rgba(0,0,0, 0.26);
     will-change: transform, backdrop-filter;
-    z-index: -1;
+    z-index: 1;
     pointer-events: none;
+}
+
+/* Camada 3: Conteúdo */
+footer .container {
+    position: relative;
+    z-index: 2;
 }
 
 .footer-content {
