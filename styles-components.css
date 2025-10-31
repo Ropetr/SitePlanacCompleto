@@ -86,7 +86,7 @@ header {
 
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
     padding: 10px 25px;
     height: 50px;
     flex: 1;
@@ -460,8 +460,9 @@ footer .container {
     position: relative;
     z-index: 1;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
+    padding-right: 25px;
 }
 
 /* Botões desktop do footer com números */
@@ -761,14 +762,11 @@ footer .container {
         0 0 8px rgba(0,0,0,0.8),
         0 0 15px rgba(0,0,0,0.6),
         1px 1px 3px rgba(0,0,0,0.9);
-}
-
-.mobile-menu-content > ul > li > a {
-    background: transparent;
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .mobile-menu-content a:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.35);
 }
 
 .mobile-menu-dropdown {
@@ -785,10 +783,25 @@ footer .container {
     content: '▼';
     font-size: 1.4rem;
     transition: transform 0.3s;
+    animation: arrow-pulse 2s infinite;
+    display: inline-block;
 }
 
 .mobile-menu-dropdown.open > a::after {
     transform: rotate(180deg);
+    animation: none;
+}
+
+@keyframes arrow-pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .mobile-menu-dropdown ul {
@@ -826,13 +839,16 @@ footer .container {
 }
 
 .mobile-menu-submenu > a::after {
-    content: '→';
+    content: '▼';
     font-size: 1.4rem;
     transition: transform 0.3s;
+    animation: arrow-pulse 2s infinite;
+    display: inline-block;
 }
 
 .mobile-menu-submenu.open > a::after {
-    transform: rotate(90deg);
+    transform: rotate(180deg);
+    animation: none;
 }
 
 .mobile-menu-submenu ul {
