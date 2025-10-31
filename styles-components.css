@@ -457,12 +457,57 @@ footer .container {
 .footer-content {
     position: relative;
     z-index: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 40px;
-    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+/* Botões desktop do footer com números */
+.footer-buttons-desktop {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.footer-phone-btn,
+.footer-whatsapp-btn,
+.footer-location-btn,
+.footer-instagram-btn {
+    background: transparent;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.6rem;
+    transition: 0.3s;
+    white-space: nowrap;
+}
+
+.footer-phone-btn:hover,
+.footer-whatsapp-btn:hover,
+.footer-location-btn:hover,
+.footer-instagram-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.footer-phone-number {
+    white-space: nowrap;
+    text-shadow:
+        0 0 8px rgba(0,0,0,0.8),
+        0 0 15px rgba(0,0,0,0.6),
+        1px 1px 3px rgba(0,0,0,0.9);
+}
+
+.footer-buttons-desktop img {
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.6))
+            drop-shadow(0 0 8px rgba(255,255,255,0.4))
+            drop-shadow(0 0 12px rgba(255,255,255,0.2));
+}
+
+/* Ícones mobile (ocultos no desktop) */
 .footer-icons-mobile {
     display: none;
 }
@@ -953,10 +998,12 @@ footer .container {
         padding: 5px 0 5px;
     }
 
-    .footer-text-desktop {
+    /* Esconde botões desktop no mobile */
+    .footer-buttons-desktop {
         display: none !important;
     }
 
+    /* Mostra apenas ícones no mobile */
     .footer-icons-mobile {
         display: flex !important;
         justify-content: center;
@@ -966,15 +1013,8 @@ footer .container {
     }
 
     .footer-icons-mobile img {
-        width: 36px;
-        height: 36px;
         filter: drop-shadow(0 0 4px rgba(255,255,255,0.6))
                 drop-shadow(0 0 8px rgba(255,255,255,0.4))
                 drop-shadow(0 0 12px rgba(255,255,255,0.2));
-    }
-
-    .footer-content {
-        grid-template-columns: 1fr;
-        margin-bottom: 0;
     }
 }
