@@ -165,7 +165,7 @@ header {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 50px;
+    top: 35px;
     left: 0;
     list-style: none;
     margin-top: 0;
@@ -762,11 +762,10 @@ footer .container {
         0 0 8px rgba(0,0,0,0.8),
         0 0 15px rgba(0,0,0,0.6),
         1px 1px 3px rgba(0,0,0,0.9);
-    background: rgba(0, 0, 0, 0.2);
 }
 
 .mobile-menu-content a:hover {
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .mobile-menu-dropdown {
