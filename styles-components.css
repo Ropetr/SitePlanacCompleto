@@ -462,9 +462,8 @@ footer .container {
     position: relative;
     z-index: 1;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    padding-left: 25px;
     width: 100%;
 }
 
@@ -474,7 +473,6 @@ footer .container {
     gap: 15px;
     align-items: center;
     position: relative;
-    top: 5px;
 }
 
 .footer-phone-btn,
