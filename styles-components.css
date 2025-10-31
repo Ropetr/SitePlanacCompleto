@@ -761,6 +761,10 @@ footer .container {
         1px 1px 3px rgba(0,0,0,0.9);
 }
 
+.mobile-menu-content > ul > li > a {
+    background: transparent;
+}
+
 .mobile-menu-content a:hover {
     background: rgba(255, 255, 255, 0.15);
 }
