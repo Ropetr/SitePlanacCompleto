@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir \"C:\\Users\\WINDOWS GAMER\\Desktop\\Code\\SitePlanacCompleto\" /B)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(dir \"C:\\Users\\WINDOWS GAMER\\Desktop\\Code\\SitePlanacCompleto\" /s /b)",
+      "Bash(dir \"C:\\Users\\WINDOWS GAMER\\Desktop\\Code\\SitePlanacCompleto\")",
+      "WebFetch(domain:siteplanaccompleto.pages.dev)",
+      "Bash(dir:*)",
+      "Bash(git rm:*)",
+      "Bash(findstr:*)",
+      "Bash(git pull:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
