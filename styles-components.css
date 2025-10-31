@@ -987,7 +987,6 @@ footer .container {
     .header-nav {
         padding: 10px 15px;
         overflow-x: visible;
-        justify-content: flex-end;
     }
 
     .nav-links {
@@ -1001,6 +1000,7 @@ footer .container {
     .mobile-menu-btn {
         display: block;
         flex-shrink: 0;
+        margin-left: auto;
     }
 
     .header-buttons {
