@@ -514,34 +514,6 @@ footer .container {
     color: #002e59;
 }
 
-.footer-bottom {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    padding-top: 12px;
-    border-top: 1px solid rgba(255,255,255,0.2);
-    font-size: 1.4rem;
-}
-
-.heart-icon {
-    display: inline-block;
-    vertical-align: middle;
-    width: 20px;
-    height: 20px;
-    animation: heart-pulse 2s infinite;
-}
-
-@keyframes heart-pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
 
 /* WhatsApp Float */
 .whatsapp-float {
@@ -999,10 +971,6 @@ footer .container {
         filter: drop-shadow(0 0 4px rgba(255,255,255,0.6))
                 drop-shadow(0 0 8px rgba(255,255,255,0.4))
                 drop-shadow(0 0 12px rgba(255,255,255,0.2));
-    }
-
-    .footer-bottom {
-        padding-top: 8px;
     }
 
     .footer-content {
