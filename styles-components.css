@@ -977,8 +977,7 @@ footer .container {
     }
 
     .header-buttons {
-        gap: 5px;
-        flex-shrink: 0;
+        display: none !important;
     }
 
     .phone-btn,
