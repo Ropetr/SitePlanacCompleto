@@ -184,6 +184,21 @@ header {
     will-change: transform, backdrop-filter;
     padding: 10px 0;
     padding-top: 12px;
+    position: relative;
+}
+
+/* Overlay escuro no dropdown (igual header) */
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.48);
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 0 0 28px 28px;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -197,6 +212,8 @@ header {
 
 .dropdown-menu li {
     margin: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .dropdown-menu a {
@@ -204,6 +221,8 @@ header {
     display: block;
     font-size: 1.5rem;
     white-space: nowrap;
+    position: relative;
+    z-index: 1;
 }
 
 .dropdown-menu a:hover {
@@ -265,6 +284,20 @@ header {
     padding-top: 12px;
 }
 
+/* Overlay escuro no submenu (igual header) */
+.dropdown-menu-sub::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.48);
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 0 28px 28px 0;
+}
+
 .dropdown-submenu:hover .dropdown-menu-sub {
     display: block;
 }
@@ -276,6 +309,8 @@ header {
 
 .dropdown-menu-sub li {
     margin: 0;
+    position: relative;
+    z-index: 1;
 }
 
 .dropdown-menu-sub a {
@@ -283,6 +318,8 @@ header {
     display: block;
     font-size: 1.4rem;
     white-space: nowrap;
+    position: relative;
+    z-index: 1;
 }
 
 .dropdown-menu-sub a:hover {
