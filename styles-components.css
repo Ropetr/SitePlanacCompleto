@@ -39,8 +39,6 @@ header {
     align-items: center;
     justify-content: flex-end;
     padding-right: 50px;
-    border-bottom: 1.5px solid #AA000E;
-    border-right: 1.5px solid #AA000E;
     flex-shrink: 0;
     position: relative;
 }
