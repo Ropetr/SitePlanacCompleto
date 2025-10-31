@@ -628,7 +628,8 @@ footer {
     }
 
     .header-nav {
-        padding: 10px 15px;
+        padding: 10px 10px;
+        overflow-x: visible;
     }
 
     .nav-links {
@@ -641,16 +642,25 @@ footer {
 
     .mobile-menu-btn {
         display: block;
+        flex-shrink: 0;
     }
 
     .header-buttons {
-        gap: 10px;
+        gap: 5px;
+        flex-shrink: 0;
     }
 
     .phone-btn,
     .whatsapp-btn,
     .instagram-btn {
-        padding: 8px;
+        padding: 6px;
+    }
+
+    .phone-btn img,
+    .whatsapp-btn img,
+    .instagram-btn img {
+        width: 24px;
+        height: 24px;
     }
 
     .whatsapp-float {
