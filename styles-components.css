@@ -532,6 +532,9 @@ footer .container {
 .whatsapp-float img {
     width: 60px;
     height: 60px;
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.6))
+            drop-shadow(0 0 8px rgba(255,255,255,0.4))
+            drop-shadow(0 0 12px rgba(255,255,255,0.2));
 }
 
 /* Mobile Menu */
