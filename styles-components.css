@@ -159,7 +159,7 @@ header {
 
 .dropdown-toggle {
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 5px;
     position: relative;
@@ -169,9 +169,8 @@ header {
 
 .dropdown-menu {
     display: none;
-    position: absolute;
+    position: fixed;
     top: 210px;
-    left: 0;
     list-style: none;
     margin-top: 0;
     min-width: 200px;

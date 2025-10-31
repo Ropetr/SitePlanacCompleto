@@ -99,6 +99,19 @@
                 }
             });
         });
+
+        // Posicionar dropdowns dinamicamente ao passar o mouse
+        document.querySelectorAll('.dropdown').forEach(dropdown => {
+            const toggle = dropdown.querySelector('.dropdown-toggle');
+            const menu = dropdown.querySelector('.dropdown-menu');
+
+            if (toggle && menu) {
+                dropdown.addEventListener('mouseenter', function() {
+                    const rect = toggle.getBoundingClientRect();
+                    menu.style.left = rect.left + 'px';
+                });
+            }
+        });
     }
 
     // Carregar os componentes quando a página carregar
