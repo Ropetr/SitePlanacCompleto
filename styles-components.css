@@ -812,7 +812,10 @@ footer .container {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease;
-    padding-left: 15px;
+    margin-left: 25px;
+    margin-right: -10px;
+    padding-left: 10px;
+    border-left: 2px solid rgba(255,255,255,0.3);
 }
 
 .mobile-menu-submenu.open ul {
@@ -821,7 +824,7 @@ footer .container {
 
 .mobile-menu-submenu ul a {
     padding: 10px 12px;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
 }
 
 /* Responsive */
