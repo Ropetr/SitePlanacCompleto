@@ -43,7 +43,7 @@
         }
 
         .header-logo {
-            background: #fff;
+            background: linear-gradient(to bottom, #fff 0%, #fff 50%, rgba(170,0,14,0.1) 100%);
             width: 32%;
             min-width: 280px;
             max-width: 450px;
@@ -55,6 +55,17 @@
             padding-right: 50px;
             box-shadow: 0 0 5px rgba(0,0,0,0.15);
             flex-shrink: 0;
+            position: relative;
+        }
+
+        .header-logo::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, rgba(170,0,14,0.3));
         }
 
         .header-logo img {
