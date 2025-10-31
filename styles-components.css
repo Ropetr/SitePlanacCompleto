@@ -144,6 +144,11 @@ header {
     background: #fff;
 }
 
+/* Desabilita o efeito hover nos links do dropdown para evitar movimento */
+.dropdown-toggle:hover::after {
+    display: none;
+}
+
 /* Dropdown Menu */
 .dropdown {
     position: relative;
@@ -173,7 +178,7 @@ header {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 71px;
+    top: 70px;
     left: 0;
     list-style: none;
     margin-top: 0;
