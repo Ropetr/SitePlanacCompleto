@@ -29,14 +29,65 @@
 
     // Função para inicializar eventos do header
     function initializeHeaderEvents() {
-        // Menu mobile
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', function() {
-                this.classList.add('clicked');
-                alert('Menu mobile: navegue usando os links do rodapé ou o botão WhatsApp!');
-            });
+        const mobileMenuOverlay = document.querySelector('.mobile-menu-overlay');
+        const mobileMenuSidebar = document.querySelector('.mobile-menu-sidebar');
+        const mobileMenuClose = document.querySelector('.mobile-menu-close');
+
+        // Função para abrir o menu
+        function openMobileMenu() {
+            if (mobileMenuBtn) mobileMenuBtn.classList.add('clicked');
+            if (mobileMenuOverlay) mobileMenuOverlay.classList.add('active');
+            if (mobileMenuSidebar) mobileMenuSidebar.classList.add('active');
+            document.body.style.overflow = 'hidden';
         }
+
+        // Função para fechar o menu
+        function closeMobileMenu() {
+            if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
+            if (mobileMenuSidebar) mobileMenuSidebar.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', openMobileMenu);
+        }
+
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+        }
+
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        // Dropdowns do menu mobile
+        document.querySelectorAll('.mobile-menu-dropdown > a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                parent.classList.toggle('open');
+            });
+        });
+
+        // Submenus do menu mobile
+        document.querySelectorAll('.mobile-menu-submenu > a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const parent = this.parentElement;
+                parent.classList.toggle('open');
+            });
+        });
+
+        // Fechar menu ao clicar em links finais
+        document.querySelectorAll('.mobile-menu-content a[href*=".html"]').forEach(link => {
+            // Não adicionar evento aos links que são toggles de dropdown
+            if (!link.parentElement.classList.contains('mobile-menu-dropdown') &&
+                !link.parentElement.classList.contains('mobile-menu-submenu')) {
+                link.addEventListener('click', closeMobileMenu);
+            }
+        });
 
         // Smooth scroll para links internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
