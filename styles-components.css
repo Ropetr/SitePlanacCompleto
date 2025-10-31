@@ -145,8 +145,10 @@ header {
 }
 
 /* Desabilita completamente o efeito hover underline nos dropdowns */
+.dropdown-toggle:hover::after,
 .dropdown-toggle::after {
     display: none !important;
+    content: none !important;
 }
 
 /* Dropdown Menu */
@@ -173,6 +175,7 @@ header {
     height: 175px;
     background: transparent;
     z-index: 999;
+    pointer-events: auto;
 }
 
 .dropdown-menu {
