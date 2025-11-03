@@ -64,6 +64,18 @@ header {
     border-bottom-right-radius: 28px;
 }
 
+.header-logo a {
+    position: relative;
+    z-index: 1;
+    text-decoration: none;
+    display: inline-flex;
+    transition: 0.3s;
+}
+
+.header-logo a:hover {
+    transform: scale(1.05);
+}
+
 .header-logo img {
     width: 200px;
     height: auto;
