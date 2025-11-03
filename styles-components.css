@@ -191,12 +191,8 @@ header {
     padding-top: 12px;
     overflow: visible;
     border-radius: 0 0 28px 28px;
-    /* Glassmorphism Samsung S23 com overlay escuro integrado */
+    /* Glassmorphism Samsung S23 - IGUAL ao header */
     background:
-        linear-gradient(
-            rgba(0,0,0,0.48),
-            rgba(0,0,0,0.48)
-        ),
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.22 + 0.06)),
@@ -209,6 +205,20 @@ header {
         inset 0 0 1px rgba(255,255,255, 0.36),
         0 22px 54px rgba(0,0,0, 0.26);
     will-change: transform, backdrop-filter;
+}
+
+/* Overlay escuro no dropdown-menu (igual header) */
+.dropdown-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.48);
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 0 0 28px 28px;
 }
 
 .dropdown:hover .dropdown-menu {
@@ -279,12 +289,8 @@ header {
     padding-top: 12px;
     overflow: visible;
     border-radius: 0 28px 28px 0;
-    /* Glassmorphism Samsung S23 com overlay escuro integrado */
+    /* Glassmorphism Samsung S23 - IGUAL ao header */
     background:
-        linear-gradient(
-            rgba(0,0,0,0.48),
-            rgba(0,0,0,0.48)
-        ),
         linear-gradient(
             to bottom,
             rgba(255,255,255, calc(0.22 + 0.06)),
@@ -297,6 +303,20 @@ header {
         inset 0 0 1px rgba(255,255,255, 0.36),
         0 22px 54px rgba(0,0,0, 0.26);
     will-change: transform, backdrop-filter;
+}
+
+/* Overlay escuro no dropdown-menu-sub (igual header) */
+.dropdown-menu-sub::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.48);
+    z-index: 0;
+    pointer-events: none;
+    border-radius: 0 28px 28px 0;
 }
 
 .dropdown-submenu:hover .dropdown-menu-sub {
