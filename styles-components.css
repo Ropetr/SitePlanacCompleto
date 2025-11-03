@@ -190,7 +190,6 @@ header {
     padding: 10px 0;
     padding-top: 12px;
     overflow: visible;
-    border-radius: 0 0 28px 28px;
     /* Glassmorphism Samsung S23 - IGUAL ao header */
     background:
         linear-gradient(
@@ -204,6 +203,7 @@ header {
     box-shadow:
         inset 0 0 1px rgba(255,255,255, 0.36),
         0 22px 54px rgba(0,0,0, 0.26);
+    border-radius: 0 0 28px 28px;
     will-change: transform, backdrop-filter;
 }
 
