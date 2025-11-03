@@ -175,7 +175,7 @@ header {
     margin-top: 0;
     min-width: 200px;
     z-index: 1000;
-    /* Glassmorphism Samsung S23 - IGUAL ao box da logo */
+    /* Glassmorphism Samsung S23 - IGUAL ao footer */
     background:
         linear-gradient(
             to bottom,
@@ -192,7 +192,7 @@ header {
     will-change: transform, backdrop-filter;
     padding: 10px 0;
     padding-top: 12px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 /* Overlay escuro no dropdown (igual header) - DEVE vir antes do conteúdo */
@@ -273,7 +273,7 @@ header {
     list-style: none;
     min-width: 180px;
     z-index: 1001;
-    /* Glassmorphism Samsung S23 - IGUAL ao box da logo */
+    /* Glassmorphism Samsung S23 - IGUAL ao footer */
     background:
         linear-gradient(
             to bottom,
@@ -290,6 +290,7 @@ header {
     will-change: transform, backdrop-filter;
     padding: 10px 0;
     padding-top: 12px;
+    overflow: visible;
 }
 
 /* Overlay escuro no submenu (igual header) */
