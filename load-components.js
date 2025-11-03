@@ -108,8 +108,8 @@
             if (toggle && menu) {
                 dropdown.addEventListener('mouseenter', function() {
                     const rect = toggle.getBoundingClientRect();
-                    // Subtrai 450px para deslocar à esquerda (446 + 4 = 450)
-                    const leftPos = (rect.left - 450) + 'px';
+                    // Subtrai 457px para deslocar à esquerda (450 + 7 = 457)
+                    const leftPos = (rect.left - 457) + 'px';
                     const width = rect.width + 'px';
 
                     // Posiciona o dropdown
