@@ -205,6 +205,9 @@ header {
         0 22px 54px rgba(0,0,0, 0.26);
     border-radius: 0 0 28px 28px;
     will-change: transform, backdrop-filter;
+    /* Fix para backdrop-filter em position: fixed */
+    isolation: isolate;
+    transform: translateZ(0);
 }
 
 /* Overlay escuro no dropdown-menu (igual header) */
@@ -303,6 +306,9 @@ header {
         inset 0 0 1px rgba(255,255,255, 0.36),
         0 22px 54px rgba(0,0,0, 0.26);
     will-change: transform, backdrop-filter;
+    /* Fix para backdrop-filter em position: absolute */
+    isolation: isolate;
+    transform: translateZ(0);
 }
 
 /* Overlay escuro no dropdown-menu-sub (igual header) */
