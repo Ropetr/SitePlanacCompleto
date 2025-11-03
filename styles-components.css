@@ -170,7 +170,7 @@ header {
 .dropdown-menu {
     display: none;
     position: fixed;
-    top: 210px;
+    top: 42px; /* 210px - 168px = 42px */
     list-style: none;
     margin-top: 0;
     min-width: 200px;
@@ -199,7 +199,7 @@ header {
 .dropdown-menu::before {
     content: '';
     position: fixed;
-    top: 210px;
+    top: 42px; /* 210px - 168px = 42px */
     left: var(--dropdown-left, 0);
     width: var(--dropdown-width, 200px);
     height: 100%;
