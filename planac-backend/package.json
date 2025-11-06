@@ -1,0 +1,48 @@
+{
+  "name": "planac-backend-cloudflare",
+  "version": "1.0.0",
+  "description": "Backend API da Planac Distribuidora usando Cloudflare Workers, D1, R2 e KV",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:staging": "wrangler deploy --env staging",
+    "deploy:production": "wrangler deploy --env production",
+    "db:create": "wrangler d1 create planac-database",
+    "db:execute": "wrangler d1 execute planac-database --file=./schema.sql",
+    "db:migrate": "wrangler d1 migrations apply planac-database",
+    "db:local": "wrangler d1 execute planac-database --local --file=./schema.sql",
+    "kv:create": "wrangler kv:namespace create KV_CACHE",
+    "r2:create": "wrangler r2 bucket create planac-images",
+    "secret:jwt": "wrangler secret put JWT_SECRET",
+    "secret:refresh": "wrangler secret put JWT_REFRESH_SECRET",
+    "secret:admin": "wrangler secret put ADMIN_PASSWORD",
+    "tail": "wrangler tail",
+    "test": "vitest"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "d1",
+    "r2",
+    "api",
+    "cms",
+    "planac"
+  ],
+  "author": "Planac Distribuidora",
+  "license": "MIT",
+  "dependencies": {
+    "hono": "^3.11.7",
+    "jose": "^5.2.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231218.0",
+    "vitest": "^1.1.0",
+    "wrangler": "^3.22.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

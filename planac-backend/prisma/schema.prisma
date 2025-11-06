@@ -1,0 +1,319 @@
+// Prisma Schema para Planac Backend
+// Banco de dados: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ===========================================
+// USUÁRIOS E AUTENTICAÇÃO
+// ===========================================
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  VENDEDOR
+}
+
+model User {
+  id            String    @id @default(uuid())
+  nome          String
+  email         String    @unique
+  senha         String
+  role          UserRole  @default(EDITOR)
+  avatar        String?
+  ativo         Boolean   @default(true)
+  ultimoAcesso  DateTime?
+
+  // Relacionamentos
+  products      Product[] @relation("ProductCreatedBy")
+  updatedProducts Product[] @relation("ProductUpdatedBy")
+  quotes        Quote[]
+  auditLogs     AuditLog[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+// ===========================================
+// CATEGORIAS
+// ===========================================
+
+model Category {
+  id              String    @id @default(uuid())
+  nome            String
+  slug            String    @unique
+  descricao       String?   @db.Text
+  icone           String?
+  categoriaPaiId  String?   @map("categoria_pai_id")
+  ordem           Int       @default(0)
+  ativo           Boolean   @default(true)
+  metadata        Json?     // SEO, open graph, etc
+
+  // Auto-relacionamento (hierarquia)
+  categoriaPai    Category?  @relation("CategoryHierarchy", fields: [categoriaPaiId], references: [id])
+  subcategorias   Category[] @relation("CategoryHierarchy")
+
+  // Relacionamentos
+  products        Product[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([categoriaPaiId])
+  @@map("categories")
+}
+
+// ===========================================
+// PRODUTOS
+// ===========================================
+
+enum ProductStatus {
+  RASCUNHO
+  PUBLICADO
+  ARQUIVADO
+}
+
+model Product {
+  id                    String        @id @default(uuid())
+  nome                  String
+  slug                  String        @unique
+  subtitulo             String?
+  descricaoCurta        String?       @db.Text
+  descricaoCompleta     String?       @db.Text
+
+  // Conteúdo estruturado (JSON)
+  caracteristicas       Json?
+  vantagens             Json?
+  aplicacoes            Json?
+  especificacoes        Json?
+  normasCertificacoes   Json?
+
+  // Mídia
+  imagemBanner          String?
+  galeriaImagens        String[]      @default([])
+  videoUrl              String?
+
+  // SEO
+  metaTitle             String?
+  metaDescription       String?       @db.Text
+  metaKeywords          String[]      @default([])
+
+  // Organização
+  ordem                 Int           @default(0)
+  destaque              Boolean       @default(false)
+  status                ProductStatus @default(RASCUNHO)
+
+  // Categoria
+  categoryId            String        @map("category_id")
+  category              Category      @relation(fields: [categoryId], references: [id])
+
+  // Controle de versão
+  createdById           String        @map("created_by_id")
+  updatedById           String?       @map("updated_by_id")
+  createdBy             User          @relation("ProductCreatedBy", fields: [createdById], references: [id])
+  updatedBy             User?         @relation("ProductUpdatedBy", fields: [updatedById], references: [id])
+
+  publishedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([slug])
+  @@index([categoryId])
+  @@index([status])
+  @@map("products")
+}
+
+// ===========================================
+// PÁGINAS (Conteúdo Institucional)
+// ===========================================
+
+enum PageType {
+  HOME
+  SOBRE
+  CONTATO
+  CUSTOM
+}
+
+model Page {
+  id              String    @id @default(uuid())
+  tipo            PageType
+  titulo          String
+  slug            String    @unique
+  conteudo        String?   @db.Text
+  bannerImagem    String?
+  bannerTitulo    String?
+  bannerSubtitulo String?
+  sections        Json?     // Seções dinâmicas
+  metadata        Json?     // SEO
+  ativo           Boolean   @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([tipo])
+  @@map("pages")
+}
+
+// ===========================================
+// CONFIGURAÇÕES GLOBAIS
+// ===========================================
+
+model Setting {
+  id        String  @id @default(uuid())
+  chave     String  @unique
+  valor     String? @db.Text
+  tipo      String  // string, number, boolean, json, image
+  descricao String?
+  grupo     String? // geral, contato, seo, integracao
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([chave])
+  @@index([grupo])
+  @@map("settings")
+}
+
+// ===========================================
+// ORÇAMENTOS E LEADS
+// ===========================================
+
+enum QuoteStatus {
+  NOVO
+  EM_ATENDIMENTO
+  ATENDIDO
+  PERDIDO
+}
+
+enum TipoProjeto {
+  RESIDENCIAL
+  COMERCIAL
+  INDUSTRIAL
+  OUTRO
+}
+
+model Quote {
+  id          String      @id @default(uuid())
+
+  // Dados do cliente
+  nome        String
+  email       String
+  telefone    String
+  cidade      String?
+
+  // Dados do orçamento
+  produto     String?
+  tipoProjeto TipoProjeto?
+  mensagem    String      @db.Text
+  origem      String?     // URL da página de origem
+
+  // Controle
+  status      QuoteStatus @default(NOVO)
+  vendedorId  String?     @map("vendedor_id")
+  vendedor    User?       @relation(fields: [vendedorId], references: [id])
+  observacoes String?     @db.Text
+
+  // Rastreamento
+  ipAddress   String?
+  userAgent   String?     @db.Text
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([vendedorId])
+  @@index([createdAt])
+  @@map("quotes")
+}
+
+// ===========================================
+// CONTATOS (Formulário Genérico)
+// ===========================================
+
+model Contact {
+  id          String   @id @default(uuid())
+  nome        String
+  email       String
+  telefone    String?
+  mensagem    String   @db.Text
+  lido        Boolean  @default(false)
+  respondido  Boolean  @default(false)
+  respondidoEm DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([lido])
+  @@index([createdAt])
+  @@map("contacts")
+}
+
+// ===========================================
+// MÍDIA (Biblioteca de Arquivos)
+// ===========================================
+
+enum MediaType {
+  IMAGEM
+  DOCUMENTO
+  VIDEO
+}
+
+model Media {
+  id              String    @id @default(uuid())
+  nomeOriginal    String
+  nomeArquivo     String    @unique
+  tipo            MediaType
+  mimeType        String
+  tamanho         Int       // bytes
+  url             String
+  urlThumbnail    String?
+  largura         Int?
+  altura          Int?
+  altText         String?
+  pastaId         String?   @map("pasta_id")
+
+  uploadedById    String    @map("uploaded_by_id")
+
+  createdAt DateTime @default(now())
+
+  @@index([tipo])
+  @@index([nomeArquivo])
+  @@map("media")
+}
+
+// ===========================================
+// AUDITORIA (Logs de Ações)
+// ===========================================
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id])
+  action        String   // CREATE, UPDATE, DELETE, LOGIN
+  resourceType  String   // Product, Category, User, etc
+  resourceId    String?
+  oldValues     Json?
+  newValues     Json?
+  ipAddress     String?
+
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([resourceType])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
