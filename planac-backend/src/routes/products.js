@@ -19,16 +19,16 @@ products.get('/', async (c) => {
     const { categoria, destaque, status = 'PUBLICADO', page = 1, limit = 20 } = c.req.query();
 
     let query = `
-      SELECT p.*, c.nome as categoria_nome, c.slug as categoria_slug
+      SELECT p.*, m.nome as menu_nome, m.slug as menu_slug
       FROM products p
-      LEFT JOIN categories c ON p.categoria_id = c.id
+      LEFT JOIN menus m ON p.menu_id = m.id
       WHERE p.status = ?
     `;
 
     const params = [status];
 
     if (categoria) {
-      query += ` AND c.slug = ?`;
+      query += ` AND m.slug = ?`;
       params.push(categoria);
     }
 
@@ -102,9 +102,9 @@ products.get('/:slug', async (c) => {
     const { slug } = c.req.param();
 
     const product = await c.env.DB.prepare(`
-      SELECT p.*, c.nome as categoria_nome, c.slug as categoria_slug
+      SELECT p.*, m.nome as menu_nome, m.slug as menu_slug
       FROM products p
-      LEFT JOIN categories c ON p.categoria_id = c.id
+      LEFT JOIN menus m ON p.menu_id = m.id
       WHERE p.slug = ? AND p.status = 'PUBLICADO'
     `).bind(slug).first();
 
@@ -200,7 +200,7 @@ products.post('/admin/products', async (c) => {
         caracteristicas, vantagens, aplicacoes, especificacoes, normas_certificacoes,
         imagem_banner, galeria_imagens, video_url,
         meta_title, meta_description, meta_keywords,
-        ordem, destaque, status, categoria_id, created_by_id,
+        ordem, destaque, status, menu_id, created_by_id,
         published_at, created_at, updated_at
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
@@ -218,7 +218,7 @@ products.post('/admin/products', async (c) => {
       data.ordem || 0,
       data.destaque ? 1 : 0,
       data.status || 'RASCUNHO',
-      data.categoryId,
+      data.menuId,
       payload.id,
       data.status === 'PUBLICADO' ? now : null,
       now, now
@@ -226,7 +226,7 @@ products.post('/admin/products', async (c) => {
 
     // Log de auditoria
     await c.env.DB.prepare(`
-      INSERT INTO audit_logs (id, user_id, action, resource_type, resource_id, new_values, created_at)
+      INSERT INTO audit_logs (id, user_id, acao, entidade, entidade_id, dados_novos, created_at)
       VALUES (?, ?, 'CREATE', 'Product', ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       generateId(),
@@ -315,7 +315,7 @@ products.put('/admin/products/:id', async (c) => {
     if (data.ordem !== undefined) { updates.push('ordem = ?'); params.push(data.ordem); }
     if (data.destaque !== undefined) { updates.push('destaque = ?'); params.push(data.destaque ? 1 : 0); }
     if (data.status !== undefined) { updates.push('status = ?'); params.push(data.status); }
-    if (data.categoryId !== undefined) { updates.push('categoria_id = ?'); params.push(data.categoryId); }
+    if (data.menuId !== undefined) { updates.push('menu_id = ?'); params.push(data.menuId); }
 
     updates.push('updated_by_id = ?');
     params.push(payload.id);
@@ -335,7 +335,7 @@ products.put('/admin/products/:id', async (c) => {
 
     // Log de auditoria
     await c.env.DB.prepare(`
-      INSERT INTO audit_logs (id, user_id, action, resource_type, resource_id, old_values, new_values, created_at)
+      INSERT INTO audit_logs (id, user_id, acao, entidade, entidade_id, dados_anteriores, dados_novos, created_at)
       VALUES (?, ?, 'UPDATE', 'Product', ?, ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       generateId(),
@@ -374,7 +374,7 @@ products.delete('/admin/products/:id', async (c) => {
 
     // Log de auditoria
     await c.env.DB.prepare(`
-      INSERT INTO audit_logs (id, user_id, action, resource_type, resource_id, old_values, created_at)
+      INSERT INTO audit_logs (id, user_id, acao, entidade, entidade_id, dados_anteriores, created_at)
       VALUES (?, ?, 'DELETE', 'Product', ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       generateId(),

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Package, Plus, Edit2, Trash2, Search, Filter, Eye } from 'lucide-react';
-import ProductModal from '../components/products/ProductModal';
+import ProductModal from '../components/pages/ProductModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
 

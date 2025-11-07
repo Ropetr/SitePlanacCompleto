@@ -78,7 +78,7 @@ auth.post('/login', async (c) => {
 
     // Log de auditoria
     await c.env.DB.prepare(
-      `INSERT INTO audit_logs (id, user_id, action, resource_type, ip_address, created_at)
+      `INSERT INTO audit_logs (id, user_id, acao, entidade, ip_address, created_at)
        VALUES (?, ?, 'LOGIN', 'User', ?, CURRENT_TIMESTAMP)`
     ).bind(
       generateId(),
