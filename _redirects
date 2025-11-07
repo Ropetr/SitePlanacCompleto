@@ -1,0 +1,33 @@
+# Redirecionamentos para páginas dinâmicas de produtos
+# Todas as páginas de produtos agora são geradas dinamicamente pela API
+
+# Divisórias
+/divisoria-naval-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/divisoria-naval 200
+/drywall-divisoria-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/divisoria-gesso-acartonado 200
+
+# Forros
+/planac-forro-gesso-completo.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-gesso 200
+/pvc-branco-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-pvc-branco 200
+/pvc-amadeirado-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-pvc-amadeirado 200
+/forro-vinilico-revid.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-vinilico 200
+
+# Forros Modulares
+/planac-gesso-modular.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-modular-gesso 200
+/pvc-modular-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-modular-pvc 200
+/forrovid-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forrovid 200
+/mineral-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-mineral 200
+/isopor-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/forro-modular-isopor 200
+
+# Isolamento Termoacústico
+/la-rocha-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/la-rocha 200
+/la-vidro-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/la-vidro 200
+/la-pet-page.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/la-pet 200
+/manta-termica.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/manta-termica 200
+
+# Kit Portas
+/kit-porta.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/kit-porta-giro 200
+/kit-porta-correr.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/kit-porta-correr 200
+/portas-sanfonadas.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/portas-sanfonadas 200
+
+# Rodapés
+/rodapes.html https://planac-backend-api.planacacabamentos.workers.dev/api/pages/product/rodapes 200

@@ -6,7 +6,7 @@
 
 import { Hono } from 'hono';
 import { hashPassword, verifyPassword, generateId } from '../utils/crypto.js';
-import { createToken } from '../utils/jwt.js';
+import { createToken, verifyToken } from '../utils/jwt.js';
 import { validate, loginSchema, registerSchema } from '../utils/validators.js';
 
 const auth = new Hono();
@@ -17,14 +17,17 @@ const auth = new Hono();
 auth.post('/login', async (c) => {
   try {
     const body = await c.req.json();
+    console.log('[LOGIN] Request body:', body);
 
     // Validar dados
     const validation = validate(loginSchema, body);
     if (!validation.success) {
+      console.log('[LOGIN] Validation failed:', validation.errors);
       return c.json({ error: 'Dados inválidos', errors: validation.errors }, 400);
     }
 
     const { email, senha } = validation.data;
+    console.log('[LOGIN] Email:', email);
 
     // Buscar usuário no banco
     const user = await c.env.DB.prepare(
@@ -32,11 +35,16 @@ auth.post('/login', async (c) => {
     ).bind(email).first();
 
     if (!user) {
+      console.log('[LOGIN] User not found');
       return c.json({ error: 'E-mail ou senha incorretos' }, 401);
     }
 
+    console.log('[LOGIN] User found:', user.id, user.email);
+
     // Verificar senha
     const isValidPassword = await verifyPassword(senha, user.senha);
+    console.log('[LOGIN] Password valid:', isValidPassword);
+
     if (!isValidPassword) {
       return c.json({ error: 'E-mail ou senha incorretos' }, 401);
     }
@@ -70,7 +78,7 @@ auth.post('/login', async (c) => {
 
     // Log de auditoria
     await c.env.DB.prepare(
-      `INSERT INTO audit_logs (id, user_id, action, resource_type, ip_address, created_at)
+      `INSERT INTO audit_logs (id, user_id, acao, entidade, ip_address, created_at)
        VALUES (?, ?, 'LOGIN', 'User', ?, CURRENT_TIMESTAMP)`
     ).bind(
       generateId(),
@@ -95,8 +103,14 @@ auth.post('/login', async (c) => {
     });
 
   } catch (error) {
-    console.error('Erro no login:', error);
-    return c.json({ error: 'Erro ao fazer login' }, 500);
+    console.error('[LOGIN] Error caught:', error);
+    console.error('[LOGIN] Error message:', error.message);
+    console.error('[LOGIN] Error stack:', error.stack);
+    return c.json({
+      error: 'Erro ao fazer login',
+      message: error.message,
+      details: error.stack
+    }, 500);
   }
 });
 

@@ -33,6 +33,7 @@
   "author": "Planac Distribuidora",
   "license": "MIT",
   "dependencies": {
+    "better-sqlite3": "^12.4.1",
     "hono": "^3.11.7",
     "jose": "^5.2.0",
     "zod": "^3.22.4"

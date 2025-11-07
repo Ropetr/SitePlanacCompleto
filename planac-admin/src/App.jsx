@@ -4,24 +4,12 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import DashboardLayout from './components/layout/DashboardLayout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
+import Products from './pages/Products';
+import Categories from './pages/Categories';
+import Quotes from './pages/Quotes';
+import Contacts from './pages/Contacts';
 
 // Placeholder pages
-function Products() {
-  return <div className="text-2xl font-bold">Produtos - Em breve</div>;
-}
-
-function Categories() {
-  return <div className="text-2xl font-bold">Categorias - Em breve</div>;
-}
-
-function Quotes() {
-  return <div className="text-2xl font-bold">Orçamentos - Em breve</div>;
-}
-
-function Contacts() {
-  return <div className="text-2xl font-bold">Contatos - Em breve</div>;
-}
-
 function Settings() {
   return <div className="text-2xl font-bold">Configurações - Em breve</div>;
 }

@@ -47,8 +47,10 @@ app.use('*', secureHeaders());
 app.use('*', cors({
   origin: [
     'https://siteplanaccompleto.pages.dev',
-    'https://admin-planac.pages.dev', // Painel admin
+    'https://main.planac-admin.pages.dev', // Painel admin (main branch)
+    'https://planac-admin.pages.dev', // Painel admin (todas as branches)
     'http://localhost:5173', // Dev frontend
+    'http://localhost:5174', // Dev frontend (porta alternativa)
     'http://localhost:3000', // Dev admin
   ],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
@@ -61,6 +63,41 @@ app.use('*', cors({
 // ===========================================
 // ROTAS PÚBLICAS
 // ===========================================
+
+// Root route - API info
+app.get('/', (c) => {
+  return c.json({
+    name: 'Planac Backend API',
+    version: '1.0.0',
+    status: 'online',
+    message: 'API REST para gerenciamento do site Planac Distribuidora',
+    endpoints: {
+      health: '/health',
+      auth: {
+        login: 'POST /api/auth/login',
+        register: 'POST /api/auth/register',
+        refresh: 'POST /api/auth/refresh',
+        logout: 'POST /api/auth/logout',
+        me: 'GET /api/auth/me'
+      },
+      public: {
+        products: 'GET /api/products',
+        categories: 'GET /api/categories',
+        quotes: 'POST /api/quotes',
+        contacts: 'POST /api/contacts'
+      },
+      admin: {
+        dashboard: 'GET /api/admin/dashboard',
+        products: 'GET/POST/PUT/DELETE /api/admin/products',
+        categories: 'GET/POST/PUT/DELETE /api/admin/categories',
+        quotes: 'GET/PATCH/DELETE /api/admin/quotes',
+        contacts: 'GET /api/admin/contacts',
+        media: 'POST /api/admin/media/upload'
+      }
+    },
+    docs: 'https://github.com/planac-distribuidora/api-docs'
+  });
+});
 
 // Health check
 app.get('/health', (c) => {
