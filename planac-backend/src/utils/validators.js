@@ -45,18 +45,18 @@ export const productSchema = z.object({
   ordem: z.number().int().optional(),
   destaque: z.boolean().optional(),
   status: z.enum(['RASCUNHO', 'PUBLICADO', 'ARQUIVADO']).optional(),
-  categoryId: z.string().uuid('ID da categoria inválido'),
+  menuId: z.string().uuid('ID do menu inválido'),
 });
 
 // ===========================================
-// CATEGORY VALIDATORS
+// MENU VALIDATORS
 // ===========================================
 
-export const categorySchema = z.object({
+export const menuSchema = z.object({
   nome: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres'),
   descricao: z.string().optional(),
   icone: z.string().url().optional(),
-  categoriaPaiId: z.string().uuid().optional().nullable(),
+  menuPaiId: z.string().uuid().optional().nullable(),
   ordem: z.number().int().optional(),
   ativo: z.boolean().optional(),
   metadata: z.record(z.any()).optional(),

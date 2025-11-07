@@ -27,7 +27,7 @@ export default function DashboardLayout() {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Páginas', href: '/products', icon: Package },
-    { name: 'Menus', href: '/categories', icon: FolderTree },
+    { name: 'Menus', href: '/menus', icon: FolderTree },
     { name: 'Orçamentos', href: '/quotes', icon: FileText },
     { name: 'Contatos', href: '/contacts', icon: MessageSquare },
     { name: 'Configurações', href: '/settings', icon: Settings },

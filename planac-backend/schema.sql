@@ -23,25 +23,25 @@ CREATE INDEX idx_users_email ON users(email);
 CREATE INDEX idx_users_role ON users(role);
 
 -- ============================================
--- TABELA: categories (Categorias)
+-- TABELA: menus (Menus de Navegação)
 -- ============================================
-CREATE TABLE IF NOT EXISTS categories (
+CREATE TABLE IF NOT EXISTS menus (
     id TEXT PRIMARY KEY,
     nome TEXT NOT NULL,
     slug TEXT UNIQUE NOT NULL,
     descricao TEXT,
     icone TEXT,
-    categoria_pai_id TEXT,
+    menu_pai_id TEXT,
     ordem INTEGER DEFAULT 0,
     ativo INTEGER DEFAULT 1,
     metadata TEXT, -- JSON
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (categoria_pai_id) REFERENCES categories(id) ON DELETE SET NULL
+    FOREIGN KEY (menu_pai_id) REFERENCES menus(id) ON DELETE SET NULL
 );
 
-CREATE INDEX idx_categories_slug ON categories(slug);
-CREATE INDEX idx_categories_pai ON categories(categoria_pai_id);
+CREATE INDEX idx_menus_slug ON menus(slug);
+CREATE INDEX idx_menus_pai ON menus(menu_pai_id);
 
 -- ============================================
 -- TABELA: products (Produtos)
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS products (
     status TEXT DEFAULT 'RASCUNHO', -- RASCUNHO, PUBLICADO, ARQUIVADO
 
     -- Relacionamentos
-    categoria_id TEXT NOT NULL,
+    menu_id TEXT NOT NULL,
     created_by_id TEXT NOT NULL,
     updated_by_id TEXT,
 
@@ -85,13 +85,13 @@ CREATE TABLE IF NOT EXISTS products (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (categoria_id) REFERENCES categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_id) REFERENCES menus(id) ON DELETE CASCADE,
     FOREIGN KEY (created_by_id) REFERENCES users(id),
     FOREIGN KEY (updated_by_id) REFERENCES users(id)
 );
 
 CREATE INDEX idx_products_slug ON products(slug);
-CREATE INDEX idx_products_category ON products(categoria_id);
+CREATE INDEX idx_products_menu ON products(menu_id);
 CREATE INDEX idx_products_status ON products(status);
 CREATE INDEX idx_products_destaque ON products(destaque);
 

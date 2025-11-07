@@ -19,7 +19,7 @@ import { jwt } from 'hono/jwt';
 // Importar rotas
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
-import categoryRoutes from './routes/categories.js';
+import menuRoutes from './routes/menus.js';
 import quoteRoutes from './routes/quotes.js';
 import contactRoutes from './routes/contacts.js';
 import settingRoutes from './routes/settings.js';
@@ -82,14 +82,14 @@ app.get('/', (c) => {
       },
       public: {
         products: 'GET /api/products',
-        categories: 'GET /api/categories',
+        menus: 'GET /api/menus',
         quotes: 'POST /api/quotes',
         contacts: 'POST /api/contacts'
       },
       admin: {
         dashboard: 'GET /api/admin/dashboard',
         products: 'GET/POST/PUT/DELETE /api/admin/products',
-        categories: 'GET/POST/PUT/DELETE /api/admin/categories',
+        menus: 'GET/POST/PUT/DELETE /api/admin/menus',
         quotes: 'GET/PATCH/DELETE /api/admin/quotes',
         contacts: 'GET /api/admin/contacts',
         media: 'POST /api/admin/media/upload'
@@ -114,7 +114,7 @@ app.route('/api/auth', authRoutes);
 
 // Rotas públicas da API
 app.route('/api/products', productRoutes);
-app.route('/api/categories', categoryRoutes);
+app.route('/api/menus', menuRoutes);
 app.route('/api/settings', settingRoutes);
 app.route('/api/pages', pageRoutes);
 
@@ -142,7 +142,7 @@ app.route('/api/admin/media', mediaRoutes);
 
 // Rotas admin para gerenciar recursos
 app.route('/api/admin/products', productRoutes);
-app.route('/api/admin/categories', categoryRoutes);
+app.route('/api/admin/menus', menuRoutes);
 app.route('/api/admin/quotes', quoteRoutes);
 app.route('/api/admin/contacts', contactRoutes);
 app.route('/api/admin/settings', settingRoutes);

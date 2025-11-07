@@ -5,7 +5,7 @@ import DashboardLayout from './components/layout/DashboardLayout';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
-import Categories from './pages/Categories';
+import Menus from './pages/Menus';
 import Quotes from './pages/Quotes';
 import Contacts from './pages/Contacts';
 
@@ -34,7 +34,7 @@ export default function App() {
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="products" element={<Products />} />
-            <Route path="categories" element={<Categories />} />
+            <Route path="menus" element={<Menus />} />
             <Route path="quotes" element={<Quotes />} />
             <Route path="contacts" element={<Contacts />} />
             <Route path="settings" element={<Settings />} />

@@ -6,7 +6,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
 
 export default function ProductModal({ product, onClose }) {
   const [loading, setLoading] = useState(false);
-  const [categories, setCategories] = useState([]);
+  const [menus, setMenus] = useState([]);
   const [formData, setFormData] = useState({
     nome: '',
     slug: '',
@@ -14,7 +14,7 @@ export default function ProductModal({ product, onClose }) {
     descricao_curta: '',
     descricao_completa: '',
     imagem_banner: '',
-    categoryId: '',
+    menuId: '',
     status: 'RASCUNHO',
     destaque: 0,
     ordem: 0,
@@ -29,7 +29,7 @@ export default function ProductModal({ product, onClose }) {
   });
 
   useEffect(() => {
-    fetchCategories();
+    fetchMenus();
     if (product) {
       // Helper para converter array para string com quebras de linha
       const arrayToString = (field) => {
@@ -46,7 +46,7 @@ export default function ProductModal({ product, onClose }) {
         descricao_curta: product.descricao_curta || '',
         descricao_completa: product.descricao_completa || '',
         imagem_banner: product.imagem_banner || '',
-        categoryId: product.categoria_id || '',
+        menuId: product.menu_id || '',
         status: product.status || 'RASCUNHO',
         destaque: product.destaque || 0,
         ordem: product.ordem || 0,
@@ -62,25 +62,25 @@ export default function ProductModal({ product, onClose }) {
     }
   }, [product]);
 
-  const fetchCategories = async () => {
+  const fetchMenus = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/categories`);
+      const response = await axios.get(`${API_URL}/api/menus`);
       if (response.data.success) {
-        // Flatten hierarchical categories
-        const flattenCategories = (cats) => {
+        // Flatten hierarchical menus
+        const flattenMenus = (menusList) => {
           const result = [];
-          cats.forEach(cat => {
-            result.push(cat);
-            if (cat.subcategorias && cat.subcategorias.length > 0) {
-              result.push(...flattenCategories(cat.subcategorias));
+          menusList.forEach(menu => {
+            result.push(menu);
+            if (menu.submenus && menu.submenus.length > 0) {
+              result.push(...flattenMenus(menu.submenus));
             }
           });
           return result;
         };
-        setCategories(flattenCategories(response.data.data || []));
+        setMenus(flattenMenus(response.data.data || []));
       }
     } catch (error) {
-      console.error('Erro ao buscar categorias:', error);
+      console.error('Erro ao buscar menus:', error);
     }
   };
 
@@ -199,15 +199,15 @@ export default function ProductModal({ product, onClose }) {
                   Menu *
                 </label>
                 <select
-                  name="categoryId"
-                  value={formData.categoryId}
+                  name="menuId"
+                  value={formData.menuId}
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Selecione um menu</option>
-                  {categories.map(cat => (
-                    <option key={cat.id} value={cat.id}>{cat.nome}</option>
+                  {menus.map(menu => (
+                    <option key={menu.id} value={menu.id}>{menu.nome}</option>
                   ))}
                 </select>
               </div>
