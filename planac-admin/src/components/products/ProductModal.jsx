@@ -288,6 +288,91 @@ export default function ProductModal({ product, onClose }) {
             </div>
           </div>
 
+          {/* Detalhes do Produto */}
+          <div className="space-y-4 pt-6 border-t border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">Detalhes do Produto</h3>
+            <p className="text-sm text-gray-600">Cada item em uma linha separada</p>
+
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Características Principais
+                </label>
+                <textarea
+                  name="caracteristicas"
+                  value={formData.caracteristicas}
+                  onChange={handleChange}
+                  rows="5"
+                  placeholder="Digite cada característica em uma linha&#10;Exemplo:&#10;100% Impermeável&#10;Alta Resistência&#10;Fácil Limpeza"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Vantagens
+                </label>
+                <textarea
+                  name="vantagens"
+                  value={formData.vantagens}
+                  onChange={handleChange}
+                  rows="5"
+                  placeholder="Digite cada vantagem em uma linha&#10;Exemplo:&#10;Imunidade à umidade&#10;Resistência química&#10;Durabilidade extrema"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Aplicações
+                </label>
+                <textarea
+                  name="aplicacoes"
+                  value={formData.aplicacoes}
+                  onChange={handleChange}
+                  rows="5"
+                  placeholder="Digite cada aplicação em uma linha&#10;Exemplo:&#10;Banheiros públicos&#10;Áreas industriais&#10;Hospitais e clínicas"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Especificações Técnicas */}
+          <div className="space-y-4 pt-6 border-t border-gray-200">
+            <h3 className="text-lg font-semibold text-gray-900">Especificações Técnicas</h3>
+
+            <div className="grid grid-cols-1 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Especificações
+                </label>
+                <textarea
+                  name="especificacoes"
+                  value={formData.especificacoes}
+                  onChange={handleChange}
+                  rows="4"
+                  placeholder="Descreva as especificações técnicas do produto"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Normas e Certificações
+                </label>
+                <textarea
+                  name="normas_certificacoes"
+                  value={formData.normas_certificacoes}
+                  onChange={handleChange}
+                  rows="3"
+                  placeholder="Liste as normas e certificações (uma por linha)"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+          </div>
+
           {/* SEO */}
           <div className="space-y-4 pt-6 border-t border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900">SEO</h3>
