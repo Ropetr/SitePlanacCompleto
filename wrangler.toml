@@ -1,0 +1,14 @@
+# ===========================================
+# CLOUDFLARE PAGES - Site Principal
+# ===========================================
+# Este arquivo configura o deploy do site principal
+# O admin tem configuração separada em planac-admin/
+
+name = "siteplanaccompleto"
+compatibility_date = "2024-01-01"
+
+# Configuração básica do Pages
+pages_build_output_dir = "."
+
+# Este é o site principal (HTML estático)
+# Não precisa de build command

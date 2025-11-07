@@ -1,0 +1,28 @@
+# Cloudflare Pages Configuration
+# Este arquivo configura deployments automáticos
+
+# Configuração principal (branch main)
+production:
+  build:
+    command: ""  # Site HTML estático, sem build
+    destination: "."
+    rootDirectory: "."
+
+  environment:
+    # Nenhuma variável necessária para o site estático
+
+# Configuração para preview branches
+preview:
+  build:
+    command: ""
+    destination: "."
+    rootDirectory: "."
+
+# Redirects e headers
+headers:
+  - source: "/*"
+    headers:
+      - key: "X-Frame-Options"
+        value: "SAMEORIGIN"
+      - key: "X-Content-Type-Options"
+        value: "nosniff"
