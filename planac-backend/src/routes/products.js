@@ -152,7 +152,7 @@ products.get('/:slug', async (c) => {
 // ===========================================
 // POST /api/admin/products - Criar produto (ADMIN)
 // ===========================================
-products.post('/admin/products', async (c) => {
+products.post('/', async (c) => {
   try {
     const payload = c.get('jwtPayload');
     const body = await c.req.json();
@@ -250,7 +250,7 @@ products.post('/admin/products', async (c) => {
 // ===========================================
 // PUT /api/admin/products/:id - Editar produto (ADMIN)
 // ===========================================
-products.put('/admin/products/:id', async (c) => {
+products.put('/:id', async (c) => {
   try {
     const payload = c.get('jwtPayload');
     const { id } = c.req.param();
@@ -359,7 +359,7 @@ products.put('/admin/products/:id', async (c) => {
 // ===========================================
 // DELETE /api/admin/products/:id - Excluir produto (ADMIN)
 // ===========================================
-products.delete('/admin/products/:id', async (c) => {
+products.delete('/:id', async (c) => {
   try {
     const payload = c.get('jwtPayload');
     const { id } = c.req.param();

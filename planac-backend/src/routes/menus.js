@@ -89,7 +89,7 @@ menus.get('/:slug', async (c) => {
 // ===========================================
 // POST /api/admin/menus - Criar menu (ADMIN)
 // ===========================================
-menus.post('/admin/menus', async (c) => {
+menus.post('/', async (c) => {
   try {
     const payload = c.get('jwtPayload');
     const body = await c.req.json();
@@ -135,7 +135,7 @@ menus.post('/admin/menus', async (c) => {
 // ===========================================
 // PUT /api/admin/menus/:id - Editar menu (ADMIN)
 // ===========================================
-menus.put('/admin/menus/:id', async (c) => {
+menus.put('/:id', async (c) => {
   try {
     const { id } = c.req.param();
     const body = await c.req.json();
@@ -193,7 +193,7 @@ menus.put('/admin/menus/:id', async (c) => {
 // ===========================================
 // DELETE /api/admin/menus/:id - Excluir menu (ADMIN)
 // ===========================================
-menus.delete('/admin/menus/:id', async (c) => {
+menus.delete('/:id', async (c) => {
   try {
     const { id } = c.req.param();
 
