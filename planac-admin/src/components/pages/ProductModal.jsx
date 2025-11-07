@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { X, Save, Upload } from 'lucide-react';
+import { X, Save } from 'lucide-react';
+import ImageUpload from '../common/ImageUpload';
+import ImageGallery from '../common/ImageGallery';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
 
@@ -14,6 +16,7 @@ export default function ProductModal({ product, onClose }) {
     descricao_curta: '',
     descricao_completa: '',
     imagem_banner: '',
+    galeria_imagens: [],
     menuId: '',
     status: 'RASCUNHO',
     destaque: 0,
@@ -39,6 +42,20 @@ export default function ProductModal({ product, onClose }) {
         return '';
       };
 
+      // Parse galeria_imagens (JSON string to array)
+      const parseGaleria = (field) => {
+        if (!field) return [];
+        if (Array.isArray(field)) return field;
+        if (typeof field === 'string') {
+          try {
+            return JSON.parse(field);
+          } catch {
+            return [];
+          }
+        }
+        return [];
+      };
+
       setFormData({
         nome: product.nome || '',
         slug: product.slug || '',
@@ -46,6 +63,7 @@ export default function ProductModal({ product, onClose }) {
         descricao_curta: product.descricao_curta || '',
         descricao_completa: product.descricao_completa || '',
         imagem_banner: product.imagem_banner || '',
+        galeria_imagens: parseGaleria(product.galeria_imagens),
         menuId: product.menu_id || '',
         status: product.status || 'RASCUNHO',
         destaque: product.destaque || 0,
@@ -229,29 +247,19 @@ export default function ProductModal({ product, onClose }) {
               </div>
 
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Imagem Banner (URL)
-                </label>
-                <input
-                  type="url"
-                  name="imagem_banner"
+                <ImageUpload
+                  label="Imagem Banner"
                   value={formData.imagem_banner}
-                  onChange={handleChange}
-                  placeholder="https://exemplo.com/imagem.jpg"
-                  pattern="https?://.+\.(jpg|jpeg|png|webp|gif|svg)"
-                  title="Digite uma URL válida de imagem (JPG, PNG, WEBP, GIF ou SVG)"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  onChange={(url) => setFormData(prev => ({ ...prev, imagem_banner: url }))}
                 />
-                {formData.imagem_banner && (
-                  <div className="mt-2">
-                    <img
-                      src={formData.imagem_banner}
-                      alt="Preview"
-                      className="max-w-xs h-32 object-cover rounded border border-gray-300"
-                      onError={(e) => { e.target.style.display = 'none'; }}
-                    />
-                  </div>
-                )}
+              </div>
+
+              <div className="md:col-span-2">
+                <ImageGallery
+                  label="Galeria de Imagens"
+                  value={formData.galeria_imagens}
+                  onChange={(images) => setFormData(prev => ({ ...prev, galeria_imagens: images }))}
+                />
               </div>
 
               <div className="md:col-span-2">
