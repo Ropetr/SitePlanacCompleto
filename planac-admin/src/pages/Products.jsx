@@ -32,8 +32,8 @@ export default function Products() {
       const response = await axios.get(`${API_URL}/api/products`, { params });
 
       if (response.data.success) {
-        setProducts(response.data.products);
-        setTotalPages(response.data.pagination.totalPages);
+        setProducts(response.data.data || []);
+        setTotalPages(response.data.pagination?.totalPages || 1);
       }
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
