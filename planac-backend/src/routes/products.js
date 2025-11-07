@@ -21,7 +21,7 @@ products.get('/', async (c) => {
     let query = `
       SELECT p.*, c.nome as categoria_nome, c.slug as categoria_slug
       FROM products p
-      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN categories c ON p.categoria_id = c.id
       WHERE p.status = ?
     `;
 
@@ -45,16 +45,26 @@ products.get('/', async (c) => {
 
     const { results } = await c.env.DB.prepare(query).bind(...params).all();
 
-    // Parse JSON fields
+    // Parse JSON fields ou split strings
     const products = results.map(p => ({
       ...p,
-      caracteristicas: p.caracteristicas ? JSON.parse(p.caracteristicas) : [],
-      vantagens: p.vantagens ? JSON.parse(p.vantagens) : [],
-      aplicacoes: p.aplicacoes ? JSON.parse(p.aplicacoes) : [],
-      especificacoes: p.especificacoes ? JSON.parse(p.especificacoes) : {},
-      normasCertificacoes: p.normas_certificacoes ? JSON.parse(p.normas_certificacoes) : [],
-      galeriaImagens: p.galeria_imagens ? JSON.parse(p.galeria_imagens) : [],
-      metaKeywords: p.meta_keywords ? JSON.parse(p.meta_keywords) : [],
+      // Se for string, split por linha; se for JSON, parse
+      caracteristicas: p.caracteristicas ? (
+        p.caracteristicas.startsWith('[') || p.caracteristicas.startsWith('{')
+          ? JSON.parse(p.caracteristicas)
+          : p.caracteristicas.split('\n').filter(l => l.trim())
+      ) : [],
+      vantagens: p.vantagens ? (
+        p.vantagens.startsWith('[') || p.vantagens.startsWith('{')
+          ? JSON.parse(p.vantagens)
+          : p.vantagens.split('\n').filter(l => l.trim())
+      ) : [],
+      aplicacoes: p.aplicacoes ? (
+        p.aplicacoes.startsWith('[') || p.aplicacoes.startsWith('{')
+          ? JSON.parse(p.aplicacoes)
+          : p.aplicacoes.split('\n').filter(l => l.trim())
+      ) : [],
+      especificacoes_tecnicas: p.especificacoes_tecnicas || null,
     }));
 
     // Total count
@@ -88,7 +98,7 @@ products.get('/:slug', async (c) => {
     const product = await c.env.DB.prepare(`
       SELECT p.*, c.nome as categoria_nome, c.slug as categoria_slug
       FROM products p
-      LEFT JOIN categories c ON p.category_id = c.id
+      LEFT JOIN categories c ON p.categoria_id = c.id
       WHERE p.slug = ? AND p.status = 'PUBLICADO'
     `).bind(slug).first();
 
@@ -96,16 +106,25 @@ products.get('/:slug', async (c) => {
       return c.json({ error: 'Produto não encontrado' }, 404);
     }
 
-    // Parse JSON fields
+    // Parse JSON fields ou split strings
     const productData = {
       ...product,
-      caracteristicas: product.caracteristicas ? JSON.parse(product.caracteristicas) : [],
-      vantagens: product.vantagens ? JSON.parse(product.vantagens) : [],
-      aplicacoes: product.aplicacoes ? JSON.parse(product.aplicacoes) : [],
-      especificacoes: product.especificacoes ? JSON.parse(product.especificacoes) : {},
-      normasCertificacoes: product.normas_certificacoes ? JSON.parse(product.normas_certificacoes) : [],
-      galeriaImagens: product.galeria_imagens ? JSON.parse(product.galeria_imagens) : [],
-      metaKeywords: product.meta_keywords ? JSON.parse(product.meta_keywords) : [],
+      caracteristicas: product.caracteristicas ? (
+        product.caracteristicas.startsWith('[') || product.caracteristicas.startsWith('{')
+          ? JSON.parse(product.caracteristicas)
+          : product.caracteristicas.split('\n').filter(l => l.trim())
+      ) : [],
+      vantagens: product.vantagens ? (
+        product.vantagens.startsWith('[') || product.vantagens.startsWith('{')
+          ? JSON.parse(product.vantagens)
+          : product.vantagens.split('\n').filter(l => l.trim())
+      ) : [],
+      aplicacoes: product.aplicacoes ? (
+        product.aplicacoes.startsWith('[') || product.aplicacoes.startsWith('{')
+          ? JSON.parse(product.aplicacoes)
+          : product.aplicacoes.split('\n').filter(l => l.trim())
+      ) : [],
+      especificacoes_tecnicas: product.especificacoes_tecnicas || null,
     };
 
     return c.json({
@@ -157,7 +176,7 @@ products.post('/admin/products', async (c) => {
         caracteristicas, vantagens, aplicacoes, especificacoes, normas_certificacoes,
         imagem_banner, galeria_imagens, video_url,
         meta_title, meta_description, meta_keywords,
-        ordem, destaque, status, category_id, created_by_id,
+        ordem, destaque, status, categoria_id, created_by_id,
         published_at, created_at, updated_at
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `).bind(
@@ -262,7 +281,7 @@ products.put('/admin/products/:id', async (c) => {
     if (data.ordem !== undefined) { updates.push('ordem = ?'); params.push(data.ordem); }
     if (data.destaque !== undefined) { updates.push('destaque = ?'); params.push(data.destaque ? 1 : 0); }
     if (data.status !== undefined) { updates.push('status = ?'); params.push(data.status); }
-    if (data.categoryId !== undefined) { updates.push('category_id = ?'); params.push(data.categoryId); }
+    if (data.categoryId !== undefined) { updates.push('categoria_id = ?'); params.push(data.categoryId); }
 
     updates.push('updated_by_id = ?');
     params.push(payload.id);
