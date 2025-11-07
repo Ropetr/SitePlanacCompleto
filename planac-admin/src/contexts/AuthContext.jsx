@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const AuthContext = createContext(null);
 
-const API_URL = 'https://planac-backend-api.planacacabamentos.workers.dev';
+const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
@@ -25,16 +25,26 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           const response = await axios.get(`${API_URL}/api/auth/me`);
-          setUser(response.data.data);
+          if (response.data.success) {
+            setUser(response.data.user);
+          } else {
+            // Token inválido, limpar
+            setToken(null);
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+          }
         } catch (error) {
           console.error('Auth check failed:', error);
-          logout();
+          // Token inválido ou expirado, limpar
+          setToken(null);
+          localStorage.removeItem('token');
+          localStorage.removeItem('refreshToken');
         }
       }
       setLoading(false);
     };
     checkAuth();
-  }, [token]);
+  }, []);
 
   const login = async (email, senha) => {
     try {
@@ -43,14 +53,21 @@ export const AuthProvider = ({ children }) => {
         senha,
       });
 
-      const { user, tokens } = response.data;
+      if (response.data.success) {
+        const { user, tokens } = response.data;
 
-      setUser(user);
-      setToken(tokens.accessToken);
-      localStorage.setItem('token', tokens.accessToken);
-      localStorage.setItem('refreshToken', tokens.refreshToken);
+        setUser(user);
+        setToken(tokens.accessToken);
+        localStorage.setItem('token', tokens.accessToken);
+        localStorage.setItem('refreshToken', tokens.refreshToken);
 
-      return { success: true };
+        return { success: true };
+      } else {
+        return {
+          success: false,
+          error: response.data.error || 'Erro ao fazer login',
+        };
+      }
     } catch (error) {
       console.error('Login error:', error);
       return {
