@@ -82,9 +82,9 @@ export default function Products() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <Package className="w-8 h-8" />
-              Produtos
+              Páginas
             </h1>
-            <p className="text-gray-600 mt-1">Gerencie os produtos do seu catálogo</p>
+            <p className="text-gray-600 mt-1">Gerencie as páginas do seu site</p>
           </div>
           <button
             onClick={() => {
@@ -94,7 +94,7 @@ export default function Products() {
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
           >
             <Plus className="w-5 h-5" />
-            Novo Produto
+            Nova Página
           </button>
         </div>
 
@@ -105,7 +105,7 @@ export default function Products() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Buscar produtos..."
+                placeholder="Buscar páginas..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -132,12 +132,12 @@ export default function Products() {
       {/* Products Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-gray-500">Carregando produtos...</div>
+          <div className="p-8 text-center text-gray-500">Carregando páginas...</div>
         ) : products.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
             <Package className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-            <p className="text-lg font-medium">Nenhum produto encontrado</p>
-            <p className="text-sm mt-2">Comece adicionando seu primeiro produto</p>
+            <p className="text-lg font-medium">Nenhuma página encontrada</p>
+            <p className="text-sm mt-2">Comece adicionando sua primeira página</p>
           </div>
         ) : (
           <>
@@ -146,10 +146,10 @@ export default function Products() {
                 <thead className="bg-gray-50 border-b border-gray-200">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Produto
+                      Página
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Categoria
+                      Menu
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
@@ -183,7 +183,7 @@ export default function Products() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{product.category_id || 'Sem categoria'}</div>
+                        <div className="text-sm text-gray-900">{product.categoria_nome || 'Sem menu'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(product.status)}`}>

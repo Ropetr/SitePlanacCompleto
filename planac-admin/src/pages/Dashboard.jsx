@@ -40,9 +40,9 @@ export default function Dashboard() {
 
   const cards = [
     {
-      title: 'Produtos',
+      title: 'Páginas',
       value: stats?.resumo.produtos.total || 0,
-      subtitle: `${stats?.resumo.produtos.publicados || 0} publicados`,
+      subtitle: `${stats?.resumo.produtos.publicados || 0} publicadas`,
       icon: Package,
       color: 'bg-blue-500',
     },
@@ -61,9 +61,9 @@ export default function Dashboard() {
       color: 'bg-purple-500',
     },
     {
-      title: 'Categorias',
+      title: 'Menus',
       value: stats?.resumo.categorias.total || 0,
-      subtitle: 'Ativas',
+      subtitle: 'Ativos',
       icon: LayoutDashboard,
       color: 'bg-orange-500',
     },

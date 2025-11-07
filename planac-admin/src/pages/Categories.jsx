@@ -112,7 +112,7 @@ export default function Categories() {
           </div>
 
           <div className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-            {category.product_count || 0} produtos
+            {category.produtos_count || 0} páginas
           </div>
 
           <div className="px-6 py-4 whitespace-nowrap">
@@ -159,9 +159,9 @@ export default function Categories() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-2">
               <FolderTree className="w-8 h-8" />
-              Categorias
+              Menus
             </h1>
-            <p className="text-gray-600 mt-1">Organize os produtos em categorias e subcategorias</p>
+            <p className="text-gray-600 mt-1">Organize as páginas em menus e submenus</p>
           </div>
           <button
             onClick={() => {
@@ -171,7 +171,7 @@ export default function Categories() {
             className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
           >
             <Plus className="w-5 h-5" />
-            Nova Categoria
+            Novo Menu
           </button>
         </div>
 
@@ -181,7 +181,7 @@ export default function Categories() {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
-              placeholder="Buscar categorias..."
+              placeholder="Buscar menus..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -193,12 +193,12 @@ export default function Categories() {
       {/* Categories Table */}
       <div className="bg-white rounded-lg shadow overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-gray-500">Carregando categorias...</div>
+          <div className="p-8 text-center text-gray-500">Carregando menus...</div>
         ) : categories.length === 0 ? (
           <div className="p-8 text-center text-gray-500">
             <FolderTree className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-            <p className="text-lg font-medium">Nenhuma categoria encontrada</p>
-            <p className="text-sm mt-2">Comece adicionando sua primeira categoria</p>
+            <p className="text-lg font-medium">Nenhum menu encontrado</p>
+            <p className="text-sm mt-2">Comece adicionando seu primeiro menu</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -206,10 +206,10 @@ export default function Categories() {
               {/* Header */}
               <div className="bg-gray-50 border-b border-gray-200 flex">
                 <div className="flex-1 px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Categoria
+                  Menu
                 </div>
                 <div className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
-                  Produtos
+                  Páginas
                 </div>
                 <div className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-32">
                   Status
