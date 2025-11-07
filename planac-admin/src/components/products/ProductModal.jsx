@@ -14,7 +14,7 @@ export default function ProductModal({ product, onClose }) {
     descricao_curta: '',
     descricao_completa: '',
     imagem_banner: '',
-    category_id: '',
+    categoryId: '',
     status: 'RASCUNHO',
     destaque: 0,
     ordem: 0,
@@ -38,7 +38,7 @@ export default function ProductModal({ product, onClose }) {
         descricao_curta: product.descricao_curta || '',
         descricao_completa: product.descricao_completa || '',
         imagem_banner: product.imagem_banner || '',
-        category_id: product.category_id || '',
+        categoryId: product.categoria_id || '',
         status: product.status || 'RASCUNHO',
         destaque: product.destaque || 0,
         ordem: product.ordem || 0,
@@ -58,7 +58,18 @@ export default function ProductModal({ product, onClose }) {
     try {
       const response = await axios.get(`${API_URL}/api/categories`);
       if (response.data.success) {
-        setCategories(response.data.categories);
+        // Flatten hierarchical categories
+        const flattenCategories = (cats) => {
+          const result = [];
+          cats.forEach(cat => {
+            result.push(cat);
+            if (cat.subcategorias && cat.subcategorias.length > 0) {
+              result.push(...flattenCategories(cat.subcategorias));
+            }
+          });
+          return result;
+        };
+        setCategories(flattenCategories(response.data.data || []));
       }
     } catch (error) {
       console.error('Erro ao buscar categorias:', error);
@@ -118,7 +129,7 @@ export default function ProductModal({ product, onClose }) {
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <h2 className="text-2xl font-bold text-gray-900">
-            {product ? 'Editar Produto' : 'Novo Produto'}
+            {product ? 'Editar Página' : 'Nova Página'}
           </h2>
           <button
             onClick={onClose}
@@ -137,7 +148,7 @@ export default function ProductModal({ product, onClose }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nome do Produto *
+                  Nome da Página *
                 </label>
                 <input
                   type="text"
@@ -177,16 +188,16 @@ export default function ProductModal({ product, onClose }) {
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Categoria *
+                  Menu *
                 </label>
                 <select
-                  name="category_id"
-                  value={formData.category_id}
+                  name="categoryId"
+                  value={formData.categoryId}
                   onChange={handleChange}
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
-                  <option value="">Selecione uma categoria</option>
+                  <option value="">Selecione um menu</option>
                   {categories.map(cat => (
                     <option key={cat.id} value={cat.id}>{cat.nome}</option>
                   ))}
@@ -271,7 +282,7 @@ export default function ProductModal({ product, onClose }) {
                   className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                 />
                 <label className="ml-2 block text-sm text-gray-700">
-                  Produto em Destaque
+                  Página em Destaque
                 </label>
               </div>
             </div>
@@ -339,7 +350,7 @@ export default function ProductModal({ product, onClose }) {
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center gap-2"
           >
             <Save className="w-4 h-4" />
-            {loading ? 'Salvando...' : 'Salvar Produto'}
+            {loading ? 'Salvando...' : 'Salvar Página'}
           </button>
         </div>
       </div>
