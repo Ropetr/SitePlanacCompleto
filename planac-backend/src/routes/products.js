@@ -45,26 +45,32 @@ products.get('/', async (c) => {
 
     const { results } = await c.env.DB.prepare(query).bind(...params).all();
 
-    // Parse JSON fields ou split strings
+    // Helper para converter string/JSON para array
+    const parseArrayField = (field) => {
+      if (!field) return [];
+      if (typeof field === 'string') {
+        try {
+          // Tenta fazer parse como JSON primeiro
+          const parsed = JSON.parse(field);
+          return Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+          // Se falhar, trata como texto (split por linha)
+          return field.split('\n').map(l => l.trim()).filter(l => l);
+        }
+      }
+      return Array.isArray(field) ? field : [];
+    };
+
+    // Parse JSON fields
     const products = results.map(p => ({
       ...p,
-      // Se for string, split por linha; se for JSON, parse
-      caracteristicas: p.caracteristicas ? (
-        p.caracteristicas.startsWith('[') || p.caracteristicas.startsWith('{')
-          ? JSON.parse(p.caracteristicas)
-          : p.caracteristicas.split('\n').filter(l => l.trim())
-      ) : [],
-      vantagens: p.vantagens ? (
-        p.vantagens.startsWith('[') || p.vantagens.startsWith('{')
-          ? JSON.parse(p.vantagens)
-          : p.vantagens.split('\n').filter(l => l.trim())
-      ) : [],
-      aplicacoes: p.aplicacoes ? (
-        p.aplicacoes.startsWith('[') || p.aplicacoes.startsWith('{')
-          ? JSON.parse(p.aplicacoes)
-          : p.aplicacoes.split('\n').filter(l => l.trim())
-      ) : [],
-      especificacoes_tecnicas: p.especificacoes_tecnicas || null,
+      caracteristicas: parseArrayField(p.caracteristicas),
+      vantagens: parseArrayField(p.vantagens),
+      aplicacoes: parseArrayField(p.aplicacoes),
+      especificacoes: p.especificacoes ?
+        (typeof p.especificacoes === 'string' ? p.especificacoes : JSON.stringify(p.especificacoes))
+        : null,
+      normas_certificacoes: parseArrayField(p.normas_certificacoes),
     }));
 
     // Total count
@@ -106,25 +112,30 @@ products.get('/:slug', async (c) => {
       return c.json({ error: 'Produto não encontrado' }, 404);
     }
 
-    // Parse JSON fields ou split strings
+    // Helper para converter string/JSON para array
+    const parseArrayField = (field) => {
+      if (!field) return [];
+      if (typeof field === 'string') {
+        try {
+          const parsed = JSON.parse(field);
+          return Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+          return field.split('\n').map(l => l.trim()).filter(l => l);
+        }
+      }
+      return Array.isArray(field) ? field : [];
+    };
+
+    // Parse JSON fields
     const productData = {
       ...product,
-      caracteristicas: product.caracteristicas ? (
-        product.caracteristicas.startsWith('[') || product.caracteristicas.startsWith('{')
-          ? JSON.parse(product.caracteristicas)
-          : product.caracteristicas.split('\n').filter(l => l.trim())
-      ) : [],
-      vantagens: product.vantagens ? (
-        product.vantagens.startsWith('[') || product.vantagens.startsWith('{')
-          ? JSON.parse(product.vantagens)
-          : product.vantagens.split('\n').filter(l => l.trim())
-      ) : [],
-      aplicacoes: product.aplicacoes ? (
-        product.aplicacoes.startsWith('[') || product.aplicacoes.startsWith('{')
-          ? JSON.parse(product.aplicacoes)
-          : product.aplicacoes.split('\n').filter(l => l.trim())
-      ) : [],
-      especificacoes_tecnicas: product.especificacoes_tecnicas || null,
+      caracteristicas: parseArrayField(product.caracteristicas),
+      vantagens: parseArrayField(product.vantagens),
+      aplicacoes: parseArrayField(product.aplicacoes),
+      especificacoes: product.especificacoes ?
+        (typeof product.especificacoes === 'string' ? product.especificacoes : JSON.stringify(product.especificacoes))
+        : null,
+      normas_certificacoes: parseArrayField(product.normas_certificacoes),
     };
 
     return c.json({
@@ -158,14 +169,27 @@ products.post('/admin/products', async (c) => {
     const baseSlug = slugify(data.nome);
     const slug = await generateUniqueSlug(c.env.DB, 'products', baseSlug);
 
+    // Helper para preparar campos de array/texto
+    const prepareArrayField = (field) => {
+      if (!field) return JSON.stringify([]);
+      // Se for string, converte para array (split por linha)
+      if (typeof field === 'string') {
+        const lines = field.split('\n').map(l => l.trim()).filter(l => l);
+        return JSON.stringify(lines);
+      }
+      // Se já for array, stringifica
+      return JSON.stringify(field);
+    };
+
     // Preparar dados JSON
-    const caracteristicas = JSON.stringify(data.caracteristicas || []);
-    const vantagens = JSON.stringify(data.vantagens || []);
-    const aplicacoes = JSON.stringify(data.aplicacoes || []);
-    const especificacoes = JSON.stringify(data.especificacoes || {});
-    const normasCertificacoes = JSON.stringify(data.normasCertificacoes || []);
+    const caracteristicas = prepareArrayField(data.caracteristicas);
+    const vantagens = prepareArrayField(data.vantagens);
+    const aplicacoes = prepareArrayField(data.aplicacoes);
+    const especificacoes = data.especificacoes || null;
+    const normasCertificacoes = prepareArrayField(data.normas_certificacoes);
     const galeriaImagens = JSON.stringify(data.galeriaImagens || []);
-    const metaKeywords = JSON.stringify(data.metaKeywords || []);
+    const metaKeywords = typeof data.meta_keywords === 'string' ?
+      data.meta_keywords : JSON.stringify(data.meta_keywords || []);
 
     const productId = generateId();
     const now = new Date().toISOString();
@@ -264,11 +288,21 @@ products.put('/admin/products/:id', async (c) => {
     if (data.descricaoCurta !== undefined) { updates.push('descricao_curta = ?'); params.push(data.descricaoCurta); }
     if (data.descricaoCompleta !== undefined) { updates.push('descricao_completa = ?'); params.push(data.descricaoCompleta); }
 
-    if (data.caracteristicas) { updates.push('caracteristicas = ?'); params.push(JSON.stringify(data.caracteristicas)); }
-    if (data.vantagens) { updates.push('vantagens = ?'); params.push(JSON.stringify(data.vantagens)); }
-    if (data.aplicacoes) { updates.push('aplicacoes = ?'); params.push(JSON.stringify(data.aplicacoes)); }
-    if (data.especificacoes) { updates.push('especificacoes = ?'); params.push(JSON.stringify(data.especificacoes)); }
-    if (data.normasCertificacoes) { updates.push('normas_certificacoes = ?'); params.push(JSON.stringify(data.normasCertificacoes)); }
+    // Helper para preparar campos de array/texto
+    const prepareArrayField = (field) => {
+      if (!field) return JSON.stringify([]);
+      if (typeof field === 'string') {
+        const lines = field.split('\n').map(l => l.trim()).filter(l => l);
+        return JSON.stringify(lines);
+      }
+      return JSON.stringify(field);
+    };
+
+    if (data.caracteristicas !== undefined) { updates.push('caracteristicas = ?'); params.push(prepareArrayField(data.caracteristicas)); }
+    if (data.vantagens !== undefined) { updates.push('vantagens = ?'); params.push(prepareArrayField(data.vantagens)); }
+    if (data.aplicacoes !== undefined) { updates.push('aplicacoes = ?'); params.push(prepareArrayField(data.aplicacoes)); }
+    if (data.especificacoes !== undefined) { updates.push('especificacoes = ?'); params.push(data.especificacoes); }
+    if (data.normas_certificacoes !== undefined) { updates.push('normas_certificacoes = ?'); params.push(prepareArrayField(data.normas_certificacoes)); }
 
     if (data.imagemBanner !== undefined) { updates.push('imagem_banner = ?'); params.push(data.imagemBanner); }
     if (data.galeriaImagens) { updates.push('galeria_imagens = ?'); params.push(JSON.stringify(data.galeriaImagens)); }

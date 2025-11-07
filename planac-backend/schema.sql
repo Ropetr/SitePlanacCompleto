@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS products (
     status TEXT DEFAULT 'RASCUNHO', -- RASCUNHO, PUBLICADO, ARQUIVADO
 
     -- Relacionamentos
-    category_id TEXT NOT NULL,
+    categoria_id TEXT NOT NULL,
     created_by_id TEXT NOT NULL,
     updated_by_id TEXT,
 
@@ -85,13 +85,13 @@ CREATE TABLE IF NOT EXISTS products (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
-    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
+    FOREIGN KEY (categoria_id) REFERENCES categories(id) ON DELETE CASCADE,
     FOREIGN KEY (created_by_id) REFERENCES users(id),
     FOREIGN KEY (updated_by_id) REFERENCES users(id)
 );
 
 CREATE INDEX idx_products_slug ON products(slug);
-CREATE INDEX idx_products_category ON products(category_id);
+CREATE INDEX idx_products_category ON products(categoria_id);
 CREATE INDEX idx_products_status ON products(status);
 CREATE INDEX idx_products_destaque ON products(destaque);
 

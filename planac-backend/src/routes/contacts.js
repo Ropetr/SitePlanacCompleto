@@ -7,6 +7,7 @@
 import { Hono } from 'hono';
 import { generateId } from '../utils/crypto.js';
 import { validate, contactSchema } from '../utils/validators.js';
+import { sendEmail, createContactEmailTemplate } from '../utils/email.js';
 
 const contacts = new Hono();
 
@@ -35,6 +36,25 @@ contacts.post('/', async (c) => {
       data.telefone || null,
       data.mensagem
     ).run();
+
+    // Enviar notificação por e-mail
+    try {
+      const emailHtml = createContactEmailTemplate({
+        nome: data.nome,
+        email: data.email,
+        telefone: data.telefone,
+        mensagem: data.mensagem,
+      });
+
+      await sendEmail({
+        to: 'contato@planacdivisorias.com.br',
+        subject: `💬 Nova Mensagem de Contato - ${data.nome}`,
+        html: emailHtml,
+      });
+    } catch (emailError) {
+      console.error('Erro ao enviar e-mail:', emailError);
+      // Continua mesmo se o e-mail falhar
+    }
 
     return c.json({
       success: true,

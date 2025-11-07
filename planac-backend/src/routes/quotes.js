@@ -7,6 +7,7 @@
 import { Hono } from 'hono';
 import { generateId } from '../utils/crypto.js';
 import { validate, quoteSchema } from '../utils/validators.js';
+import { sendEmail, createQuoteEmailTemplate } from '../utils/email.js';
 
 const quotes = new Hono();
 
@@ -69,7 +70,27 @@ quotes.post('/', async (c) => {
       utmCampaign
     ).run();
 
-    // TODO: Enviar notificação por e-mail/WhatsApp
+    // Enviar notificação por e-mail
+    try {
+      const emailHtml = createQuoteEmailTemplate({
+        nome: data.nome,
+        email: data.email,
+        telefone: data.telefone,
+        cidade: data.cidade,
+        produto: data.produto,
+        tipoProjeto: data.tipoProjeto,
+        mensagem: data.mensagem,
+      });
+
+      await sendEmail({
+        to: 'contato@planacdivisorias.com.br',
+        subject: `🎯 Novo Orçamento - ${data.nome}`,
+        html: emailHtml,
+      });
+    } catch (emailError) {
+      console.error('Erro ao enviar e-mail:', emailError);
+      // Continua mesmo se o e-mail falhar
+    }
 
     return c.json({
       success: true,

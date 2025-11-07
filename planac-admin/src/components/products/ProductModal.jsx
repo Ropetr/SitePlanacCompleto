@@ -31,6 +31,14 @@ export default function ProductModal({ product, onClose }) {
   useEffect(() => {
     fetchCategories();
     if (product) {
+      // Helper para converter array para string com quebras de linha
+      const arrayToString = (field) => {
+        if (!field) return '';
+        if (Array.isArray(field)) return field.join('\n');
+        if (typeof field === 'string') return field;
+        return '';
+      };
+
       setFormData({
         nome: product.nome || '',
         slug: product.slug || '',
@@ -42,11 +50,11 @@ export default function ProductModal({ product, onClose }) {
         status: product.status || 'RASCUNHO',
         destaque: product.destaque || 0,
         ordem: product.ordem || 0,
-        caracteristicas: product.caracteristicas || '',
-        vantagens: product.vantagens || '',
-        aplicacoes: product.aplicacoes || '',
+        caracteristicas: arrayToString(product.caracteristicas),
+        vantagens: arrayToString(product.vantagens),
+        aplicacoes: arrayToString(product.aplicacoes),
         especificacoes: product.especificacoes || '',
-        normas_certificacoes: product.normas_certificacoes || '',
+        normas_certificacoes: arrayToString(product.normas_certificacoes),
         meta_title: product.meta_title || '',
         meta_description: product.meta_description || '',
         meta_keywords: product.meta_keywords || ''
@@ -230,8 +238,20 @@ export default function ProductModal({ product, onClose }) {
                   value={formData.imagem_banner}
                   onChange={handleChange}
                   placeholder="https://exemplo.com/imagem.jpg"
+                  pattern="https?://.+\.(jpg|jpeg|png|webp|gif|svg)"
+                  title="Digite uma URL válida de imagem (JPG, PNG, WEBP, GIF ou SVG)"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+                {formData.imagem_banner && (
+                  <div className="mt-2">
+                    <img
+                      src={formData.imagem_banner}
+                      alt="Preview"
+                      className="max-w-xs h-32 object-cover rounded border border-gray-300"
+                      onError={(e) => { e.target.style.display = 'none'; }}
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="md:col-span-2">
