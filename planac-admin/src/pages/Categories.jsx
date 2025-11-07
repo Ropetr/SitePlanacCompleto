@@ -22,7 +22,7 @@ export default function Categories() {
       const response = await axios.get(`${API_URL}/api/categories`);
 
       if (response.data.success) {
-        let cats = response.data.categories;
+        let cats = response.data.data || [];
 
         // Filtrar por busca se houver
         if (search) {

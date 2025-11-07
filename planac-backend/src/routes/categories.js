@@ -18,7 +18,7 @@ categories.get('/', async (c) => {
   try {
     const { results } = await c.env.DB.prepare(`
       SELECT c.*,
-        (SELECT COUNT(*) FROM products p WHERE p.category_id = c.id AND p.status = 'PUBLICADO') as produtos_count
+        (SELECT COUNT(*) FROM products p WHERE p.categoria_id = c.id AND p.status = 'PUBLICADO') as produtos_count
       FROM categories c
       WHERE c.ativo = 1
       ORDER BY c.ordem ASC, c.nome ASC
@@ -67,7 +67,7 @@ categories.get('/:slug', async (c) => {
     const { results: products } = await c.env.DB.prepare(`
       SELECT id, nome, slug, subtitulo, imagem_banner, destaque
       FROM products
-      WHERE category_id = ? AND status = 'PUBLICADO'
+      WHERE categoria_id = ? AND status = 'PUBLICADO'
       ORDER BY destaque DESC, ordem ASC
     `).bind(category.id).all();
 
@@ -199,7 +199,7 @@ categories.delete('/admin/categories/:id', async (c) => {
 
     // Verificar se existem produtos usando esta categoria
     const { count } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as count FROM products WHERE category_id = ?'
+      'SELECT COUNT(*) as count FROM products WHERE categoria_id = ?'
     ).bind(id).first();
 
     if (count > 0) {
