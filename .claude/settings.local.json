@@ -52,7 +52,8 @@
       "Bash(node build-static-pages.js:*)",
       "Bash(xcopy:*)",
       "Bash(if not exist backups mkdir backups)",
-      "Bash(move:*)"
+      "Bash(move:*)",
+      "Bash(del .githubworkflowsdeploy-backend.yml)"
     ],
     "deny": [],
     "ask": []
