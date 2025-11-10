@@ -22,6 +22,7 @@ export default function Contacts() {
   const fetchContacts = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem('token');
       const params = {
         page,
         limit: 20,
@@ -29,7 +30,12 @@ export default function Contacts() {
         ...(search && { search })
       };
 
-      const response = await axios.get(`${API_URL}/api/admin/contacts`, { params });
+      const response = await axios.get(`${API_URL}/api/admin/contacts`, {
+        params,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
       if (response.data.success) {
         setContacts(response.data.contacts);

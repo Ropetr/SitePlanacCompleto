@@ -12,7 +12,7 @@ import { sendEmail, createQuoteEmailTemplate } from '../utils/email.js';
 const quotes = new Hono();
 
 // ===========================================
-// POST /api/quotes - Enviar orçamento (PÚBLICO)
+// POST / - Enviar orçamento (PÚBLICO - será /api/quotes)
 // ===========================================
 quotes.post('/', async (c) => {
   try {
@@ -49,20 +49,18 @@ quotes.post('/', async (c) => {
 
     await c.env.DB.prepare(`
       INSERT INTO quotes (
-        id, nome, email, telefone, cidade, produto, tipo_projeto, mensagem, origem,
+        id, nome, email, telefone, cidade, produto_interesse, mensagem,
         status, ip_address, user_agent, utm_source, utm_medium, utm_campaign,
         created_at, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'NOVO', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, 'PENDENTE', ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
     `).bind(
       quoteId,
       data.nome,
       data.email,
-      data.telefone,
+      data.telefone || null,
       data.cidade || null,
-      data.produto || null,
-      data.tipoProjeto || null,
+      data.produto_interesse || null,
       data.mensagem,
-      data.origem || referer || null,
       ipAddress,
       userAgent,
       utmSource,
@@ -77,8 +75,7 @@ quotes.post('/', async (c) => {
         email: data.email,
         telefone: data.telefone,
         cidade: data.cidade,
-        produto: data.produto,
-        tipoProjeto: data.tipoProjeto,
+        produto_interesse: data.produto_interesse,
         mensagem: data.mensagem,
       });
 
@@ -105,23 +102,29 @@ quotes.post('/', async (c) => {
 });
 
 // ===========================================
-// GET /api/admin/quotes - Listar orçamentos (ADMIN)
+// GET / - Listar orçamentos (ADMIN - será /api/admin/quotes)
 // ===========================================
-quotes.get('/admin/quotes', async (c) => {
+quotes.get('/', async (c) => {
   try {
-    const { status, page = 1, limit = 50 } = c.req.query();
+    const { status, search, page = 1, limit = 20 } = c.req.query();
 
     let query = `
-      SELECT q.*, u.nome as vendedor_nome
+      SELECT q.*
       FROM quotes q
-      LEFT JOIN users u ON q.vendedor_id = u.id
+      WHERE 1=1
     `;
 
     const params = [];
 
-    if (status) {
-      query += ` WHERE q.status = ?`;
+    if (status && status !== 'all') {
+      query += ` AND q.status = ?`;
       params.push(status);
+    }
+
+    if (search) {
+      query += ` AND (q.nome LIKE ? OR q.email LIKE ? OR q.telefone LIKE ?)`;
+      const searchTerm = `%${search}%`;
+      params.push(searchTerm, searchTerm, searchTerm);
     }
 
     query += ` ORDER BY q.created_at DESC`;
@@ -132,16 +135,26 @@ quotes.get('/admin/quotes', async (c) => {
 
     const { results } = await c.env.DB.prepare(query).bind(...params).all();
 
-    const countQuery = status
-      ? `SELECT COUNT(*) as total FROM quotes WHERE status = ?`
-      : `SELECT COUNT(*) as total FROM quotes`;
+    // Contar total
+    let countQuery = `SELECT COUNT(*) as total FROM quotes WHERE 1=1`;
+    const countParams = [];
 
-    const countParams = status ? [status] : [];
+    if (status && status !== 'all') {
+      countQuery += ` AND status = ?`;
+      countParams.push(status);
+    }
+
+    if (search) {
+      countQuery += ` AND (nome LIKE ? OR email LIKE ? OR telefone LIKE ?)`;
+      const searchTerm = `%${search}%`;
+      countParams.push(searchTerm, searchTerm, searchTerm);
+    }
+
     const { total } = await c.env.DB.prepare(countQuery).bind(...countParams).first();
 
     return c.json({
       success: true,
-      data: results,
+      quotes: results,
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),
@@ -157,17 +170,14 @@ quotes.get('/admin/quotes', async (c) => {
 });
 
 // ===========================================
-// GET /api/admin/quotes/:id - Detalhes do orçamento (ADMIN)
+// GET /:id - Detalhes do orçamento (ADMIN)
 // ===========================================
-quotes.get('/admin/quotes/:id', async (c) => {
+quotes.get('/:id', async (c) => {
   try {
     const { id } = c.req.param();
 
     const quote = await c.env.DB.prepare(`
-      SELECT q.*, u.nome as vendedor_nome, u.email as vendedor_email
-      FROM quotes q
-      LEFT JOIN users u ON q.vendedor_id = u.id
-      WHERE q.id = ?
+      SELECT * FROM quotes WHERE id = ?
     `).bind(id).first();
 
     if (!quote) {
@@ -186,13 +196,13 @@ quotes.get('/admin/quotes/:id', async (c) => {
 });
 
 // ===========================================
-// PATCH /api/admin/quotes/:id - Atualizar status (ADMIN)
+// PATCH /:id - Atualizar status (ADMIN)
 // ===========================================
-quotes.patch('/admin/quotes/:id', async (c) => {
+quotes.patch('/:id', async (c) => {
   try {
     const payload = c.get('jwtPayload');
     const { id } = c.req.param();
-    const { status, vendedorId, observacoes } = await c.req.json();
+    const { status, observacoes_internas } = await c.req.json();
 
     const existing = await c.env.DB.prepare('SELECT * FROM quotes WHERE id = ?').bind(id).first();
 
@@ -204,21 +214,16 @@ quotes.patch('/admin/quotes/:id', async (c) => {
     const params = [];
 
     if (status) {
-      if (!['NOVO', 'EM_ATENDIMENTO', 'ATENDIDO', 'PERDIDO'].includes(status)) {
+      if (!['PENDENTE', 'EM_ANALISE', 'RESPONDIDO', 'ARQUIVADO'].includes(status)) {
         return c.json({ error: 'Status inválido' }, 400);
       }
       updates.push('status = ?');
       params.push(status);
     }
 
-    if (vendedorId !== undefined) {
-      updates.push('vendedor_id = ?');
-      params.push(vendedorId);
-    }
-
-    if (observacoes !== undefined) {
-      updates.push('observacoes = ?');
-      params.push(observacoes);
+    if (observacoes_internas !== undefined) {
+      updates.push('observacoes_internas = ?');
+      params.push(observacoes_internas);
     }
 
     updates.push('updated_at = CURRENT_TIMESTAMP');
@@ -231,14 +236,14 @@ quotes.patch('/admin/quotes/:id', async (c) => {
 
     // Log de auditoria
     await c.env.DB.prepare(`
-      INSERT INTO audit_logs (id, user_id, action, resource_type, resource_id, old_values, new_values, created_at)
+      INSERT INTO audit_logs (id, user_id, acao, entidade, entidade_id, dados_anteriores, dados_novos, created_at)
       VALUES (?, ?, 'UPDATE', 'Quote', ?, ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       generateId(),
       payload.id,
       id,
       JSON.stringify({ status: existing.status }),
-      JSON.stringify({ status, vendedorId, observacoes })
+      JSON.stringify({ status, observacoes_internas })
     ).run();
 
     return c.json({
@@ -253,9 +258,9 @@ quotes.patch('/admin/quotes/:id', async (c) => {
 });
 
 // ===========================================
-// DELETE /api/admin/quotes/:id - Excluir orçamento (ADMIN)
+// DELETE /:id - Excluir orçamento (ADMIN)
 // ===========================================
-quotes.delete('/admin/quotes/:id', async (c) => {
+quotes.delete('/:id', async (c) => {
   try {
     const { id } = c.req.param();
 

@@ -14,9 +14,14 @@ export default function ContactModal({ contact, onClose }) {
     setLoading(true);
 
     try {
-      await axios.put(`${API_URL}/api/admin/contacts/${contact.id}`, {
+      const token = localStorage.getItem('token');
+      await axios.patch(`${API_URL}/api/admin/contacts/${contact.id}`, {
         status,
         observacoes_internas
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       onClose();
     } catch (error) {

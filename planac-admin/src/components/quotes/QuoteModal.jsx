@@ -14,9 +14,14 @@ export default function QuoteModal({ quote, onClose }) {
     setLoading(true);
 
     try {
-      await axios.put(`${API_URL}/api/admin/quotes/${quote.id}`, {
+      const token = localStorage.getItem('token');
+      await axios.patch(`${API_URL}/api/admin/quotes/${quote.id}`, {
         status,
         observacoes_internas
+      }, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       onClose();
     } catch (error) {

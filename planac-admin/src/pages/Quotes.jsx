@@ -22,6 +22,7 @@ export default function Quotes() {
   const fetchQuotes = async () => {
     try {
       setLoading(true);
+      const token = localStorage.getItem('token');
       const params = {
         page,
         limit: 20,
@@ -29,7 +30,12 @@ export default function Quotes() {
         ...(search && { search })
       };
 
-      const response = await axios.get(`${API_URL}/api/admin/quotes`, { params });
+      const response = await axios.get(`${API_URL}/api/admin/quotes`, {
+        params,
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
 
       if (response.data.success) {
         setQuotes(response.data.quotes);
