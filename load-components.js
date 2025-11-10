@@ -126,19 +126,14 @@
 
     // Carregar os componentes quando a página carregar
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 Carregando componentes - Versão 3.0 (com menus dinâmicos)');
+        console.log('🚀 Carregando componentes - Versão 4.0 (header dinâmico da API)');
 
-        // Carregar componentes
-        loadComponent('header.html', 'header-container');
+        // Carregar header dinâmico da API (com cache-busting)
+        const API_URL = 'https://planac-backend-api.planacacabamentos.workers.dev';
+        loadComponent(`${API_URL}/api/pages/header`, 'header-container');
+
+        // Carregar outros componentes locais
         loadComponent('footer.html', 'footer-container');
         loadComponent('whatsapp-float.html', 'whatsapp-float-container');
-
-        // Aguardar um pouco para garantir que o header foi carregado
-        // antes de substituir os menus
-        setTimeout(() => {
-            if (window.DynamicMenus) {
-                window.DynamicMenus.updateHeaderWithDynamicMenus();
-            }
-        }, 500);
     });
 })();
