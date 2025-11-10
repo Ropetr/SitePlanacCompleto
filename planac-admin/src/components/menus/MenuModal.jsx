@@ -17,8 +17,9 @@ export default function MenuModal({ menu, menus, onClose }) {
   });
 
   useEffect(() => {
+    console.log('🔄 useEffect executado! menu:', menu);
     if (menu) {
-      setFormData({
+      const newFormData = {
         nome: menu.nome || '',
         slug: menu.slug || '',
         descricao: menu.descricao || '',
@@ -26,6 +27,20 @@ export default function MenuModal({ menu, menus, onClose }) {
         menuPaiId: menu.menu_pai_id || '',
         ordem: menu.ordem || 0,
         ativo: menu.ativo || 1
+      };
+      console.log('📝 Novo formData:', newFormData);
+      setFormData(newFormData);
+    } else {
+      // Reset para valores padrão quando não há menu
+      console.log('🔄 Reset formData para valores padrão');
+      setFormData({
+        nome: '',
+        slug: '',
+        descricao: '',
+        icone: '',
+        menuPaiId: '',
+        ordem: 0,
+        ativo: 1
       });
     }
   }, [menu]);
