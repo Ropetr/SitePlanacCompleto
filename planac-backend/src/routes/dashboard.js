@@ -73,7 +73,7 @@ dashboard.get('/', async (c) => {
 
     // Últimos orçamentos
     const { results: ultimosOrcamentos } = await c.env.DB.prepare(`
-      SELECT id, nome, email, telefone, produto_interesse as produto, status, created_at
+      SELECT id, nome, email, telefone, produto, status, created_at
       FROM quotes
       ORDER BY created_at DESC
       LIMIT 10
@@ -155,10 +155,10 @@ dashboard.get('/stats', async (c) => {
 
     // Produtos mais solicitados
     const { results: produtosMaisSolicitados } = await c.env.DB.prepare(`
-      SELECT produto_interesse as produto, COUNT(*) as total
+      SELECT produto, COUNT(*) as total
       FROM quotes
-      WHERE produto_interesse IS NOT NULL AND created_at >= datetime('now', '-' || ? || ' days')
-      GROUP BY produto_interesse
+      WHERE produto IS NOT NULL AND created_at >= datetime('now', '-' || ? || ' days')
+      GROUP BY produto
       ORDER BY total DESC
       LIMIT 10
     `).bind(periodo).all();
