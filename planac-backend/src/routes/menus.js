@@ -16,7 +16,7 @@ const menus = new Hono();
  */
 async function triggerBuildDeploy(env) {
   try {
-    fetch(`${env.API_URL || 'https://planac-backend-api.planacacabamentos.workers.dev'}/api/admin/build-deploy`, {
+    fetch(`${env.API_URL || 'https://planac-backend-api.planacacabamentos.workers.dev'}/api/internal/build-deploy`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

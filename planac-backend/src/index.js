@@ -124,6 +124,9 @@ app.route('/api/pages', pageRoutes);
 app.route('/api/quotes', quoteRoutes);
 app.route('/api/contacts', contactRoutes);
 
+// Rota interna de build-deploy (sem JWT - usada pelo triggerBuildDeploy)
+app.route('/api/internal/build-deploy', buildDeployRoutes);
+
 // ===========================================
 // MIDDLEWARE JWT - Protege rotas admin
 // ===========================================
