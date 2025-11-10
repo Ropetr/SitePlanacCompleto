@@ -59,6 +59,20 @@ export default function Products() {
     }
   };
 
+  const handleToggleStatus = async (product) => {
+    try {
+      // Alterna entre PUBLICADO e RASCUNHO
+      const novoStatus = product.status === 'PUBLICADO' ? 'RASCUNHO' : 'PUBLICADO';
+      await axios.put(`${API_URL}/api/admin/products/${product.id}`, {
+        status: novoStatus
+      });
+      fetchProducts();
+    } catch (error) {
+      console.error('Erro ao alterar status:', error);
+      alert(error.response?.data?.error || 'Erro ao alterar status');
+    }
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedProduct(null);
@@ -154,6 +168,9 @@ export default function Products() {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Publicar
+                    </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Criado em
                     </th>
@@ -189,6 +206,21 @@ export default function Products() {
                         <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(product.status)}`}>
                           {product.status}
                         </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-center">
+                        <button
+                          onClick={() => handleToggleStatus(product)}
+                          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                            product.status === 'PUBLICADO' ? 'bg-green-600' : 'bg-gray-300'
+                          }`}
+                          title={product.status === 'PUBLICADO' ? 'Clique para despublicar' : 'Clique para publicar'}
+                        >
+                          <span
+                            className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                              product.status === 'PUBLICADO' ? 'translate-x-6' : 'translate-x-1'
+                            }`}
+                          />
+                        </button>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {new Date(product.created_at).toLocaleDateString('pt-BR')}

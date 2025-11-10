@@ -58,6 +58,19 @@ export default function Menus() {
     }
   };
 
+  const handleToggleAtivo = async (menu) => {
+    try {
+      const novoStatus = menu.ativo ? 0 : 1;
+      await axios.put(`${API_URL}/api/admin/menus/${menu.id}`, {
+        ativo: novoStatus
+      });
+      fetchMenus();
+    } catch (error) {
+      console.error('Erro ao alterar status do menu:', error);
+      alert(error.response?.data?.error || 'Erro ao alterar status');
+    }
+  };
+
   const handleCloseModal = () => {
     setShowModal(false);
     setSelectedMenu(null);
@@ -143,11 +156,19 @@ export default function Menus() {
           </div>
 
           <div className="px-6 py-4 whitespace-nowrap">
-            <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-              menu.ativo ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-            }`}>
-              {menu.ativo ? 'Ativo' : 'Inativo'}
-            </span>
+            <button
+              onClick={() => handleToggleAtivo(menu)}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${
+                menu.ativo ? 'bg-green-600' : 'bg-gray-300'
+              }`}
+              title={menu.ativo ? 'Clique para desativar' : 'Clique para ativar'}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  menu.ativo ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
           </div>
 
           <div className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
