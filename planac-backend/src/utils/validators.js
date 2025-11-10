@@ -30,22 +30,32 @@ export const productSchema = z.object({
   nome: z.string().min(3, 'Nome deve ter no mínimo 3 caracteres'),
   subtitulo: z.string().optional(),
   descricaoCurta: z.string().optional(),
+  descricao_curta: z.string().optional(), // snake_case alias
   descricaoCompleta: z.string().optional(),
-  caracteristicas: z.array(z.string()).optional(),
-  vantagens: z.array(z.string()).optional(),
-  aplicacoes: z.array(z.string()).optional(),
-  especificacoes: z.record(z.any()).optional(),
-  normasCertificacoes: z.array(z.string()).optional(),
+  descricao_completa: z.string().optional(), // snake_case alias
+  caracteristicas: z.union([z.array(z.string()), z.string()]).optional(),
+  vantagens: z.union([z.array(z.string()), z.string()]).optional(),
+  aplicacoes: z.union([z.array(z.string()), z.string()]).optional(),
+  especificacoes: z.union([z.record(z.any()), z.string()]).optional(),
+  normasCertificacoes: z.union([z.array(z.string()), z.string()]).optional(),
+  normas_certificacoes: z.union([z.array(z.string()), z.string()]).optional(), // snake_case alias
   imagemBanner: z.union([z.string().url(), z.literal('')]).optional().nullable(),
-  galeriaImagens: z.array(z.string().url()).optional(),
+  imagem_banner: z.union([z.string().url(), z.literal('')]).optional().nullable(), // snake_case alias
+  galeriaImagens: z.array(z.string()).optional(),
+  galeria_imagens: z.array(z.string()).optional(), // snake_case alias
   videoUrl: z.union([z.string().url(), z.literal('')]).optional().nullable(),
+  video_url: z.union([z.string().url(), z.literal('')]).optional().nullable(), // snake_case alias
   metaTitle: z.string().optional(),
+  meta_title: z.string().optional(), // snake_case alias
   metaDescription: z.string().optional(),
-  metaKeywords: z.array(z.string()).optional(),
-  ordem: z.number().int().optional(),
-  destaque: z.boolean().optional(),
+  meta_description: z.string().optional(), // snake_case alias
+  metaKeywords: z.union([z.array(z.string()), z.string()]).optional(),
+  meta_keywords: z.union([z.array(z.string()), z.string()]).optional(), // snake_case alias
+  ordem: z.union([z.number().int(), z.string().transform(v => parseInt(v))]).optional(),
+  destaque: z.union([z.boolean(), z.number().transform(v => v === 1)]).optional(),
   status: z.enum(['RASCUNHO', 'PUBLICADO', 'ARQUIVADO']).optional(),
-  menuId: z.string().uuid('ID do menu inválido'),
+  menuId: z.string().optional(),
+  menu_id: z.string().optional(), // snake_case alias
 });
 
 // ===========================================

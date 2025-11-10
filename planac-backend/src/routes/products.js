@@ -285,8 +285,14 @@ products.put('/:id', async (c) => {
     if (data.nome) { updates.push('nome = ?'); params.push(data.nome); }
     if (slug !== existing.slug) { updates.push('slug = ?'); params.push(slug); }
     if (data.subtitulo !== undefined) { updates.push('subtitulo = ?'); params.push(data.subtitulo); }
-    if (data.descricaoCurta !== undefined) { updates.push('descricao_curta = ?'); params.push(data.descricaoCurta); }
-    if (data.descricaoCompleta !== undefined) { updates.push('descricao_completa = ?'); params.push(data.descricaoCompleta); }
+    if (data.descricaoCurta !== undefined || data.descricao_curta !== undefined) {
+      updates.push('descricao_curta = ?');
+      params.push(data.descricaoCurta || data.descricao_curta);
+    }
+    if (data.descricaoCompleta !== undefined || data.descricao_completa !== undefined) {
+      updates.push('descricao_completa = ?');
+      params.push(data.descricaoCompleta || data.descricao_completa);
+    }
 
     // Helper para preparar campos de array/texto
     const prepareArrayField = (field) => {
@@ -302,20 +308,45 @@ products.put('/:id', async (c) => {
     if (data.vantagens !== undefined) { updates.push('vantagens = ?'); params.push(prepareArrayField(data.vantagens)); }
     if (data.aplicacoes !== undefined) { updates.push('aplicacoes = ?'); params.push(prepareArrayField(data.aplicacoes)); }
     if (data.especificacoes !== undefined) { updates.push('especificacoes = ?'); params.push(data.especificacoes); }
-    if (data.normas_certificacoes !== undefined) { updates.push('normas_certificacoes = ?'); params.push(prepareArrayField(data.normas_certificacoes)); }
+    if (data.normasCertificacoes !== undefined || data.normas_certificacoes !== undefined) {
+      updates.push('normas_certificacoes = ?');
+      params.push(prepareArrayField(data.normasCertificacoes || data.normas_certificacoes));
+    }
 
-    if (data.imagemBanner !== undefined) { updates.push('imagem_banner = ?'); params.push(data.imagemBanner); }
-    if (data.galeriaImagens) { updates.push('galeria_imagens = ?'); params.push(JSON.stringify(data.galeriaImagens)); }
-    if (data.videoUrl !== undefined) { updates.push('video_url = ?'); params.push(data.videoUrl); }
+    if (data.imagemBanner !== undefined || data.imagem_banner !== undefined) {
+      updates.push('imagem_banner = ?');
+      params.push(data.imagemBanner || data.imagem_banner);
+    }
+    if (data.galeriaImagens || data.galeria_imagens) {
+      updates.push('galeria_imagens = ?');
+      params.push(JSON.stringify(data.galeriaImagens || data.galeria_imagens));
+    }
+    if (data.videoUrl !== undefined || data.video_url !== undefined) {
+      updates.push('video_url = ?');
+      params.push(data.videoUrl || data.video_url);
+    }
 
-    if (data.metaTitle !== undefined) { updates.push('meta_title = ?'); params.push(data.metaTitle); }
-    if (data.metaDescription !== undefined) { updates.push('meta_description = ?'); params.push(data.metaDescription); }
-    if (data.metaKeywords) { updates.push('meta_keywords = ?'); params.push(JSON.stringify(data.metaKeywords)); }
+    if (data.metaTitle !== undefined || data.meta_title !== undefined) {
+      updates.push('meta_title = ?');
+      params.push(data.metaTitle || data.meta_title);
+    }
+    if (data.metaDescription !== undefined || data.meta_description !== undefined) {
+      updates.push('meta_description = ?');
+      params.push(data.metaDescription || data.meta_description);
+    }
+    if (data.metaKeywords || data.meta_keywords) {
+      updates.push('meta_keywords = ?');
+      const keywords = data.metaKeywords || data.meta_keywords;
+      params.push(typeof keywords === 'string' ? keywords : JSON.stringify(keywords));
+    }
 
-    if (data.ordem !== undefined) { updates.push('ordem = ?'); params.push(data.ordem); }
+    if (data.ordem !== undefined) { updates.push('ordem = ?'); params.push(parseInt(data.ordem)); }
     if (data.destaque !== undefined) { updates.push('destaque = ?'); params.push(data.destaque ? 1 : 0); }
     if (data.status !== undefined) { updates.push('status = ?'); params.push(data.status); }
-    if (data.menuId !== undefined) { updates.push('menu_id = ?'); params.push(data.menuId); }
+    if (data.menuId !== undefined || data.menu_id !== undefined) {
+      updates.push('menu_id = ?');
+      params.push(data.menuId || data.menu_id);
+    }
 
     updates.push('updated_by_id = ?');
     params.push(payload.id);
