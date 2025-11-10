@@ -40,6 +40,19 @@ async function fetchProducts(env) {
  * Gerar HTML do header com menus dinâmicos
  */
 function generateHeaderHTML(menus, products) {
+  // Separar menus principais de submenus
+  const mainMenus = menus.filter(m => !m.menu_pai_id);
+  const submenusByParent = {};
+
+  menus.forEach(menu => {
+    if (menu.menu_pai_id) {
+      if (!submenusByParent[menu.menu_pai_id]) {
+        submenusByParent[menu.menu_pai_id] = [];
+      }
+      submenusByParent[menu.menu_pai_id].push(menu);
+    }
+  });
+
   // Agrupar produtos por menu
   const productsByMenu = {};
   products.forEach(product => {
@@ -49,17 +62,30 @@ function generateHeaderHTML(menus, products) {
     productsByMenu[product.menu_id].push(product);
   });
 
-  // Gerar menu desktop
+  // Gerar menu desktop (apenas menus principais)
   let menuHTML = '';
-  menus.forEach(menu => {
+  mainMenus.forEach(menu => {
     const menuProducts = productsByMenu[menu.id] || [];
+    const submenus = submenusByParent[menu.id] || [];
+    const hasDropdown = menuProducts.length > 0 || submenus.length > 0;
 
-    if (menuProducts.length > 0) {
-      // Dropdown
+    if (hasDropdown) {
+      // Dropdown com produtos e/ou submenus
       menuHTML += `            <li class="dropdown">\n`;
       menuHTML += `                <a href="planac-website.html#${menu.slug}" class="dropdown-toggle">${menu.nome}</a>\n`;
       menuHTML += `                <ul class="dropdown-menu">\n`;
 
+      // Adicionar submenus primeiro
+      submenus.forEach(submenu => {
+        const submenuProducts = productsByMenu[submenu.id] || [];
+        if (submenuProducts.length > 0) {
+          submenuProducts.forEach(product => {
+            menuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
+          });
+        }
+      });
+
+      // Depois adicionar produtos diretos do menu pai
       menuProducts.forEach(product => {
         menuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
       });
@@ -67,21 +93,34 @@ function generateHeaderHTML(menus, products) {
       menuHTML += `                </ul>\n`;
       menuHTML += `            </li>\n`;
     } else {
-      // Link direto
+      // Link direto (sem dropdown)
       menuHTML += `            <a href="planac-website.html#${menu.slug}">${menu.nome}</a>\n`;
     }
   });
 
-  // Gerar menu mobile
+  // Gerar menu mobile (apenas menus principais)
   let mobileMenuHTML = '';
-  menus.forEach(menu => {
+  mainMenus.forEach(menu => {
     const menuProducts = productsByMenu[menu.id] || [];
+    const submenus = submenusByParent[menu.id] || [];
+    const hasDropdown = menuProducts.length > 0 || submenus.length > 0;
 
-    if (menuProducts.length > 0) {
+    if (hasDropdown) {
       mobileMenuHTML += `            <li class="mobile-menu-dropdown">\n`;
       mobileMenuHTML += `                <a href="planac-website.html#${menu.slug}">${menu.nome}</a>\n`;
       mobileMenuHTML += `                <ul>\n`;
 
+      // Adicionar submenus primeiro
+      submenus.forEach(submenu => {
+        const submenuProducts = productsByMenu[submenu.id] || [];
+        if (submenuProducts.length > 0) {
+          submenuProducts.forEach(product => {
+            mobileMenuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
+          });
+        }
+      });
+
+      // Depois adicionar produtos diretos do menu pai
       menuProducts.forEach(product => {
         mobileMenuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
       });
