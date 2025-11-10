@@ -16,16 +16,24 @@ const menus = new Hono();
  */
 async function triggerBuildDeploy(env) {
   try {
-    fetch(`${env.API_URL || 'https://planac-backend-api.planacacabamentos.workers.dev'}/api/internal/build-deploy`, {
+    const url = `${env.API_URL || 'https://planac-backend-api.planacacabamentos.workers.dev'}/api/internal/build-deploy`;
+    console.log('🚀 Acionando build/deploy em:', url);
+
+    const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-    }).catch(err => console.error('Erro ao acionar build/deploy:', err));
+    });
 
-    console.log('🚀 Build/deploy acionado em background');
+    if (response.ok) {
+      const result = await response.json();
+      console.log('✅ Build/deploy executado com sucesso:', result);
+    } else {
+      console.error('❌ Erro ao acionar build/deploy:', response.status, response.statusText);
+    }
   } catch (error) {
-    console.error('Erro ao acionar build/deploy:', error);
+    console.error('❌ Exceção ao acionar build/deploy:', error.message);
   }
 }
 
