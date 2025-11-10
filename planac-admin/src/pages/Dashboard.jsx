@@ -19,7 +19,12 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/admin/dashboard`);
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${API_URL}/api/admin/dashboard`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         setStats(response.data.data);
       } catch (error) {
         console.error('Error fetching stats:', error);

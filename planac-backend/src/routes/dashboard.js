@@ -13,18 +13,18 @@ const dashboard = new Hono();
 // ===========================================
 dashboard.get('/', async (c) => {
   try {
-    // Contar produtos
+    // Contar páginas (products = paginas)
     const { total: produtosTotal } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM products'
+      'SELECT COUNT(*) as total FROM paginas'
     ).first();
 
     const { total: produtosPublicados } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM products WHERE status = ?'
+      'SELECT COUNT(*) as total FROM paginas WHERE status = ?'
     ).bind('PUBLICADO').first();
 
-    // Contar categorias
+    // Contar menus (categories virou menus)
     const { total: categoriasTotal } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM categories WHERE ativo = 1'
+      'SELECT COUNT(*) as total FROM menus WHERE ativo = 1'
     ).first();
 
     // Orçamentos
@@ -34,15 +34,15 @@ dashboard.get('/', async (c) => {
 
     const { total: orcamentosNovos } = await c.env.DB.prepare(
       'SELECT COUNT(*) as total FROM quotes WHERE status = ?'
-    ).bind('NOVO').first();
+    ).bind('PENDENTE').first();
 
     const { total: orcamentosAtendimento } = await c.env.DB.prepare(
       'SELECT COUNT(*) as total FROM quotes WHERE status = ?'
-    ).bind('EM_ATENDIMENTO').first();
+    ).bind('EM_ANALISE').first();
 
     const { total: orcamentosAtendidos } = await c.env.DB.prepare(
       'SELECT COUNT(*) as total FROM quotes WHERE status = ?'
-    ).bind('ATENDIDO').first();
+    ).bind('RESPONDIDO').first();
 
     // Contatos
     const { total: contatosTotal } = await c.env.DB.prepare(
@@ -50,8 +50,8 @@ dashboard.get('/', async (c) => {
     ).first();
 
     const { total: contatosNaoLidos } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM contacts WHERE lido = 0'
-    ).first();
+      'SELECT COUNT(*) as total FROM contacts WHERE status = ?'
+    ).bind('PENDENTE').first();
 
     // Orçamentos recentes (últimos 7 dias)
     const { results: orcamentosRecentes } = await c.env.DB.prepare(`
@@ -62,10 +62,10 @@ dashboard.get('/', async (c) => {
       ORDER BY data DESC
     `).all();
 
-    // Produtos mais visualizados (simular - você pode adicionar tracking depois)
+    // Páginas mais destacadas
     const { results: produtosPopulares } = await c.env.DB.prepare(`
-      SELECT id, nome, slug, imagem_banner, destaque
-      FROM products
+      SELECT id, titulo as nome, slug, imagem_banner, destaque
+      FROM paginas
       WHERE status = 'PUBLICADO'
       ORDER BY destaque DESC, ordem ASC
       LIMIT 5
@@ -73,7 +73,7 @@ dashboard.get('/', async (c) => {
 
     // Últimos orçamentos
     const { results: ultimosOrcamentos } = await c.env.DB.prepare(`
-      SELECT id, nome, email, telefone, produto, status, created_at
+      SELECT id, nome, email, telefone, produto_interesse as produto, status, created_at
       FROM quotes
       ORDER BY created_at DESC
       LIMIT 10
@@ -151,10 +151,10 @@ dashboard.get('/stats', async (c) => {
 
     // Produtos mais solicitados
     const { results: produtosMaisSolicitados } = await c.env.DB.prepare(`
-      SELECT produto, COUNT(*) as total
+      SELECT produto_interesse as produto, COUNT(*) as total
       FROM quotes
-      WHERE produto IS NOT NULL AND created_at >= datetime('now', '-' || ? || ' days')
-      GROUP BY produto
+      WHERE produto_interesse IS NOT NULL AND created_at >= datetime('now', '-' || ? || ' days')
+      GROUP BY produto_interesse
       ORDER BY total DESC
       LIMIT 10
     `).bind(periodo).all();
