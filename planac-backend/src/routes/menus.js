@@ -105,6 +105,29 @@ menus.get('/:slug', async (c) => {
 });
 
 // ===========================================
+// GET /api/admin/menus - Listar TODOS os menus (ADMIN)
+// ===========================================
+menus.get('/admin', async (c) => {
+  try {
+    const { results } = await c.env.DB.prepare(`
+      SELECT m.*,
+        (SELECT COUNT(*) FROM products p WHERE p.menu_id = m.id) as produtos_count
+      FROM menus m
+      ORDER BY m.ordem ASC, m.nome ASC
+    `).all();
+
+    return c.json({
+      success: true,
+      data: results,
+    });
+
+  } catch (error) {
+    console.error('Erro ao listar menus (admin):', error);
+    return c.json({ error: 'Erro ao listar menus' }, 500);
+  }
+});
+
+// ===========================================
 // POST /api/admin/menus - Criar menu (ADMIN)
 // ===========================================
 menus.post('/', async (c) => {
