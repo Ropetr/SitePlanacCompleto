@@ -13,13 +13,13 @@ const dashboard = new Hono();
 // ===========================================
 dashboard.get('/', async (c) => {
   try {
-    // Contar páginas (products = paginas)
+    // Contar páginas (products)
     const { total: produtosTotal } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM paginas'
+      'SELECT COUNT(*) as total FROM products'
     ).first();
 
     const { total: produtosPublicados } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM paginas WHERE status = ?'
+      'SELECT COUNT(*) as total FROM products WHERE status = ?'
     ).bind('PUBLICADO').first();
 
     // Contar menus (categories virou menus)
@@ -64,8 +64,8 @@ dashboard.get('/', async (c) => {
 
     // Páginas mais destacadas
     const { results: produtosPopulares } = await c.env.DB.prepare(`
-      SELECT id, titulo as nome, slug, imagem_banner, destaque
-      FROM paginas
+      SELECT id, nome, slug, imagem_banner, destaque
+      FROM products
       WHERE status = 'PUBLICADO'
       ORDER BY destaque DESC, ordem ASC
       LIMIT 5
