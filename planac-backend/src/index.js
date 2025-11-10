@@ -107,6 +107,7 @@ app.get('/health', (c) => {
     message: 'Planac API rodando no Cloudflare Workers 🚀',
     timestamp: new Date().toISOString(),
     version: '1.0.0',
+    deployMethod: 'GitHub Actions - Auto Deploy',
   });
 });
 
