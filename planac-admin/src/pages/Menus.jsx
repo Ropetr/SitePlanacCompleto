@@ -20,10 +20,16 @@ export default function Menus() {
   const fetchMenus = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/api/menus`);
+      // Usar endpoint admin que retorna TODOS os menus (ativos e inativos)
+      const response = await axios.get(`${API_URL}/api/admin/menus`);
+
+      console.log('📋 Menus recebidos da API:', response.data);
 
       if (response.data.success) {
         let menusList = response.data.data || [];
+
+        console.log(`📊 Total de menus: ${menusList.length}`);
+        console.log('🔍 Menus inativos:', menusList.filter(m => m.ativo === 0));
 
         // Filtrar por busca se houver
         if (search) {
@@ -37,6 +43,8 @@ export default function Menus() {
         if (!showInactive) {
           menusList = menusList.filter(menu => menu.ativo === 1);
         }
+
+        console.log(`✅ Menus após filtros: ${menusList.length}`, menusList);
 
         setMenus(menusList);
       }
