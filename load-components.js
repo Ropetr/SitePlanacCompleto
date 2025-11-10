@@ -126,9 +126,19 @@
 
     // Carregar os componentes quando a página carregar
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('🚀 Carregando componentes - Versão 2.0');
+        console.log('🚀 Carregando componentes - Versão 3.0 (com menus dinâmicos)');
+
+        // Carregar componentes
         loadComponent('header.html', 'header-container');
         loadComponent('footer.html', 'footer-container');
         loadComponent('whatsapp-float.html', 'whatsapp-float-container');
+
+        // Aguardar um pouco para garantir que o header foi carregado
+        // antes de substituir os menus
+        setTimeout(() => {
+            if (window.DynamicMenus) {
+                window.DynamicMenus.updateHeaderWithDynamicMenus();
+            }
+        }, 500);
     });
 })();
