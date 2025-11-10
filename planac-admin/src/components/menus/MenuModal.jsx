@@ -61,11 +61,11 @@ export default function MenuModal({ menu, menus, onClose }) {
     setLoading(true);
 
     try {
-      if (menu) {
-        // Editar
+      if (menu && menu.id) {
+        // Editar (só se tiver ID)
         await axios.put(`${API_URL}/api/admin/menus/${menu.id}`, formData);
       } else {
-        // Criar
+        // Criar (novo menu ou submenu)
         await axios.post(`${API_URL}/api/admin/menus`, formData);
       }
       onClose();
