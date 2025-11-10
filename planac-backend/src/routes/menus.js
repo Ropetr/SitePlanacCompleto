@@ -31,18 +31,44 @@ async function triggerBuildDeploy(env) {
 
 // ===========================================
 // GET /api/menus - Listar menus (PÚBLICO)
+// GET /api/admin/menus - Listar TODOS os menus (ADMIN)
 // ===========================================
 menus.get('/', async (c) => {
   try {
-    const { results } = await c.env.DB.prepare(`
-      SELECT m.*,
-        (SELECT COUNT(*) FROM products p WHERE p.menu_id = m.id AND p.status = 'PUBLICADO') as produtos_count
-      FROM menus m
-      WHERE m.ativo = 1
-      ORDER BY m.ordem ASC, m.nome ASC
-    `).all();
+    // Verificar se é uma requisição autenticada (admin)
+    const isAdmin = c.req.url.includes('/api/admin/');
 
-    // Organizar em árvore hierárquica
+    let query;
+    if (isAdmin) {
+      // Admin: retorna TODOS os menus (ativos e inativos)
+      query = `
+        SELECT m.*,
+          (SELECT COUNT(*) FROM products p WHERE p.menu_id = m.id) as produtos_count
+        FROM menus m
+        ORDER BY m.ordem ASC, m.nome ASC
+      `;
+    } else {
+      // Público: retorna apenas menus ativos
+      query = `
+        SELECT m.*,
+          (SELECT COUNT(*) FROM products p WHERE p.menu_id = m.id AND p.status = 'PUBLICADO') as produtos_count
+        FROM menus m
+        WHERE m.ativo = 1
+        ORDER BY m.ordem ASC, m.nome ASC
+      `;
+    }
+
+    const { results } = await c.env.DB.prepare(query).all();
+
+    // Se for admin, retorna lista simples
+    if (isAdmin) {
+      return c.json({
+        success: true,
+        data: results,
+      });
+    }
+
+    // Se for público, organiza em árvore hierárquica
     const buildTree = (items, parentId = null) => {
       return items
         .filter(item => item.menu_pai_id === parentId)
@@ -101,29 +127,6 @@ menus.get('/:slug', async (c) => {
   } catch (error) {
     console.error('Erro ao buscar menu:', error);
     return c.json({ error: 'Erro ao buscar menu' }, 500);
-  }
-});
-
-// ===========================================
-// GET /api/admin/menus - Listar TODOS os menus (ADMIN)
-// ===========================================
-menus.get('/admin', async (c) => {
-  try {
-    const { results } = await c.env.DB.prepare(`
-      SELECT m.*,
-        (SELECT COUNT(*) FROM products p WHERE p.menu_id = m.id) as produtos_count
-      FROM menus m
-      ORDER BY m.ordem ASC, m.nome ASC
-    `).all();
-
-    return c.json({
-      success: true,
-      data: results,
-    });
-
-  } catch (error) {
-    console.error('Erro ao listar menus (admin):', error);
-    return c.json({ error: 'Erro ao listar menus' }, 500);
   }
 });
 
