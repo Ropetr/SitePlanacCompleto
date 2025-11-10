@@ -114,7 +114,11 @@ dashboard.get('/', async (c) => {
 
   } catch (error) {
     console.error('Erro ao buscar dashboard:', error);
-    return c.json({ error: 'Erro ao carregar dashboard' }, 500);
+    return c.json({
+      error: 'Erro ao carregar dashboard',
+      message: error.message,
+      details: error.toString()
+    }, 500);
   }
 });
 
