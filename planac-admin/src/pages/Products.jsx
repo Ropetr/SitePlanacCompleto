@@ -183,7 +183,7 @@ export default function Products() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{product.categoria_nome || 'Sem menu'}</div>
+                        <div className="text-sm text-gray-900">{product.menu_nome || 'Sem menu'}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`px-2 py-1 text-xs font-semibold rounded-full ${getStatusBadge(product.status)}`}>
