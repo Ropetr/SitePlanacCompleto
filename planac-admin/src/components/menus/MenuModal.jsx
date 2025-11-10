@@ -61,16 +61,22 @@ export default function MenuModal({ menu, menus, onClose }) {
     setLoading(true);
 
     try {
+      console.log('Menu objeto:', menu);
+      console.log('FormData:', formData);
+
       if (menu && menu.id) {
         // Editar (só se tiver ID)
+        console.log('Editando menu ID:', menu.id);
         await axios.put(`${API_URL}/api/admin/menus/${menu.id}`, formData);
       } else {
         // Criar (novo menu ou submenu)
+        console.log('Criando novo menu');
         await axios.post(`${API_URL}/api/admin/menus`, formData);
       }
       onClose();
     } catch (error) {
       console.error('Erro ao salvar menu:', error);
+      console.error('Resposta do erro:', error.response?.data);
       alert(error.response?.data?.error || 'Erro ao salvar menu');
     } finally {
       setLoading(false);
