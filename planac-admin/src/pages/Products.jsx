@@ -14,10 +14,11 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [showInactive, setShowInactive] = useState(true); // Mostrar arquivados por padrão
 
   useEffect(() => {
     fetchProducts();
-  }, [page, statusFilter, search]);
+  }, [page, statusFilter, search, showInactive]);
 
   const fetchProducts = async () => {
     try {
@@ -32,7 +33,14 @@ export default function Products() {
       const response = await axios.get(`${API_URL}/api/products`, { params });
 
       if (response.data.success) {
-        setProducts(response.data.data || []);
+        let productsList = response.data.data || [];
+
+        // Filtrar arquivados se showInactive estiver desativado
+        if (!showInactive) {
+          productsList = productsList.filter(p => p.status !== 'ARQUIVADO');
+        }
+
+        setProducts(productsList);
         setTotalPages(response.data.pagination?.totalPages || 1);
       }
     } catch (error) {
@@ -127,18 +135,32 @@ export default function Products() {
             </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <Filter className="w-5 h-5 text-gray-400" />
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="all">Todos os Status</option>
-              <option value="PUBLICADO">Publicados</option>
-              <option value="RASCUNHO">Rascunhos</option>
-              <option value="ARQUIVADO">Arquivados</option>
-            </select>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Filter className="w-5 h-5 text-gray-400" />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value)}
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="all">Todos os Status</option>
+                <option value="PUBLICADO">Publicados</option>
+                <option value="RASCUNHO">Rascunhos</option>
+                <option value="ARQUIVADO">Arquivados</option>
+              </select>
+            </div>
+            <div className="flex items-center gap-2 border-l border-gray-300 pl-4">
+              <input
+                type="checkbox"
+                id="showInactiveProducts"
+                checked={showInactive}
+                onChange={(e) => setShowInactive(e.target.checked)}
+                className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+              />
+              <label htmlFor="showInactiveProducts" className="text-sm text-gray-700 whitespace-nowrap cursor-pointer">
+                Mostrar arquivados
+              </label>
+            </div>
           </div>
         </div>
       </div>
