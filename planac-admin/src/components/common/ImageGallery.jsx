@@ -154,6 +154,8 @@ export default function ImageGallery({ value = [], onChange, label = 'Galeria de
 
       <p className="text-xs text-gray-500 mt-2">
         Selecione múltiplas imagens. JPG, PNG, WebP ou GIF. Máximo 10MB cada.
+        <br />
+        <span className="text-green-600">✓ Salvo automaticamente em WebP otimizado</span>
       </p>
 
       {/* Contador */}

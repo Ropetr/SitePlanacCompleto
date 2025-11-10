@@ -33,13 +33,21 @@ export default function ImageUpload({ value, onChange, label = 'Imagem', classNa
     };
     reader.readAsDataURL(file);
 
-    // Upload
+    // Upload (usa /replace se já existir imagem, /upload se for nova)
     setUploading(true);
     try {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await axios.post(`${API_URL}/api/admin/media/upload`, formData, {
+      // Se já existe uma imagem, enviar URL antiga para ser deletada
+      const oldImageUrl = value;
+      const endpoint = oldImageUrl ? '/api/admin/media/replace' : '/api/admin/media/upload';
+
+      if (oldImageUrl) {
+        formData.append('oldUrl', oldImageUrl);
+      }
+
+      const response = await axios.post(`${API_URL}${endpoint}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -49,6 +57,13 @@ export default function ImageUpload({ value, onChange, label = 'Imagem', classNa
         const imageUrl = response.data.data.url;
         setPreview(imageUrl);
         onChange(imageUrl);
+
+        // Log de sucesso
+        if (oldImageUrl && response.data.data.oldFileDeleted) {
+          console.log('✅ Imagem antiga deletada e nova imagem salva');
+        } else {
+          console.log('✅ Nova imagem salva');
+        }
       } else {
         alert('Erro ao fazer upload da imagem');
         setPreview(value || '');
@@ -127,6 +142,8 @@ export default function ImageUpload({ value, onChange, label = 'Imagem', classNa
 
           <p className="text-xs text-gray-500 mt-1">
             JPG, PNG, WebP ou GIF. Máximo 10MB.
+            <br />
+            <span className="text-green-600">✓ Salvo automaticamente em WebP otimizado</span>
           </p>
         </div>
 
