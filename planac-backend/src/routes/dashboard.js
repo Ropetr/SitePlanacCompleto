@@ -50,8 +50,8 @@ dashboard.get('/', async (c) => {
     ).first();
 
     const { total: contatosNaoLidos } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM contacts WHERE status = ?'
-    ).bind('PENDENTE').first();
+      'SELECT COUNT(*) as total FROM contacts WHERE lido = 0'
+    ).first();
 
     // Orçamentos recentes (últimos 7 dias)
     const { results: orcamentosRecentes } = await c.env.DB.prepare(`
