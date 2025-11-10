@@ -230,6 +230,34 @@ pages.get('/product/:slug', async (c) => {
   }
 });
 
+// ===========================================
+// GET /api/pages/header - Servir header dinâmico do KV (PÚBLICO)
+// ===========================================
+pages.get('/header', async (c) => {
+  try {
+    // Tentar buscar header do KV cache
+    const headerHTML = await c.env.SITE_CACHE.get('header.html');
+
+    if (!headerHTML) {
+      return c.json({
+        error: 'Header não encontrado. Execute build-deploy primeiro.'
+      }, 404);
+    }
+
+    return new Response(headerHTML, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, max-age=300', // Cache de 5 minutos
+        'Access-Control-Allow-Origin': '*', // Permitir CORS para incluir no site
+      }
+    });
+
+  } catch (error) {
+    console.error('Erro ao servir header:', error);
+    return c.json({ error: 'Erro ao servir header' }, 500);
+  }
+});
+
 // Função antiga removida - agora usando TemplateEngine
 
 export default pages;

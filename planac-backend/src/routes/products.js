@@ -11,6 +11,26 @@ import { slugify, generateUniqueSlug } from '../utils/slugify.js';
 
 const products = new Hono();
 
+/**
+ * Aciona build e deploy automático (não bloqueia a resposta)
+ */
+async function triggerBuildDeploy(env) {
+  try {
+    // Fazer requisição assíncrona para o endpoint de build/deploy
+    // Não esperamos a resposta (fire and forget)
+    fetch(`${env.API_URL || 'https://planac-backend-api.planacacabamentos.workers.dev'}/api/admin/build-deploy`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).catch(err => console.error('Erro ao acionar build/deploy:', err));
+
+    console.log('🚀 Build/deploy acionado em background');
+  } catch (error) {
+    console.error('Erro ao acionar build/deploy:', error);
+  }
+}
+
 // ===========================================
 // GET /api/products - Listar produtos (PÚBLICO)
 // ===========================================
@@ -235,6 +255,9 @@ products.post('/', async (c) => {
       JSON.stringify({ nome: data.nome, slug })
     ).run();
 
+    // 🚀 Acionar build e deploy automático
+    triggerBuildDeploy(c.env);
+
     return c.json({
       success: true,
       message: 'Produto criado com sucesso',
@@ -375,6 +398,9 @@ products.put('/:id', async (c) => {
       JSON.stringify({ nome: existing.nome }),
       JSON.stringify(data)
     ).run();
+
+    // 🚀 Acionar build e deploy automático
+    triggerBuildDeploy(c.env);
 
     return c.json({
       success: true,

@@ -66,9 +66,10 @@ export const menuSchema = z.object({
   nome: z.string().min(2, 'Nome deve ter no mínimo 2 caracteres'),
   descricao: z.string().optional(),
   icone: z.union([z.string().url(), z.literal('')]).optional().nullable(),
-  menuPaiId: z.string().uuid().optional().nullable(),
-  ordem: z.number().int().optional(),
-  ativo: z.boolean().optional(),
+  menuPaiId: z.string().optional().nullable(),
+  menu_pai_id: z.string().optional().nullable(), // snake_case alias
+  ordem: z.union([z.number().int(), z.string().transform(v => parseInt(v))]).optional(),
+  ativo: z.union([z.boolean(), z.number().transform(v => v === 1)]).optional(),
   metadata: z.record(z.any()).optional(),
 });
 

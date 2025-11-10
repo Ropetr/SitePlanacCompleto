@@ -145,13 +145,15 @@ export default function MenuModal({ menu, menus, onClose }) {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Menu Pai
+                Menu Pai {formData.menuPaiId && <span className="text-blue-600 font-semibold">(Criando submenu)</span>}
               </label>
               <select
                 name="menuPaiId"
                 value={formData.menuPaiId}
                 onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  formData.menuPaiId ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+                }`}
               >
                 <option value="">Nenhum (Menu raiz)</option>
                 {availableParentMenus
@@ -161,7 +163,9 @@ export default function MenuModal({ menu, menus, onClose }) {
                   ))}
               </select>
               <p className="text-xs text-gray-500 mt-1">
-                Deixe vazio para criar um menu principal
+                {formData.menuPaiId
+                  ? '✓ Este será um submenu'
+                  : 'Deixe vazio para criar um menu principal'}
               </p>
             </div>
 

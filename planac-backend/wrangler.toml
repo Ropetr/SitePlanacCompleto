@@ -39,6 +39,10 @@ id = "e8d8225292f9453db316a0a6566dec7d"
 binding = "KV_SESSIONS"
 id = "719ad6603daa4043999069240aa9deed"
 
+[[kv_namespaces]]
+binding = "SITE_CACHE" # Para cache do header.html e invalidação
+id = "e8d8225292f9453db316a0a6566dec7d" # Usando mesmo KV do cache
+
 # ============================================
 # VARIÁVEIS SECRETAS (não commitar!)
 # ============================================

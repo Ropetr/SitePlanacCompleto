@@ -37,7 +37,22 @@
       "Bash(node run-migration.js:*)",
       "Bash(wrangler pages project:*)",
       "Bash(node check-cloudflare.js:*)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(node migrate-pages.js:*)",
+      "Bash(move Categories.jsx Menus.jsx)",
+      "Bash(move CategoryModal.jsx MenuModal.jsx)",
+      "Bash(move categories menus)",
+      "Bash(echo $CLOUDFLARE_API_TOKEN)",
+      "Bash(set CLOUDFLARE_API_TOKEN=y_3eCvXgEP1NJYIi5tA0Oa3d_EBygsu7MK1l-njq)",
+      "Bash(npx wrangler deploy)",
+      "Bash(npx wrangler pages project create:*)",
+      "Bash(npx wrangler d1 execute:*)",
+      "Bash(npx wrangler:*)",
+      "WebFetch(domain:planac-admin.pages.dev)",
+      "Bash(node build-static-pages.js:*)",
+      "Bash(xcopy:*)",
+      "Bash(if not exist backups mkdir backups)",
+      "Bash(move:*)"
     ],
     "deny": [],
     "ask": []

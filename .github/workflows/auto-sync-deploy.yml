@@ -1,0 +1,68 @@
+name: Auto Sync & Deploy
+
+on:
+  # Executar a cada hora
+  schedule:
+    - cron: '0 * * * *'  # A cada hora
+
+  # Permitir execução manual
+  workflow_dispatch:
+
+  # Executar quando alguém fizer push (backup)
+  push:
+    branches:
+      - main
+
+jobs:
+  sync-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 🔄 Sincronizar menus do banco
+        run: node sync-from-database.js
+        env:
+          API_URL: https://planac-backend-api.planacacabamentos.workers.dev
+
+      - name: 🏗️ Build páginas otimizadas
+        run: node build-static-pages.js
+
+      - name: 📝 Verificar se há mudanças
+        id: check_changes
+        run: |
+          git diff --quiet || echo "has_changes=true" >> $GITHUB_OUTPUT
+
+      - name: 💾 Commit mudanças
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add -A
+          git commit -m "🤖 Auto-sync: Atualiza site com dados do banco [skip ci]"
+          git push
+
+      - name: 🚀 Deploy para Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=siteplanaccompleto
+
+      - name: ✅ Sucesso!
+        if: success()
+        run: |
+          echo "================================"
+          echo "✅ Deploy concluído com sucesso!"
+          echo "================================"
+          echo ""
+          echo "🌐 Site: https://siteplanaccompleto.pages.dev"
+          echo "📅 Data: $(date)"

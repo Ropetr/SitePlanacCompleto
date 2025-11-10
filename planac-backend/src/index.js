@@ -26,6 +26,7 @@ import settingRoutes from './routes/settings.js';
 import pageRoutes from './routes/pages.js';
 import mediaRoutes from './routes/media.js';
 import dashboardRoutes from './routes/dashboard.js';
+import buildDeployRoutes from './routes/build-deploy.js';
 
 // Criar app Hono
 const app = new Hono();
@@ -139,6 +140,7 @@ app.use('/api/admin/*', async (c, next) => {
 
 app.route('/api/admin/dashboard', dashboardRoutes);
 app.route('/api/admin/media', mediaRoutes);
+app.route('/api/admin/build-deploy', buildDeployRoutes);
 
 // Rotas admin para gerenciar recursos
 app.route('/api/admin/products', productRoutes);

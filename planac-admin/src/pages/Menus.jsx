@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FolderTree, Plus, Edit2, Trash2, Search } from 'lucide-react';
+import { FolderTree, Plus, Edit2, Trash2, Search, ChevronRight, Folder, FileText } from 'lucide-react';
 import MenuModal from '../components/menus/MenuModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
@@ -88,24 +88,51 @@ export default function Menus() {
 
   const hierarchicalMenus = organizeHierarchy(menus);
 
+  const handleAddSubmenu = (parentMenu) => {
+    // Criar um menu com o pai pré-selecionado
+    setSelectedMenu({ menu_pai_id: parentMenu.id });
+    setShowModal(true);
+  };
+
   const renderMenu = (menu, level = 0) => {
-    const indent = level * 30;
+    const indent = level * 40;
+    const isSubmenu = level > 0;
+    const hasChildren = menu.children && menu.children.length > 0;
 
     return (
       <div key={menu.id}>
-        <div className="flex items-center hover:bg-gray-50 border-b border-gray-100">
+        <div className={`flex items-center hover:bg-gray-50 border-b border-gray-100 ${
+          isSubmenu ? 'bg-blue-50/30' : ''
+        }`}>
           <div className="flex-1 px-6 py-4" style={{ paddingLeft: `${24 + indent}px` }}>
             <div className="flex items-center gap-3">
-              {level > 0 && (
-                <span className="text-gray-400">└─</span>
+              {/* Indicador visual de hierarquia */}
+              {isSubmenu ? (
+                <div className="flex items-center gap-2 text-gray-400">
+                  <ChevronRight className="w-4 h-4" />
+                  <FileText className="w-4 h-4 text-blue-500" />
+                </div>
+              ) : (
+                <Folder className="w-5 h-5 text-gray-600" />
               )}
+
               {menu.icone && (
-                <span className="text-2xl">{menu.icone}</span>
+                <span className="text-xl">{menu.icone}</span>
               )}
-              <div>
-                <div className="text-sm font-medium text-gray-900">{menu.nome}</div>
+
+              <div className="flex-1">
+                <div className={`text-sm font-medium ${
+                  isSubmenu ? 'text-gray-700' : 'text-gray-900'
+                }`}>
+                  {menu.nome}
+                  {isSubmenu && (
+                    <span className="ml-2 text-xs text-gray-500 font-normal">
+                      (submenu)
+                    </span>
+                  )}
+                </div>
                 {menu.descricao && (
-                  <div className="text-sm text-gray-500 mt-1">{menu.descricao}</div>
+                  <div className="text-xs text-gray-500 mt-1">{menu.descricao}</div>
                 )}
               </div>
             </div>
@@ -125,6 +152,16 @@ export default function Menus() {
 
           <div className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
             <div className="flex items-center justify-end gap-2">
+              {/* Botão para adicionar submenu (apenas em menus de nível 0) */}
+              {!isSubmenu && (
+                <button
+                  onClick={() => handleAddSubmenu(menu)}
+                  className="text-green-600 hover:text-green-900"
+                  title="Adicionar Submenu"
+                >
+                  <Plus className="w-4 h-4" />
+                </button>
+              )}
               <button
                 onClick={() => handleEdit(menu)}
                 className="text-blue-600 hover:text-blue-900"
@@ -144,7 +181,7 @@ export default function Menus() {
         </div>
 
         {/* Renderizar submenus */}
-        {menu.children && menu.children.length > 0 && (
+        {hasChildren && (
           menu.children.map(child => renderMenu(child, level + 1))
         )}
       </div>

@@ -11,6 +11,24 @@ import { slugify, generateUniqueSlug } from '../utils/slugify.js';
 
 const menus = new Hono();
 
+/**
+ * Aciona build e deploy automático (não bloqueia a resposta)
+ */
+async function triggerBuildDeploy(env) {
+  try {
+    fetch(`${env.API_URL || 'https://planac-backend-api.planacacabamentos.workers.dev'}/api/admin/build-deploy`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).catch(err => console.error('Erro ao acionar build/deploy:', err));
+
+    console.log('🚀 Build/deploy acionado em background');
+  } catch (error) {
+    console.error('Erro ao acionar build/deploy:', error);
+  }
+}
+
 // ===========================================
 // GET /api/menus - Listar menus (PÚBLICO)
 // ===========================================
@@ -120,6 +138,9 @@ menus.post('/', async (c) => {
       data.metadata ? JSON.stringify(data.metadata) : null
     ).run();
 
+    // 🚀 Acionar build e deploy automático
+    triggerBuildDeploy(c.env);
+
     return c.json({
       success: true,
       message: 'Menu criado com sucesso',
@@ -178,6 +199,9 @@ menus.put('/:id', async (c) => {
     await c.env.DB.prepare(`
       UPDATE menus SET ${updates.join(', ')} WHERE id = ?
     `).bind(...params).run();
+
+    // 🚀 Acionar build e deploy automático
+    triggerBuildDeploy(c.env);
 
     return c.json({
       success: true,

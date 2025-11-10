@@ -1,0 +1,40 @@
+name: Build & Deploy Site
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'header.html'
+      - 'footer.html'
+      - 'whatsapp-float.html'
+      - '*.html'
+      - 'build-static-pages.js'
+  workflow_dispatch: # Permite executar manualmente
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Build páginas otimizadas
+        run: node build-static-pages.js
+
+      - name: Deploy para Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=siteplanaccompleto
+
+      - name: Notificar sucesso
+        if: success()
+        run: echo "✅ Deploy concluído com sucesso!"
