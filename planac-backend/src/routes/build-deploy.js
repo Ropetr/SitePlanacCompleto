@@ -75,13 +75,21 @@ function generateHeaderHTML(menus, products) {
       menuHTML += `                <a href="planac-website.html#${menu.slug}" class="dropdown-toggle">${menu.nome}</a>\n`;
       menuHTML += `                <ul class="dropdown-menu">\n`;
 
-      // Adicionar submenus primeiro
+      // Adicionar submenus primeiro (NOVO: sempre renderiza se existir)
       submenus.forEach(submenu => {
         const submenuProducts = productsByMenu[submenu.id] || [];
+
+        // NOVO: Se o submenu tem produtos, renderiza como seção
         if (submenuProducts.length > 0) {
+          // Adicionar título do submenu (opcional - pode descomentar se quiser)
+          // menuHTML += `                    <li class="dropdown-header">${submenu.nome}</li>\n`;
+
           submenuProducts.forEach(product => {
             menuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
           });
+        } else {
+          // NOVO: Se não tem produtos, renderiza como link direto do submenu
+          menuHTML += `                    <li><a href="planac-website.html#${submenu.slug}">${submenu.nome}</a></li>\n`;
         }
       });
 
@@ -110,13 +118,18 @@ function generateHeaderHTML(menus, products) {
       mobileMenuHTML += `                <a href="planac-website.html#${menu.slug}">${menu.nome}</a>\n`;
       mobileMenuHTML += `                <ul>\n`;
 
-      // Adicionar submenus primeiro
+      // Adicionar submenus primeiro (NOVO: sempre renderiza se existir)
       submenus.forEach(submenu => {
         const submenuProducts = productsByMenu[submenu.id] || [];
+
+        // NOVO: Se o submenu tem produtos, renderiza como seção
         if (submenuProducts.length > 0) {
           submenuProducts.forEach(product => {
             mobileMenuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
           });
+        } else {
+          // NOVO: Se não tem produtos, renderiza como link direto do submenu
+          mobileMenuHTML += `                    <li><a href="planac-website.html#${submenu.slug}">${submenu.nome}</a></li>\n`;
         }
       });
 
