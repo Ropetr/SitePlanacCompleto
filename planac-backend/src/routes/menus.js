@@ -281,6 +281,9 @@ menus.delete('/:id', async (c) => {
 
     await c.env.DB.prepare('DELETE FROM menus WHERE id = ?').bind(id).run();
 
+    // 🚀 Acionar build e deploy automático
+    triggerBuildDeploy(c.env);
+
     return c.json({
       success: true,
       message: 'Menu excluído com sucesso',

@@ -446,6 +446,9 @@ products.delete('/:id', async (c) => {
       JSON.stringify({ nome: existing.nome })
     ).run();
 
+    // 🚀 Acionar build e deploy automático
+    triggerBuildDeploy(c.env);
+
     return c.json({
       success: true,
       message: 'Produto excluído com sucesso',
