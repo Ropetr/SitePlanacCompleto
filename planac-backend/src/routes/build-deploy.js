@@ -75,20 +75,24 @@ function generateHeaderHTML(menus, products) {
       menuHTML += `                <a href="planac-website.html#${menu.slug}" class="dropdown-toggle">${menu.nome}</a>\n`;
       menuHTML += `                <ul class="dropdown-menu">\n`;
 
-      // Adicionar submenus primeiro (NOVO: sempre renderiza se existir)
+      // Adicionar submenus primeiro com dropdown aninhado
       submenus.forEach(submenu => {
         const submenuProducts = productsByMenu[submenu.id] || [];
 
-        // NOVO: Se o submenu tem produtos, renderiza como seção
         if (submenuProducts.length > 0) {
-          // Adicionar título do submenu (opcional - pode descomentar se quiser)
-          // menuHTML += `                    <li class="dropdown-header">${submenu.nome}</li>\n`;
+          // Submenu com produtos: cria dropdown aninhado
+          menuHTML += `                    <li class="dropdown-submenu">\n`;
+          menuHTML += `                        <a href="#" class="dropdown-toggle-sub">${submenu.nome} →</a>\n`;
+          menuHTML += `                        <ul class="dropdown-menu-sub">\n`;
 
           submenuProducts.forEach(product => {
-            menuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
+            menuHTML += `                            <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
           });
+
+          menuHTML += `                        </ul>\n`;
+          menuHTML += `                    </li>\n`;
         } else {
-          // NOVO: Se não tem produtos, renderiza como link direto do submenu
+          // Submenu sem produtos: link direto
           menuHTML += `                    <li><a href="planac-website.html#${submenu.slug}">${submenu.nome}</a></li>\n`;
         }
       });
@@ -118,17 +122,24 @@ function generateHeaderHTML(menus, products) {
       mobileMenuHTML += `                <a href="planac-website.html#${menu.slug}">${menu.nome}</a>\n`;
       mobileMenuHTML += `                <ul>\n`;
 
-      // Adicionar submenus primeiro (NOVO: sempre renderiza se existir)
+      // Adicionar submenus primeiro com dropdown aninhado no mobile
       submenus.forEach(submenu => {
         const submenuProducts = productsByMenu[submenu.id] || [];
 
-        // NOVO: Se o submenu tem produtos, renderiza como seção
         if (submenuProducts.length > 0) {
+          // Submenu com produtos: cria dropdown aninhado
+          mobileMenuHTML += `                    <li class="mobile-menu-submenu">\n`;
+          mobileMenuHTML += `                        <a href="#">${submenu.nome}</a>\n`;
+          mobileMenuHTML += `                        <ul>\n`;
+
           submenuProducts.forEach(product => {
-            mobileMenuHTML += `                    <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
+            mobileMenuHTML += `                            <li><a href="${product.slug}.html">${product.nome}</a></li>\n`;
           });
+
+          mobileMenuHTML += `                        </ul>\n`;
+          mobileMenuHTML += `                    </li>\n`;
         } else {
-          // NOVO: Se não tem produtos, renderiza como link direto do submenu
+          // Submenu sem produtos: link direto
           mobileMenuHTML += `                    <li><a href="planac-website.html#${submenu.slug}">${submenu.nome}</a></li>\n`;
         }
       });
