@@ -1,7 +1,8 @@
 # 📚 Documentação Atualizada - Sistema Planac
 
-**Data:** 10/11/2025
+**Data:** 11/11/2025
 **Status:** Produção ✅
+**Última Atualização:** Sistema de dropdown aninhado implementado
 
 ---
 
@@ -12,7 +13,7 @@
 - **Tipo:** Cloudflare Worker (Hono.js)
 - **Status:** ✅ Online e funcionando
 - **Recursos:**
-  - D1 Database: `planac-database`
+  - D1 Database: `planac-database` (ce7c52fc-7aa4-4539-ac80-081d8ee16cc2)
   - R2 Bucket: `planac-images`
   - KV Namespaces: `KV_CACHE`, `KV_SESSIONS`, `SITE_CACHE`
 
@@ -37,15 +38,15 @@
 1. **Home** - Página inicial
 2. **Divisórias** - 2 páginas
 3. **Drywall** - Divisórias de gesso
-4. **Forros** - 9 páginas (maior categoria)
+4. **Forros** - 8 páginas + 1 submenu
+   - **Forro Modular** (submenu) - 4 páginas
 5. **Isolamento Termoacústico** - 4 páginas
 6. **Kits de Portas** - 3 páginas
 7. **Rodapés** - 1 página
 8. **Sobre** - Institucional
 9. **Contato** - Formulário
-10. *(Submenus podem existir)*
 
-### Páginas (20 total)
+### Páginas (19 total)
 
 #### Home (1)
 - Página Inicial (`index`)
@@ -54,16 +55,18 @@
 - Divisória Naval (`divisoria-naval-page`)
 - Divisória de Gesso Acartonado (`drywall-divisoria-page`)
 
-#### Forros (9)
-- Forro de Gesso Acartonado Completo (`planac-forro-gesso-completo`)
-- Gesso Modular (`planac-gesso-modular`)
-- Forro Vinílico (`forro-vinilico-revid`)
-- Forros (página geral) (`forrovid-page`)
-- Forro de Isopor (`isopor-page`)
-- Forro Mineral (`mineral-page`)
-- PVC Modular (`pvc-modular-page`)
+#### Forros (4 diretos + 4 no submenu)
+**Diretos no menu Forros:**
+- Forro de Gesso Acartonado (`forro-de-gesso-acartonado`)
+- Forro Vinílico REVID (`forro-vinilico-revid`)
 - PVC Branco (`pvc-branco-page`)
 - PVC Amadeirado (`pvc-amadeirado-page`)
+
+**No submenu "Forro Modular":**
+- Forro de Gesso Modular (`forro-de-gesso-modular`)
+- Forro de Isopor (`isopor-page`)
+- Forro Mineral (`mineral-page`)
+- Forro de PVC Modular (`forro-de-pvc-modular`)
 
 #### Isolamento Termoacústico (4)
 - Lã de Rocha (`la-rocha-page`)
@@ -81,32 +84,45 @@
 
 ---
 
-## 🔄 Sistema de Auto-Deploy
+## 🔄 Sistema de Auto-Deploy ✨ NOVO
 
-### Como Funciona
+### Como Funciona (Atualizado em 11/11/2025)
 
-1. **Usuário salva no Admin** (cria/edita menu ou página)
-2. **Backend salva no D1** e aciona `triggerBuildDeploy()`
+**O sistema agora é 100% automático!** Toda operação CRUD aciona rebuild do header:
+
+1. **Usuário realiza ação no Admin:**
+   - Criar página/menu
+   - Editar página/menu
+   - Ativar/desativar menu ou página
+   - Excluir página/menu
+
+2. **Backend automaticamente:**
+   - Salva alteração no D1
+   - Aciona `triggerBuildDeploy()` via `POST /api/internal/build-deploy`
+
 3. **Build-Deploy Worker:**
    - Busca menus ativos do D1
    - Busca produtos (páginas) publicados do D1
-   - Gera `header.html` dinâmico com estrutura de menus
+   - Gera `header.html` dinâmico com estrutura de menus **hierárquica**
+   - Cria dropdowns aninhados para submenus
    - Salva no KV cache (`SITE_CACHE`)
    - Invalida cache (timestamp)
-4. **Build estático:**
-   - Script `build-static-pages.js` busca header do KV
-   - Gera páginas HTML otimizadas (dist/)
-5. **Deploy manual** (quando necessário):
-   ```bash
-   node build-static-pages.js
-   npx wrangler pages deploy dist --project-name siteplanaccompleto
-   ```
+
+4. **Resultado:**
+   - Header atualizado em tempo real
+   - Mudanças visíveis imediatamente no site
 
 ### Endpoints Relacionados
 
-- **POST** `/api/admin/build-deploy` - Aciona build/deploy
-- **GET** `/api/admin/build-deploy/status` - Status do último build
+- **POST** `/api/internal/build-deploy` - Aciona build/deploy (interno, sem JWT)
+- **GET** `/api/admin/build-deploy/status` - Status do último build (requer JWT)
 - **GET** `/api/pages/header` - Serve header do KV cache (público)
+
+### Operações que Acionam Auto-Deploy
+
+✅ **CREATE** - Criar produto ou menu
+✅ **UPDATE** - Editar produto ou menu (incluindo ativar/desativar)
+✅ **DELETE** - Excluir produto ou menu
 
 ---
 
@@ -114,21 +130,23 @@
 
 ### Menus
 - ✅ Criar, editar, excluir menus
-- ✅ Hierarquia (menus e submenus)
+- ✅ **Hierarquia completa (menus e submenus com dropdown aninhado)**
 - ✅ Visualização hierárquica com indentação
 - ✅ Ícones visuais (📁 menu, 📄 submenu)
 - ✅ Botão rápido para adicionar submenu
-- ✅ Campo "ativo" (mas sem toggle visual ainda)
+- ✅ Campo "ativo" para ativar/desativar
 - ✅ Reordenação por campo "ordem"
+- ✅ **Auto-deploy ao salvar/editar/excluir**
 
 ### Páginas (Products)
 - ✅ Criar, editar, excluir páginas
 - ✅ Campos completos (nome, descrição, características, etc.)
-- ✅ Associação com menus
+- ✅ Associação com menus/submenus
 - ✅ Status: RASCUNHO, PUBLICADO, ARQUIVADO
 - ✅ Campo "destaque"
-- ✅ Upload de imagens (banner e galeria)
+- ✅ Upload de imagens (banner e galeria) para R2
 - ✅ SEO (meta title, description, keywords)
+- ✅ **Auto-deploy ao salvar/editar/excluir**
 
 ### Outros
 - ✅ Dashboard com estatísticas
@@ -136,6 +154,32 @@
 - ✅ Gerenciamento de orçamentos
 - ✅ Gerenciamento de contatos
 - ✅ Sistema de autenticação (JWT)
+
+---
+
+## 🎯 Sistema de Dropdown Aninhado ✨ NOVO
+
+### Desktop
+```
+Forros (hover)
+├── Forro Modular → (hover abre à direita)
+│   ├── Forro de Gesso Modular
+│   ├── Forro de Isopor
+│   ├── Forro Mineral
+│   └── Forro de PVC Modular
+├── Forro de Gesso Acartonado
+├── Forro Vinílico REVID
+└── ...
+```
+
+### Classes CSS Usadas
+- **Desktop:** `.dropdown-submenu` + `.dropdown-menu-sub`
+- **Mobile:** `.mobile-menu-submenu`
+
+### Comportamento
+- **Automático:** Qualquer submenu com produtos gera dropdown aninhado
+- **Sem produtos:** Submenu aparece como link direto
+- **Responsivo:** Funciona em desktop e mobile
 
 ---
 
@@ -148,7 +192,7 @@
 - slug (TEXT, NOT NULL, UNIQUE)
 - descricao (TEXT)
 - icone (TEXT) -- emoji ou URL
-- menu_pai_id (TEXT) -- FK para menus.id
+- menu_pai_id (TEXT) -- FK para menus.id (NULL = menu principal)
 - ordem (INTEGER, default 0)
 - ativo (INTEGER, default 1) -- 1=ativo, 0=inativo
 - metadata (TEXT) -- JSON
@@ -178,7 +222,7 @@
 - ordem (INTEGER, default 0)
 - destaque (INTEGER, default 0) -- 1=destaque, 0=normal
 - status (TEXT, default 'RASCUNHO') -- RASCUNHO, PUBLICADO, ARQUIVADO
-- menu_id (TEXT, NOT NULL) -- FK para menus.id
+- menu_id (TEXT, NOT NULL) -- FK para menus.id (pode ser menu ou submenu)
 - created_by_id (TEXT, NOT NULL) -- FK para users.id
 - updated_by_id (TEXT)
 - published_at (DATETIME)
@@ -207,7 +251,7 @@ cd planac-backend
 npx wrangler deploy
 ```
 
-### Atualizar Site Público
+### Atualizar Site Público (Manual - se necessário)
 ```bash
 # 1. Gerar páginas estáticas (busca header do KV)
 node build-static-pages.js
@@ -237,12 +281,28 @@ VITE_API_URL=https://planac-backend-api.planacacabamentos.workers.dev
 
 ---
 
-## 📝 Melhorias Implementadas Recentemente
+## 📝 Melhorias Implementadas (11/11/2025)
 
-### ✅ Sistema de Submenus
+### ✅ Dropdown Aninhado para Submenus
+- Submenus agora criam dropdown dentro de dropdown
+- Desktop: hover abre submenu à direita
+- Mobile: tap expande submenu com animação
+- Geração automática via `build-deploy.js`
+
+### ✅ Auto-Deploy Completo
+- Todas operações CRUD acionam rebuild do header
+- CREATE, UPDATE, DELETE em produtos e menus
+- Header atualizado em tempo real
+
+### ✅ Correção de Renderização de Submenus
+- Submenus sem produtos aparecem como links
+- Submenus com produtos criam dropdown aninhado
+- Estrutura hierárquica respeitada
+
+### ✅ Sistema de Submenus (implementado anteriormente)
 - Visualização hierárquica com indentação
 - Fundo azul claro para submenus
-- Ícones diferenciados (pasta vs arquivo)
+- Ícones diferenciados (📁 menu, 📄 submenu)
 - Botão rápido "+" para adicionar submenu
 - Modal com destaque visual para criação de submenu
 
@@ -253,24 +313,21 @@ VITE_API_URL=https://planac-backend-api.planacacabamentos.workers.dev
 
 ### ✅ Integração Git
 - Admin agora está no Git e faz deploy automático
-- Removido `wrangler.toml` da raiz que causava conflito
 - Build configurado corretamente via Cloudflare Pages
-
-### ✅ Restauração de Páginas
-- 10 páginas que foram removidas acidentalmente foram restauradas
-- Total: 20 páginas completas no sistema
 
 ---
 
-## 🐛 Problemas Conhecidos
+## 🐛 Pendências
 
-### ❌ Não implementado ainda:
-- [ ] Toggle visual para ativar/desativar menus
+### ⏳ Melhorias Futuras:
+- [ ] Toggle visual para ativar/desativar menus (atualmente via campo de texto)
 - [ ] Toggle visual para ativar/desativar páginas
 - [ ] Drag-and-drop para reordenar menus
 - [ ] Preview de páginas antes de publicar
 - [ ] Versionamento de conteúdo
 - [ ] Bulk actions (editar múltiplos itens)
+- [ ] Editor rich text para descrições
+- [ ] Sistema de busca no admin
 
 ---
 
@@ -293,10 +350,17 @@ npx wrangler kv:key get "header.html" \
 curl https://planac-backend-api.planacacabamentos.workers.dev/health
 ```
 
+### Forçar Rebuild do Header (se necessário)
+```bash
+curl -X POST https://planac-backend-api.planacacabamentos.workers.dev/api/internal/build-deploy
+```
+
 ---
 
 ## 📚 Documentação Adicional
 
+- `README.md` - Visão geral do projeto
+- `DOCUMENTACAO-COMPLETA.md` - Documentação técnica completa
 - `SISTEMA-AUTO-DEPLOY.md` - Detalhes do sistema de deploy automático
 - `MELHORIAS-SUBMENUS.md` - Melhorias na visualização de submenus
 - `COMO-ADICIONAR-MENUS.md` - Guia para adicionar menus
@@ -304,5 +368,16 @@ curl https://planac-backend-api.planacacabamentos.workers.dev/health
 
 ---
 
-**Última atualização:** 10/11/2025
-**Versão do sistema:** 1.0.0
+## 🎯 Commits Recentes
+
+```
+97ba4a8 - feat: Implementa dropdown aninhado para submenus
+d51ed53 - fix: Adiciona triggerBuildDeploy ao DELETE de produtos e menus
+440ace0 - fix: Corrige renderização de submenus sem produtos no header
+```
+
+---
+
+**Última atualização:** 11/11/2025
+**Versão do sistema:** 1.1.0
+**Status:** ✅ Sistema em Produção com Dropdown Aninhado Funcional
