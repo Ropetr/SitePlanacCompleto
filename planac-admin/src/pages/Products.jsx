@@ -14,7 +14,7 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [showInactive, setShowInactive] = useState(true); // Mostrar arquivados por padrão
+  const [showInactive, setShowInactive] = useState(true); // Mostrar inativos por padrão
 
   useEffect(() => {
     fetchProducts();
@@ -35,9 +35,9 @@ export default function Products() {
       if (response.data.success) {
         let productsList = response.data.data || [];
 
-        // Filtrar arquivados se showInactive estiver desativado
+        // Filtrar inativos (RASCUNHO e ARQUIVADO) se showInactive estiver desativado
         if (!showInactive) {
-          productsList = productsList.filter(p => p.status !== 'ARQUIVADO');
+          productsList = productsList.filter(p => p.status === 'PUBLICADO');
         }
 
         setProducts(productsList);
@@ -158,7 +158,7 @@ export default function Products() {
                 className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
               />
               <label htmlFor="showInactiveProducts" className="text-sm text-gray-700 whitespace-nowrap cursor-pointer">
-                Mostrar arquivados
+                Mostrar inativos
               </label>
             </div>
           </div>

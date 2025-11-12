@@ -164,6 +164,7 @@ function parseJSONField(field) {
 
 /**
  * Rebuild completo de uma página (salva no KV)
+ * Se a página NÃO está PUBLICADA, remove do cache
  */
 export async function rebuildPage(pageId, env) {
   try {
@@ -176,11 +177,24 @@ export async function rebuildPage(pageId, env) {
       throw new Error(`Página ${pageId} não encontrada`);
     }
 
-    // Gerar HTML
+    const cacheKey = `page:${page.slug}`;
+
+    // ❌ Se página NÃO está publicada: REMOVE do cache
+    if (page.status !== 'PUBLICADO') {
+      await env.SITE_CACHE.delete(cacheKey);
+      console.log(`🗑️ Página '${page.nome}' (${page.slug}) removida do cache (status: ${page.status})`);
+
+      return {
+        success: true,
+        slug: page.slug,
+        action: 'removed_from_cache',
+        status: page.status
+      };
+    }
+
+    // ✅ Se página está PUBLICADA: gera HTML e salva no cache
     const html = await generatePageHTML(page, env);
 
-    // Salvar no KV Cache com chave baseada no slug
-    const cacheKey = `page:${page.slug}`;
     await env.SITE_CACHE.put(cacheKey, html, {
       metadata: {
         pageId: page.id,
@@ -190,11 +204,12 @@ export async function rebuildPage(pageId, env) {
       }
     });
 
-    console.log(`✅ Página '${page.nome}' (${page.slug}) rebuiltada com sucesso!`);
+    console.log(`✅ Página '${page.nome}' (${page.slug}) rebuiltada e cacheada com sucesso!`);
 
     return {
       success: true,
       slug: page.slug,
+      action: 'cached',
       cacheKey
     };
 
