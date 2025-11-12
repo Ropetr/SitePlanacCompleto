@@ -190,7 +190,7 @@ header {
     padding: 10px 0;
     padding-top: 12px;
     overflow: visible;
-    /* Glassmorphism Samsung S23 - FORÇAR IGUAL ao mobile menu */
+    /* Glassmorphism Samsung S23 COM blur por cima do overlay escuro */
     background:
         linear-gradient(
             to bottom,
@@ -207,13 +207,12 @@ header {
         0 22px 54px rgba(0,0,0, 0.26);
     border-radius: 0 0 28px 28px;
     will-change: transform, backdrop-filter;
-    /* Fix para backdrop-filter em position: fixed */
     isolation: isolate;
     transform: translateZ(0);
     -webkit-transform: translateZ(0);
 }
 
-/* Overlay escuro no dropdown-menu (MAIS FORTE para ofuscar imagem de fundo) */
+/* Overlay escuro EMBAIXO - fumê forte para ofuscar fundo */
 .dropdown-menu::before {
     content: '';
     position: absolute;
@@ -222,6 +221,22 @@ header {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.65) !important;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 0 0 28px 28px;
+}
+
+/* Camada de glassmorphism POR CIMA do overlay escuro */
+.dropdown-menu::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    backdrop-filter: inherit;
+    -webkit-backdrop-filter: inherit;
     z-index: 0;
     pointer-events: none;
     border-radius: 0 0 28px 28px;
@@ -317,7 +332,7 @@ header {
     -webkit-transform: translateZ(0);
 }
 
-/* Overlay escuro no dropdown-menu-sub (MAIS FORTE para ofuscar imagem de fundo) */
+/* Overlay escuro EMBAIXO - fumê forte para ofuscar fundo */
 .dropdown-menu-sub::before {
     content: '';
     position: absolute;
@@ -326,6 +341,22 @@ header {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.65) !important;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: 0 28px 28px 0;
+}
+
+/* Camada de glassmorphism POR CIMA do overlay escuro */
+.dropdown-menu-sub::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    backdrop-filter: inherit;
+    -webkit-backdrop-filter: inherit;
     z-index: 0;
     pointer-events: none;
     border-radius: 0 28px 28px 0;
