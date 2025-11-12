@@ -57,7 +57,8 @@
       "WebFetch(domain:planac-backend-api.planacacabamentos.workers.dev)",
       "Read(//c/**)",
       "Bash(node remove-duplicate-styles.js:*)",
-      "Bash(node add-css-version.js:*)"
+      "Bash(node add-css-version.js:*)",
+      "Bash(node list-products.js:*)"
     ],
     "deny": [],
     "ask": []
