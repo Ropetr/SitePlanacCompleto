@@ -42,6 +42,72 @@ pages.get('/header', async (c) => {
 });
 
 // ===========================================
+// GET /api/paginas/:slug - Servir página HTML do KV cache (PÚBLICO)
+// ===========================================
+pages.get('/paginas/:slug', async (c) => {
+  try {
+    const { slug } = c.req.param();
+
+    // Buscar página do KV cache
+    const cacheKey = `page:${slug}`;
+    const pageHTML = await c.env.SITE_CACHE.get(cacheKey);
+
+    if (!pageHTML) {
+      // Se não estiver no cache, retornar 404
+      return new Response(`
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Página não encontrada - Planac</title>
+</head>
+<body>
+  <h1>Página não encontrada</h1>
+  <p>A página "${slug}" não foi encontrada.</p>
+  <a href="/">Voltar para o início</a>
+</body>
+</html>
+      `, {
+        status: 404,
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+        }
+      });
+    }
+
+    // Servir página HTML do cache
+    return new Response(pageHTML, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600', // Cache de 1 hora no navegador
+        'X-Cache': 'HIT', // Indicar que veio do cache
+      }
+    });
+
+  } catch (error) {
+    console.error('Erro ao servir página:', error);
+    return new Response(`
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Erro - Planac</title>
+</head>
+<body>
+  <h1>Erro ao carregar página</h1>
+  <p>Ocorreu um erro ao carregar a página. Tente novamente mais tarde.</p>
+</body>
+</html>
+    `, {
+      status: 500,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+      }
+    });
+  }
+});
+
+// ===========================================
 // GET /api/pages/:tipo - Obter página por tipo (PÚBLICO)
 // ===========================================
 pages.get('/:tipo', async (c) => {

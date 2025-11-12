@@ -8,6 +8,7 @@ import { Hono } from 'hono';
 import { generateId } from '../utils/crypto.js';
 import { validate, productSchema } from '../utils/validators.js';
 import { slugify, generateUniqueSlug } from '../utils/slugify.js';
+import { rebuildPage, deleteCachedPage } from '../utils/page-builder.js';
 
 const products = new Hono();
 
@@ -261,7 +262,10 @@ products.post('/', async (c) => {
       JSON.stringify({ nome: data.nome, slug })
     ).run();
 
-    // 🚀 Acionar build e deploy automático
+    // 🚀 Rebuild página automaticamente
+    await rebuildPage(productId, c.env);
+
+    // 🚀 Acionar build do header/footer (mantém para atualizar menu)
     triggerBuildDeploy(c.env);
 
     return c.json({
@@ -405,7 +409,10 @@ products.put('/:id', async (c) => {
       JSON.stringify(data)
     ).run();
 
-    // 🚀 Acionar build e deploy automático
+    // 🚀 Rebuild página automaticamente
+    await rebuildPage(id, c.env);
+
+    // 🚀 Acionar build do header/footer (mantém para atualizar menu)
     triggerBuildDeploy(c.env);
 
     return c.json({
@@ -427,7 +434,7 @@ products.delete('/:id', async (c) => {
     const payload = c.get('jwtPayload');
     const { id } = c.req.param();
 
-    const existing = await c.env.DB.prepare('SELECT nome FROM pages WHERE id = ?').bind(id).first();
+    const existing = await c.env.DB.prepare('SELECT nome, slug FROM pages WHERE id = ?').bind(id).first();
 
     if (!existing) {
       return c.json({ error: 'Produto não encontrado' }, 404);
@@ -446,7 +453,10 @@ products.delete('/:id', async (c) => {
       JSON.stringify({ nome: existing.nome })
     ).run();
 
-    // 🚀 Acionar build e deploy automático
+    // 🗑️ Remover página do cache
+    await deleteCachedPage(existing.slug, c.env);
+
+    // 🚀 Acionar build do header/footer (mantém para atualizar menu)
     triggerBuildDeploy(c.env);
 
     return c.json({
