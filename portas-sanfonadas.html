@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portas Sanfonadas - Planac Distribuidora</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 10px;
+        }
+
+        body {
+            font-family: 'Barlow', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1410px;
+            width: 90%;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .service-banner {
+            width: 100%;
+            height: 60vh;
+            min-height: 400px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-size: cover;
+            background-position: center;
+            margin-top: 0;
+        }
+
+        .service-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .service-banner-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #fff;
+            max-width: 900px;
+        }
+
+        .service-banner h1 {
+            font-size: clamp(3.5rem, 6vw, 6rem);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
+        }
+
+        .service-banner p {
+            font-size: clamp(1.8rem, 2.5vw, 2.4rem);
+            filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
+        }
+
+        .breadcrumb {
+            padding: 20px 0;
+            background: #f6f8fb;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            gap: 10px;
+            list-style: none;
+            font-size: 1.4rem;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .breadcrumb-list a {
+            color: #AA000E;
+            text-decoration: none;
+        }
+
+        .breadcrumb-list a:hover {
+            text-decoration: underline;
+        }
+
+        .breadcrumb-list span {
+            color: #666;
+        }
+
+        .service-content {
+            padding: 80px 0;
+            background: #fff;
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .service-main {
+            background: #fff;
+        }
+
+        .service-main h2 {
+            font-size: 3.6rem;
+            color: #AA000E;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .service-main h3 {
+            font-size: 2.8rem;
+            color: #3d3d3d;
+            margin: 40px 0 20px;
+        }
+
+        .service-main p {
+            font-size: 1.8rem;
+            line-height: 1.8;
+            color: #3d3d3d;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .service-main ul {
+            list-style: none;
+            padding-left: 0;
+            margin: 20px 0;
+        }
+
+        .service-main li {
+            font-size: 1.8rem;
+            padding: 12px 0 12px 30px;
+            position: relative;
+            color: #3d3d3d;
+        }
+
+        .service-main li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #AA000E;
+            font-weight: bold;
+            font-size: 2rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #AA000E 0%, #96181c 100%);
+            color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            box-shadow: 0 5px 20px rgba(170,0,14,0.2);
+        }
+
+        .highlight-box h4 {
+            font-size: 2.4rem;
+            margin-bottom: 15px;
+        }
+
+        .highlight-box p {
+            font-size: 1.8rem;
+            color: #fff;
+            text-align: left;
+        }
+
+        .service-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .gallery-item {
+            position: relative;
+            height: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .service-sidebar {
+            position: sticky;
+            top: 180px;
+        }
+
+        .sidebar-card {
+            background: #f6f8fb;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .sidebar-card h3 {
+            font-size: 2.4rem;
+            color: #AA000E;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .sidebar-card ul {
+            list-style: none;
+        }
+
+        .sidebar-card li {
+            margin-bottom: 15px;
+        }
+
+        .sidebar-card a {
+            color: #3d3d3d;
+            text-decoration: none;
+            font-size: 1.6rem;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .sidebar-card a:hover,
+        .sidebar-card a.active {
+            background: #fff;
+            color: #AA000E;
+            padding-left: 20px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #AA000E 0%, #96181c 100%);
+            padding: 60px 0;
+            text-align: center;
+            color: #fff;
+        }
+
+        .cta-section h2 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .cta-section p {
+            font-size: 2rem;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #AA000E;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #ec3237;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+
+        .quote-form-section {
+            padding: 80px 0;
+            background: #f6f8fb;
+        }
+
+        .quote-form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 50px;
+            border-radius: 10px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+
+        .quote-form-container h2 {
+            font-size: 3.6rem;
+            color: #AA000E;
+            margin-bottom: 30px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #3d3d3d;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.6rem;
+            font-family: 'Barlow', sans-serif;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #AA000E;
+            box-shadow: 0 0 0 3px rgba(170,0,14,0.1);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group button {
+            width: 100%;
+            background: #AA000E;
+            color: #fff;
+            padding: 18px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .form-group button:hover {
+            background: #96181c;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(170,0,14,0.3);
+        }
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        
+
+        
+
+        @media (max-width: 1024px) {
+            
+
+            
+
+            
+
+            .service-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-sidebar {
+                position: static;
+            }
+
+            .service-banner {
+                margin-top: 130px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .service-banner {
+                height: 50vh;
+                min-height: 300px;
+            }
+
+            .quote-form-container {
+                padding: 30px 20px;
+            }
+
+            
+
+        }
+    </style>
+    <link rel="stylesheet" href="styles-components.css?v=8">
+</head>
+<body>
+    <!-- Header Container -->
+    <div id="header-container"></div>
+    <section class="service-banner" style="background-image: url('https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=1600')">
+        <div class="service-banner-content">
+            <h1>Portas Sanfonadas</h1>
+            <p>Praticidade e economia para todos os ambientes</p>
+        </div>
+    </section>
+
+    <section class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li><a href="index.html">Início</a></li>
+                <li>›</li>
+                <li><a href="index.html#portas">Portas</a></li>
+                <li>›</li>
+                <li><span>Portas Sanfonadas</span></li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="service-content">
+        <div class="container">
+            <div class="service-grid">
+                <div class="service-main">
+                    <h2>Portas Sanfonadas</h2>
+                    
+                    <p>
+                        As <strong>Portas Sanfonadas</strong> são a solução mais econômica e prática para fechamento de vãos, caracterizadas por seu sistema de abertura em sanfona que permite máxima economia de espaço. Ideais para ambientes que necessitam praticidade e versatilidade, as portas sanfonadas são fabricadas em PVC de alta qualidade, oferecendo durabilidade e fácil manutenção.
+                    </p>
+
+                    <p>
+                        Com design compacto e funcional, as portas sanfonadas se dobram completamente durante a abertura, ocupando mínimo espaço e permitindo aproveitamento total do vão. São perfeitas para áreas de serviço, despensas, closets, banheiros, varandas e diversos outros ambientes residenciais e comerciais.
+                    </p>
+
+                    <div class="highlight-box">
+                        <h4>💰 Máxima Economia</h4>
+                        <p>
+                            A solução mais econômica do mercado! Porta sanfonada une preço acessível com praticidade total - ocupa apenas 10cm quando aberta!
+                        </p>
+                    </div>
+
+                    <h3>Características Principais</h3>
+                    <ul>
+                        <li><strong>Material PVC:</strong> Leve, resistente e durável</li>
+                        <li><strong>Sistema Sanfonado:</strong> Dobra-se completamente na abertura</li>
+                        <li><strong>Impermeável:</strong> Resistente à umidade</li>
+                        <li><strong>Fácil Instalação:</strong> Sistema simples e rápido</li>
+                        <li><strong>Manutenção Simples:</strong> Limpeza prática</li>
+                        <li><strong>Leveza:</strong> Fácil de manusear</li>
+                        <li><strong>Variedade de Cores:</strong> Diversas opções de acabamento</li>
+                        <li><strong>Custo-Benefício:</strong> Melhor preço do mercado</li>
+                    </ul>
+
+                    <h3>Vantagens das Portas Sanfonadas</h3>
+                    <p>
+                        As portas sanfonadas oferecem diversos benefícios práticos:
+                    </p>
+
+                    <ul>
+                        <li><strong>Economia de Espaço:</strong> Ocupa apenas 10cm quando aberta</li>
+                        <li><strong>Preço Acessível:</strong> A mais econômica do mercado</li>
+                        <li><strong>Instalação Rápida:</strong> Pode ser instalada em minutos</li>
+                        <li><strong>Versatilidade:</strong> Adapta-se a diversos ambientes</li>
+                        <li><strong>Resistente à Umidade:</strong> Não empena nem apodrece</li>
+                        <li><strong>Limpeza Fácil:</strong> Apenas pano úmido</li>
+                        <li><strong>Sem Manutenção:</strong> Não precisa pintura ou reparos</li>
+                        <li><strong>Durabilidade:</strong> Vida útil superior a 10 anos</li>
+                    </ul>
+
+                    <h3>Modelos e Cores</h3>
+                    <p>
+                        Oferecemos diversos modelos para combinar com sua decoração:
+                    </p>
+                    <ul>
+                        <li><strong>Branco:</strong> Clássico e versátil</li>
+                        <li><strong>Mogno:</strong> Tom amadeirado elegante</li>
+                        <li><strong>Imbuia:</strong> Cor madeira clara</li>
+                        <li><strong>Cerejeira:</strong> Tom avermelhado sofisticado</li>
+                        <li><strong>Nogueira:</strong> Marrom escuro nobre</li>
+                        <li><strong>Cinza:</strong> Moderno e neutro</li>
+                        <li><strong>Marfim:</strong> Tom claro suave</li>
+                        <li><strong>Com Visor:</strong> Opção com vidro transparente</li>
+                    </ul>
+
+                    <h3>Dimensões Disponíveis</h3>
+                    <p>
+                        Trabalhamos com as medidas padrão mais utilizadas:
+                    </p>
+                    <ul>
+                        <li><strong>Altura:</strong> 210cm (padrão brasileiro)</li>
+                        <li><strong>Larguras Padrão:</strong></li>
+                        <li>60cm - ideal para despensas e closets pequenos</li>
+                        <li>70cm - para banheiros e lavanderias</li>
+                        <li>80cm - medida mais versátil</li>
+                        <li>90cm - para áreas de serviço</li>
+                        <li>100cm - vãos mais amplos</li>
+                        <li>120cm - varandas e aberturas grandes</li>
+                        <li><strong>Sob Medida:</strong> Para vãos especiais</li>
+                    </ul>
+
+                    <h3>Componentes do Kit</h3>
+                    <ul>
+                        <li>Folha sanfonada completa em PVC</li>
+                        <li>Trilho superior em alumínio</li>
+                        <li>Roldanas de alta qualidade</li>
+                        <li>Puxador prático</li>
+                        <li>Imã de fechamento</li>
+                        <li>Parafusos e buchas para fixação</li>
+                        <li>Manual de instalação ilustrado</li>
+                    </ul>
+
+                    <h3>Ambientes Recomendados</h3>
+                    <p>
+                        As portas sanfonadas são versáteis e podem ser usadas em:
+                    </p>
+                    <ul>
+                        <li><strong>Área de Serviço:</strong> Fechamento prático e econômico</li>
+                        <li><strong>Despensa:</strong> Acesso fácil sem ocupar espaço</li>
+                        <li><strong>Closet:</strong> Abertura total para visualização</li>
+                        <li><strong>Banheiro:</strong> Opção econômica para banheiros pequenos</li>
+                        <li><strong>Varanda:</strong> Vedação de sacadas</li>
+                        <li><strong>Lavanderia:</strong> Separação funcional</li>
+                        <li><strong>Escritório Home:</strong> Divisão de ambientes</li>
+                        <li><strong>Kitnet:</strong> Otimização de espaços compactos</li>
+                        <li><strong>Comércio:</strong> Lojas, depósitos, camarins</li>
+                    </ul>
+
+                    <h3>Instalação</h3>
+                    <p>
+                        A instalação é simples e pode ser feita em poucos passos:
+                    </p>
+                    <ul>
+                        <li>Fixe o trilho superior no topo do vão</li>
+                        <li>Encaixe as roldanas no trilho</li>
+                        <li>Pendure a porta sanfonada</li>
+                        <li>Ajuste a altura se necessário</li>
+                        <li>Instale o imã de fechamento</li>
+                        <li>Teste o funcionamento</li>
+                    </ul>
+
+                    <h3>Cuidados e Manutenção</h3>
+                    <ul>
+                        <li>Limpe com pano úmido e detergente neutro</li>
+                        <li>Evite produtos abrasivos</li>
+                        <li>Lubrifique as roldanas anualmente</li>
+                        <li>Não force a abertura ou fechamento</li>
+                        <li>Verifique periodicamente a fixação do trilho</li>
+                    </ul>
+
+                    <h3>Diferenciais do Produto</h3>
+                    <ul>
+                        <li>PVC de primeira linha, resistente e durável</li>
+                        <li>Roldanas silenciosas de alta qualidade</li>
+                        <li>Acabamento perfeito sem rebarbas</li>
+                        <li>Proteção UV - não amarela com o sol</li>
+                        <li>Sistema de travamento eficiente</li>
+                        <li>Fácil de abrir mesmo para crianças</li>
+                    </ul>
+
+                    <h3>Galeria de Aplicações</h3>
+                    <div class="service-gallery">
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=800" alt="Porta Sanfonada - Branca">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=800" alt="Porta Sanfonada - Amadeirada">
+                        </div>
+                        <div class="gallery-item">
+                            <img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800" alt="Porta Sanfonada - Instalada">
+                        </div>
+                    </div>
+
+                    <h3>Por que escolher a Planac?</h3>
+                    <p>
+                        A <strong>Planac Distribuidora</strong> é referência em portas sanfonadas:
+                    </p>
+                    <ul>
+                        <li>✓ Produtos de marcas reconhecidas</li>
+                        <li>✓ Maior variedade de cores e modelos</li>
+                        <li>✓ Melhores preços do mercado</li>
+                        <li>✓ Pronta entrega</li>
+                        <li>✓ Assessoria técnica especializada</li>
+                        <li>✓ Indicação de instaladores</li>
+                        <li>✓ Garantia de qualidade</li>
+                        <li>✓ Atendimento personalizado</li>
+                    </ul>
+                </div>
+
+                <aside class="service-sidebar">
+                    <div class="sidebar-card">
+                        <h3>Portas</h3>
+                        <ul>
+                            <li><a href="kit-porta.html">Kit Porta</a></li>
+                            <li><a href="kit-porta-correr.html">Kit Porta de Correr</a></li>
+                            <li><a href="#" class="active">Portas Sanfonadas</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3>Fale Conosco</h3>
+                        <p style="font-size: 1.6rem; margin-bottom: 15px;">Entre em contato para mais informações:</p>
+                        <a href="https://api.whatsapp.com/send/?phone=5543984182582&text=Olá,%20Planac!%20Gostaria%20de%20orçamento%20para%20Portas%20Sanfonadas." 
+                           target="_blank" 
+                           style="background: #20b038; color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 8px; text-decoration: none;">
+                            <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor"><path d="M15.064 13.442c-.231.573-1.276 1.096-1.737 1.12-.46.024-.474.357-2.984-.734-2.51-1.09-4.02-3.743-4.14-3.914-.118-.17-.971-1.386-.925-2.61.046-1.223.716-1.8.955-2.04a.961.961 0 0 1 .68-.287c.198-.003.326-.006.472 0 .146.005.366-.031.556.474.19.506.645 1.748.703 1.875.058.127.094.273.004.436-.09.163-.135.265-.266.406-.13.14-.275.314-.392.422-.13.118-.267.248-.13.503.137.254.61 1.087 1.33 1.774.925.882 1.723 1.175 1.968 1.308.247.134.394.12.546-.041.152-.16.654-.703.83-.945.177-.243.342-.195.57-.104.226.091 1.435.739 1.681.873.246.133.41.202.47.308.058.106.04.604-.191 1.176zM10.18 0C4.76 0 .363 4.362.363 9.742c0 1.841.515 3.563 1.409 5.031L0 20l5.436-1.727a9.838 9.838 0 0 0 4.745 1.212c5.423 0 9.819-4.362 9.819-9.742C20 4.362 15.604 0 10.181 0z"></path></svg>
+                            WhatsApp
+                        </a>
+                    </div>
+
+                    <div class="sidebar-card">
+                        <h3>Atendimento</h3>
+                        <p style="font-size: 1.6rem; margin-bottom: 10px;">📞 (43) 98418-2582</p>
+                        <p style="font-size: 1.4rem; color: #666;">Segunda a Sexta<br>8h às 17h</p>
+                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
+                        <p style="font-size: 1.4rem; color: #666;">📍 Av. Abelio Benatti, 4912<br>Jardim do Sol<br>Londrina-PR</p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Praticidade com Economia!</h2>
+            <p>Solicite um orçamento e transforme seus ambientes com portas sanfonadas!</p>
+            <a href="#orcamento" class="btn-primary">Solicitar Orçamento Agora</a>
+        </div>
+    </section>
+
+    <section class="quote-form-section" id="orcamento">
+        <div class="container">
+            <div class="quote-form-container">
+                <h2>Solicite seu Orçamento</h2>
+                <form onsubmit="handleQuote(event)">
+                    <div class="form-group">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefone">Telefone/WhatsApp *</label>
+                        <input type="tel" id="telefone" name="telefone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cidade">Cidade *</label>
+                        <input type="text" id="cidade" name="cidade" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tipo">Cor Desejada</label>
+                        <select id="tipo" name="tipo">
+                            <option value="">Selecione...</option>
+                            <option value="branco">Branco</option>
+                            <option value="mogno">Mogno</option>
+                            <option value="imbuia">Imbuia</option>
+                            <option value="cerejeira">Cerejeira</option>
+                            <option value="outro">Outra</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="mensagem">Detalhes do Pedido *</label>
+                        <textarea id="mensagem" name="mensagem" placeholder="Quantidade, medidas, ambiente de instalação..." required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">🚀 Enviar via WhatsApp</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.getElementById('telefone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            
+            if (value.length > 10) {
+                value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+            } else if (value.length > 6) {
+                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+            } else if (value.length > 2) {
+                value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+            } else {
+                value = value.replace(/^(\d*)/, '($1');
+            }
+            
+            e.target.value = value;
+        });
+
+        function handleQuote(e) {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const email = document.getElementById('email').value;
+            const telefone = document.getElementById('telefone').value;
+            const cidade = document.getElementById('cidade').value;
+            const tipo = document.getElementById('tipo').value;
+            const mensagem = document.getElementById('mensagem').value;
+            
+            const whatsappMsg = `*Orçamento - Portas Sanfonadas*\n\n` +
+                `*Nome:* ${nome}\n` +
+                `*E-mail:* ${email}\n` +
+                `*Telefone:* ${telefone}\n` +
+                `*Cidade:* ${cidade}\n` +
+                `*Cor:* ${tipo || 'Não especificado'}\n\n` +
+                `*Detalhes:*\n${mensagem}`;
+            
+            const whatsappURL = `https://api.whatsapp.com/send/?phone=5543984182582&text=${encodeURIComponent(whatsappMsg)}`;
+            
+            window.open(whatsappURL, '_blank');
+            e.target.reset();
+            alert('✅ Redirecionando para WhatsApp!');
+        }
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
+            alert('📱 Use os links do rodapé para navegar!');
+        });
+
+        document.querySelectorAll('.gallery-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const img = this.querySelector('img');
+                window.open(img.src, '_blank');
+            });
+        });
+    </script>
+    <!-- WhatsApp Float Container -->
+    <div id="whatsapp-float-container"></div>
+
+    <!-- Footer Container -->
+    <div id="footer-container"></div>
+
+    <!-- Load Header and Footer Components -->
+    <script src="load-components.js?v=2"></script>
+</body>
+</html>
