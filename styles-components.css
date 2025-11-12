@@ -18,7 +18,7 @@ header {
 }
 
 .header-logo {
-    /* Glassmorphism Samsung S23 - Branco */
+    /* Glassmorphism Samsung S23 - IGUAL ao mobile menu */
     background:
         linear-gradient(
             to bottom,
@@ -27,11 +27,11 @@ header {
         );
     backdrop-filter: blur(28px) saturate(220%);
     -webkit-backdrop-filter: blur(28px) saturate(220%);
-    border: 1px solid rgba(255,255,255, 0.46);
+    border-bottom: 1px solid rgba(255,255,255, 0.46);
+    border-right: 1px solid rgba(255,255,255, 0.46);
     box-shadow:
         inset 0 0 1px rgba(255,255,255, 0.36),
         0 22px 54px rgba(0,0,0, 0.26);
-    border-radius: 28px;
     will-change: transform, backdrop-filter;
 
     width: 32%;
@@ -50,7 +50,7 @@ header {
     position: relative;
 }
 
-/* Overlay escuro no header-logo (igual footer) */
+/* Overlay escuro no header-logo (IGUAL ao mobile menu) */
 .header-logo::before {
     content: '';
     position: absolute;
@@ -88,7 +88,7 @@ header {
 }
 
 .header-nav {
-    /* Glassmorphism Samsung S23 - IGUAL ao box da logo */
+    /* Glassmorphism Samsung S23 - IGUAL ao mobile menu */
     background:
         linear-gradient(
             to bottom,
@@ -97,7 +97,7 @@ header {
         );
     backdrop-filter: blur(28px) saturate(220%);
     -webkit-backdrop-filter: blur(28px) saturate(220%);
-    border: 1px solid rgba(255,255,255, 0.46);
+    border-bottom: 1px solid rgba(255,255,255, 0.46);
     box-shadow:
         inset 0 0 1px rgba(255,255,255, 0.36),
         0 22px 54px rgba(0,0,0, 0.26);
@@ -112,7 +112,7 @@ header {
     position: relative;
 }
 
-/* Overlay escuro no header-nav (igual footer) */
+/* Overlay escuro no header-nav (IGUAL ao mobile menu) */
 .header-nav::before {
     content: '';
     position: absolute;
@@ -446,7 +446,7 @@ footer {
     height: 70px;
     display: flex;
     align-items: center;
-    /* Glassmorphism Samsung S23 - IGUAL ao box da logo */
+    /* Glassmorphism Samsung S23 - IGUAL ao mobile menu */
     background:
         linear-gradient(
             to bottom,
@@ -455,14 +455,14 @@ footer {
         );
     backdrop-filter: blur(28px) saturate(220%);
     -webkit-backdrop-filter: blur(28px) saturate(220%);
-    border: 1px solid rgba(255,255,255, 0.46);
+    border-top: 1px solid rgba(255,255,255, 0.46);
     box-shadow:
         inset 0 0 1px rgba(255,255,255, 0.36),
-        0 22px 54px rgba(0,0,0, 0.26);
+        0 -22px 54px rgba(0,0,0, 0.26);
     will-change: transform, backdrop-filter;
 }
 
-/* Overlay escuro por cima (igual divisória naval) */
+/* Overlay escuro por cima (IGUAL ao mobile menu) */
 footer::before {
     content: '';
     position: absolute;
