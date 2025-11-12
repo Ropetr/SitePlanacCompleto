@@ -56,7 +56,8 @@
       "Bash(del .githubworkflowsdeploy-backend.yml)",
       "WebFetch(domain:planac-backend-api.planacacabamentos.workers.dev)",
       "Read(//c/**)",
-      "Bash(node remove-duplicate-styles.js:*)"
+      "Bash(node remove-duplicate-styles.js:*)",
+      "Bash(node add-css-version.js:*)"
     ],
     "deny": [],
     "ask": []
