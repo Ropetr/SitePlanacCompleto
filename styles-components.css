@@ -213,7 +213,7 @@ header {
     -webkit-transform: translateZ(0);
 }
 
-/* Overlay escuro no dropdown-menu (FORÇAR IGUAL ao mobile menu) */
+/* Overlay escuro no dropdown-menu (MAIS FORTE para ofuscar imagem de fundo) */
 .dropdown-menu::before {
     content: '';
     position: absolute;
@@ -221,7 +221,7 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.48) !important;
+    background: rgba(0,0,0,0.65) !important;
     z-index: 0;
     pointer-events: none;
     border-radius: 0 0 28px 28px;
@@ -317,7 +317,7 @@ header {
     -webkit-transform: translateZ(0);
 }
 
-/* Overlay escuro no dropdown-menu-sub (FORÇAR IGUAL ao mobile menu) */
+/* Overlay escuro no dropdown-menu-sub (MAIS FORTE para ofuscar imagem de fundo) */
 .dropdown-menu-sub::before {
     content: '';
     position: absolute;
@@ -325,7 +325,7 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.48) !important;
+    background: rgba(0,0,0,0.65) !important;
     z-index: 0;
     pointer-events: none;
     border-radius: 0 28px 28px 0;
