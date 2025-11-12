@@ -212,7 +212,7 @@ header {
     -webkit-transform: translateZ(0);
 }
 
-/* Overlay escuro EMBAIXO - fumê forte para ofuscar fundo */
+/* Overlay escuro por cima (IGUAL ao mobile menu) */
 .dropdown-menu::before {
     content: '';
     position: absolute;
@@ -221,22 +221,6 @@ header {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.65) !important;
-    z-index: -1;
-    pointer-events: none;
-    border-radius: 0 0 28px 28px;
-}
-
-/* Camada de glassmorphism POR CIMA do overlay escuro */
-.dropdown-menu::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: inherit;
-    backdrop-filter: inherit;
-    -webkit-backdrop-filter: inherit;
     z-index: 0;
     pointer-events: none;
     border-radius: 0 0 28px 28px;
@@ -332,7 +316,7 @@ header {
     -webkit-transform: translateZ(0);
 }
 
-/* Overlay escuro EMBAIXO - fumê forte para ofuscar fundo */
+/* Overlay escuro por cima (IGUAL ao mobile menu) */
 .dropdown-menu-sub::before {
     content: '';
     position: absolute;
@@ -341,22 +325,6 @@ header {
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.65) !important;
-    z-index: -1;
-    pointer-events: none;
-    border-radius: 0 28px 28px 0;
-}
-
-/* Camada de glassmorphism POR CIMA do overlay escuro */
-.dropdown-menu-sub::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: inherit;
-    backdrop-filter: inherit;
-    -webkit-backdrop-filter: inherit;
     z-index: 0;
     pointer-events: none;
     border-radius: 0 28px 28px 0;
