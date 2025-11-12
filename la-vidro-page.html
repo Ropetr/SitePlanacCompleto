@@ -4,812 +4,273 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lã de Vidro - Planac Distribuidora</title>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <meta name="description" content="A Lã de Vidro é um material isolante termoacústico de altíssimo desempenho, fabricado a partir de fibras de vidro aglomeradas com resinas especiais. Considerada uma das soluções mais eficientes para isolamento térmico e acústico, a lã de vidro é amplamente utilizada na construção civil, indústria e refrigeração devido às suas excepcionais propriedades isolantes e versatilidade de aplicação.">
+    <meta name="keywords" content="Lã de Vidro, Lã de Vidro, Isolamento Termoacústico">
 
-        html {
-            scroll-behavior: smooth;
-            font-size: 10px;
-        }
+    <!-- Preload crítico -->
+    <link rel="preload" as="image" href="" fetchpriority="high">
+    <link rel="preload" as="image" href="Logo.svg" fetchpriority="high">
 
-        body {
-            font-family: 'Barlow', sans-serif;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1410px;
-            width: 90%;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        .service-banner {
-            width: 100%;
-            height: 60vh;
-            min-height: 400px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-size: cover;
-            background-position: center;
-            margin-top: 0;
-        }
-
-        .service-banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .service-banner-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            color: #fff;
-            max-width: 900px;
-        }
-
-        .service-banner h1 {
-            font-size: clamp(3.5rem, 6vw, 6rem);
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
-        }
-
-        .service-banner p {
-            font-size: clamp(1.8rem, 2.5vw, 2.4rem);
-            filter: drop-shadow(0px 0px 5px rgba(0,0,0,0.6));
-        }
-
-        .breadcrumb {
-            padding: 20px 0;
-            background: #f6f8fb;
-        }
-
-        .breadcrumb-list {
-            display: flex;
-            gap: 10px;
-            list-style: none;
-            font-size: 1.4rem;
-            flex-wrap: wrap;
-        }
-
-        .breadcrumb-list li {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .breadcrumb-list a {
-            color: #AA000E;
-            text-decoration: none;
-        }
-
-        .breadcrumb-list a:hover {
-            text-decoration: underline;
-        }
-
-        .breadcrumb-list span {
-            color: #666;
-        }
-
-        .service-content {
-            padding: 80px 0;
-            background: #fff;
-        }
-
-        .service-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 50px;
-            align-items: start;
-        }
-
-        .service-main {
-            background: #fff;
-        }
-
-        .service-main h2 {
-            font-size: 3.6rem;
-            color: #AA000E;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        .service-main h3 {
-            font-size: 2.8rem;
-            color: #3d3d3d;
-            margin: 40px 0 20px;
-        }
-
-        .service-main p {
-            font-size: 1.8rem;
-            line-height: 1.8;
-            color: #3d3d3d;
-            margin-bottom: 20px;
-            text-align: justify;
-        }
-
-        .service-main ul {
-            list-style: none;
-            padding-left: 0;
-            margin: 20px 0;
-        }
-
-        .service-main li {
-            font-size: 1.8rem;
-            padding: 12px 0 12px 30px;
-            position: relative;
-            color: #3d3d3d;
-        }
-
-        .service-main li::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #AA000E;
-            font-weight: bold;
-            font-size: 2rem;
-        }
-
-        .highlight-box {
-            background: linear-gradient(135deg, #AA000E 0%, #96181c 100%);
-            color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            margin: 30px 0;
-            box-shadow: 0 5px 20px rgba(170,0,14,0.2);
-        }
-
-        .highlight-box h4 {
-            font-size: 2.4rem;
-            margin-bottom: 15px;
-        }
-
-        .highlight-box p {
-            font-size: 1.8rem;
-            color: #fff;
-            text-align: left;
-        }
-
-        .service-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 40px 0;
-        }
-
-        .gallery-item {
-            position: relative;
-            height: 250px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .service-sidebar {
-            position: sticky;
-            top: 180px;
-        }
-
-        .sidebar-card {
-            background: #f6f8fb;
-            padding: 30px;
-            border-radius: 10px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-
-        .sidebar-card h3 {
-            font-size: 2.4rem;
-            color: #AA000E;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .sidebar-card ul {
-            list-style: none;
-        }
-
-        .sidebar-card li {
-            margin-bottom: 15px;
-        }
-
-        .sidebar-card a {
-            color: #3d3d3d;
-            text-decoration: none;
-            font-size: 1.6rem;
-            display: block;
-            padding: 10px;
-            border-radius: 5px;
-            transition: 0.3s;
-        }
-
-        .sidebar-card a:hover,
-        .sidebar-card a.active {
-            background: #fff;
-            color: #AA000E;
-            padding-left: 20px;
-        }
-
-        .cta-section {
-            background: linear-gradient(135deg, #AA000E 0%, #96181c 100%);
-            padding: 60px 0;
-            text-align: center;
-            color: #fff;
-        }
-
-        .cta-section h2 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-
-        .cta-section p {
-            font-size: 2rem;
-            margin-bottom: 40px;
-        }
-
-        .btn-primary {
-            background: #fff;
-            color: #AA000E;
-            padding: 15px 40px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 1.8rem;
-            font-weight: 700;
-            display: inline-block;
-            transition: 0.3s;
-        }
-
-        .btn-primary:hover {
-            background: #ec3237;
-            color: #fff;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-        }
-
-        .quote-form-section {
-            padding: 80px 0;
-            background: #f6f8fb;
-        }
-
-        .quote-form-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 50px;
-            border-radius: 10px;
-            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
-        }
-
-        .quote-form-container h2 {
-            font-size: 3.6rem;
-            color: #AA000E;
-            margin-bottom: 30px;
-            text-align: center;
-            text-transform: uppercase;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 1.6rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #3d3d3d;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1.6rem;
-            font-family: 'Barlow', sans-serif;
-            transition: 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #AA000E;
-            box-shadow: 0 0 0 3px rgba(170,0,14,0.1);
-        }
-
-        .form-group textarea {
-            min-height: 150px;
-            resize: vertical;
-        }
-
-        .form-group button {
-            width: 100%;
-            background: #AA000E;
-            color: #fff;
-            padding: 18px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.8rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .form-group button:hover {
-            background: #96181c;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(170,0,14,0.3);
-        }
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
-        }
-
-        
-
-        
-
-        @media (max-width: 1024px) {
-            
-
-            
-
-            
-
-            .service-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .service-sidebar {
-                position: static;
-            }
-
-            .service-banner {
-                margin-top: 130px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .service-banner {
-                height: 50vh;
-                min-height: 300px;
-            }
-
-            .quote-form-container {
-                padding: 30px 20px;
-            }
-
-            
-
-        }
-    </style>
     <link rel="stylesheet" href="styles-components.css?v=8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Header Container -->
-    <div id="header-container"></div>
-    <section class="service-banner" style="background-image: url('https://painel-planac.codiehost.com.br/uploads/133471459211169154.jpg')">
-        <div class="service-banner-content">
-            <h1>Lã de Vidro</h1>
-            <p>Isolamento térmico e acústico de alta performance</p>
-        </div>
-    </section>
-
-    <section class="breadcrumb">
-        <div class="container">
-            <ul class="breadcrumb-list">
-                <li><a href="index.html">Início</a></li>
-                <li>›</li>
-                <li><a href="index.html#termoacustica">Termoacústica</a></li>
-                <li>›</li>
-                <li><span>Lã de Vidro</span></li>
-            </ul>
-        </div>
-    </section>
-
-    <section class="service-content">
-        <div class="container">
-            <div class="service-grid">
-                <div class="service-main">
-                    <h2>Lã de Vidro</h2>
-                    
-                    <p>
-                        A <strong>Lã de Vidro</strong> é um material isolante termoacústico de altíssimo desempenho, fabricado a partir de fibras de vidro aglomeradas com resinas especiais. Considerada uma das soluções mais eficientes para isolamento térmico e acústico, a lã de vidro é amplamente utilizada na construção civil, indústria e refrigeração devido às suas excepcionais propriedades isolantes e versatilidade de aplicação.
-                    </p>
-
-                    <p>
-                        Composta por milhões de filamentos de vidro entrelaçados que formam uma estrutura fibrosa e porosa, a lã de vidro cria inúmeras células de ar que dificultam a passagem de calor e som. Este material oferece excelente relação custo-benefício, é incombustível, não absorve umidade, não apodrece e possui vida útil superior a 50 anos.
-                    </p>
-
-                    <div class="highlight-box">
-                        <h4>🌡️ Dupla Proteção: Térmica + Acústica!</h4>
-                        <p>
-                            A lã de vidro reduz até 95% da transmissão de ruídos e pode diminuir em até 70% a transferência de calor! Economize até 40% em energia com ar-condicionado e aquecimento. Conforto térmico e silêncio total em um único material!
-                        </p>
-                    </div>
-
-                    <h3>Características Principais</h3>
-                    <ul>
-                        <li><strong>Excelente Isolamento Térmico:</strong> Condutividade térmica baixíssima (0,032 a 0,045 W/mK)</li>
-                        <li><strong>Alta Absorção Acústica:</strong> Coeficiente NRC de até 0,95</li>
-                        <li><strong>Incombustível:</strong> Classe A de resistência ao fogo</li>
-                        <li><strong>Não Absorve Umidade:</strong> Hidrofóbica por natureza</li>
-                        <li><strong>Levíssima:</strong> Densidades de 10 a 96 kg/m³</li>
-                        <li><strong>Versátil:</strong> Diversas apresentações e densidades</li>
-                        <li><strong>Durabilidade:</strong> Vida útil superior a 50 anos</li>
-                        <li><strong>Sustentável:</strong> Fabricada com até 60% de vidro reciclado</li>
-                    </ul>
-
-                    <h3>Tipos e Apresentações</h3>
-                    <p>
-                        A lã de vidro está disponível em diversos formatos:
-                    </p>
-                    <ul>
-                        <li><strong>Painéis Rígidos:</strong> Para isolamento de paredes e tetos</li>
-                        <li><strong>Mantas:</strong> Flexíveis, com ou sem revestimento</li>
-                        <li><strong>Rolos:</strong> Para grandes áreas contínuas</li>
-                        <li><strong>Flocos:</strong> Para insuflamento em cavidades</li>
-                        <li><strong>Tubos:</strong> Para isolamento de tubulações</li>
-                        <li><strong>Feltros:</strong> Para aplicações especiais</li>
-                    </ul>
-
-                    <h3>Densidades Disponíveis</h3>
-                    <p>
-                        Cada densidade tem sua aplicação ideal:
-                    </p>
-                    <ul>
-                        <li><strong>10 a 16 kg/m³:</strong> Forros residenciais e comerciais leves</li>
-                        <li><strong>20 a 32 kg/m³:</strong> Paredes divisórias e forros com tráfego</li>
-                        <li><strong>40 a 48 kg/m³:</strong> Isolamento industrial e acústico reforçado</li>
-                        <li><strong>60 a 96 kg/m³:</strong> Aplicações especiais e alta performance</li>
-                    </ul>
-
-                    <h3>Revestimentos</h3>
-                    <p>
-                        Opções de acabamento para diferentes necessidades:
-                    </p>
-                    <ul>
-                        <li><strong>Sem Revestimento:</strong> Uso geral em áreas protegidas</li>
-                        <li><strong>Papel Kraft:</strong> Barreira de vapor para ambientes internos</li>
-                        <li><strong>Véu de Vidro:</strong> Proteção mecânica leve</li>
-                        <li><strong>Alumínio:</strong> Barreira radiante e de vapor</li>
-                        <li><strong>Manta Aluminizada:</strong> Alta refletividade térmica</li>
-                        <li><strong>Laminado Preto:</strong> Para ambientes visíveis (estúdios, teatros)</li>
-                    </ul>
-
-                    <h3>Vantagens da Lã de Vidro</h3>
-                    <p>
-                        Benefícios que fazem da lã de vidro a escolha ideal:
-                    </p>
-
-                    <ul>
-                        <li><strong>Economia de Energia:</strong> Reduz custos com climatização em até 40%</li>
-                        <li><strong>Conforto Térmico:</strong> Mantém temperatura estável</li>
-                        <li><strong>Conforto Acústico:</strong> Elimina ruídos indesejados</li>
-                        <li><strong>Segurança:</strong> Material incombustível classe A</li>
-                        <li><strong>Saúde:</strong> Não prolifera fungos, bactérias ou ácaros</li>
-                        <li><strong>Instalação Fácil:</strong> Leve e manuseável</li>
-                        <li><strong>Versatilidade:</strong> Adapta-se a qualquer projeto</li>
-                        <li><strong>ROI Rápido:</strong> Retorno do investimento em 18-36 meses</li>
-                    </ul>
-
-                    <h3>Aplicações</h3>
-                    <p>
-                        A lã de vidro é utilizada em diversos segmentos:
-                    </p>
-                    <ul>
-                        <li><strong>Residencial:</strong> Forros, paredes, coberturas, entre-lajes</li>
-                        <li><strong>Comercial:</strong> Escritórios, lojas, shoppings, hotéis</li>
-                        <li><strong>Industrial:</strong> Galpões, fábricas, câmaras frias</li>
-                        <li><strong>Acústica:</strong> Estúdios, cinemas, teatros, auditórios</li>
-                        <li><strong>HVAC:</strong> Dutos de ar-condicionado, tubulações</li>
-                        <li><strong>Automotiva:</strong> Isolamento de veículos</li>
-                        <li><strong>Naval:</strong> Embarcações e plataformas</li>
-                        <li><strong>Frigorífica:</strong> Câmaras frias e refrigeração</li>
-                    </ul>
-
-                    <h3>Desempenho Térmico</h3>
-                    <p>
-                        Especificações técnicas de isolamento térmico:
-                    </p>
-                    <ul>
-                        <li><strong>Condutividade Térmica:</strong> 0,032 a 0,045 W/mK</li>
-                        <li><strong>Resistência Térmica:</strong> 0,5 a 6,0 m²K/W</li>
-                        <li><strong>Temperatura de Uso:</strong> -40°C a +250°C</li>
-                        <li><strong>Redução de Carga Térmica:</strong> Até 70%</li>
-                    </ul>
-
-                    <h3>Desempenho Acústico</h3>
-                    <p>
-                        Capacidade excepcional de absorção sonora:
-                    </p>
-                    <ul>
-                        <li><strong>Coeficiente NRC:</strong> 0,70 a 0,95</li>
-                        <li><strong>Redução de Ruído:</strong> 45 a 60 dB</li>
-                        <li><strong>Absorção:</strong> Especialmente eficaz em médias e altas frequências</li>
-                    </ul>
-
-                    <h3>Instalação</h3>
-                    <p>
-                        Orientações para instalação adequada:
-                    </p>
-                    <ul>
-                        <li>Usar EPIs adequados (luvas, máscara, óculos)</li>
-                        <li>Mantas devem preencher 100% do vão sem compressão excessiva</li>
-                        <li>Face com revestimento voltada para o lado quente</li>
-                        <li>Evitar lacunas entre peças</li>
-                        <li>Fixação com arames, grampos ou suportes apropriados</li>
-                        <li>Proteger de intempéries durante instalação</li>
-                    </ul>
-
-                    <h3>Cuidados e Manutenção</h3>
-                    <ul>
-                        <li>Proteger de umidade excessiva e água direta</li>
-                        <li>Evitar compressão permanente (reduz eficiência)</li>
-                        <li>Não expor diretamente a chamas</li>
-                        <li>Inspecionar periodicamente em áreas acessíveis</li>
-                        <li>Substituir trechos danificados quando necessário</li>
-                    </ul>
-
-                    <h3>Normas e Certificações</h3>
-                    <ul>
-                        <li>NBR 11356 - Lã de vidro para isolamento térmico</li>
-                        <li>NBR 15220 - Desempenho térmico de edificações</li>
-                        <li>NBR 15575 - Desempenho de edificações habitacionais</li>
-                        <li>ASTM C665 - Lã mineral (fibra de vidro)</li>
-                        <li>Euroclasse A1 - Incombustibilidade</li>
-                    </ul>
-
-                    <h3>Galeria de Aplicações</h3>
-                    <div class="service-gallery">
-                        <div class="gallery-item">
-                            <img src="https://painel-planac.codiehost.com.br/uploads/133471459211169154.jpg" alt="Lã de Vidro - Aplicação 1">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://painel-planac.codiehost.com.br/uploads/133471459468999996.jpg" alt="Lã de Vidro - Aplicação 2">
-                        </div>
-                        <div class="gallery-item">
-                            <img src="https://painel-planac.codiehost.com.br/uploads/133471459779072990.jpg" alt="Lã de Vidro - Aplicação 3">
-                        </div>
-                    </div>
-
-                    <h3>Por que escolher a Planac?</h3>
-                    <p>
-                        A <strong>Planac Distribuidora</strong> é especialista em isolamento termoacústico:
-                    </p>
-                    <ul>
-                        <li>✓ Lã de vidro das melhores marcas (Isover, Wallfelt, Trisoft)</li>
-                        <li>✓ Amplo estoque de densidades e espessuras</li>
-                        <li>✓ Assessoria técnica para dimensionamento</li>
-                        <li>✓ Cálculos de desempenho térmico e acústico</li>
-                        <li>✓ Preços especiais para grandes volumes</li>
-                        <li>✓ Entrega rápida e segura</li>
-                        <li>✓ Suporte completo durante a obra</li>
-                        <li>✓ Indicação de instaladores qualificados</li>
-                    </ul>
-                </div>
-
-                <aside class="service-sidebar">
-                    <div class="sidebar-card">
-                        <h3>Outros Isolantes</h3>
-                        <ul>
-                            <li><a href="#" class="active">Lã de Vidro</a></li>
-                            <li><a href="la-rocha.html">Lã de Rocha</a></li>
-                            <li><a href="la-pet.html">Lã de Pet</a></li>
-                            <li><a href="manta-termica.html">Manta Térmica Aluminizada</a></li>
+    <header>
+    <div class="header-logo">
+        <a href="https://siteplanaccompleto.pages.dev/">
+            <img src="Logo.svg" alt="Planac Logo">
+        </a>
+    </div>
+    <div class="header-nav">
+        <nav class="nav-links">
+            <li class="dropdown">
+                <a href="planac-website.html#divisorias" class="dropdown-toggle">Divisórias</a>
+                <ul class="dropdown-menu">
+                    <li><a href="divisoria-naval-page.html">Divisória Naval</a></li>
+                    <li><a href="drywall-divisoria-page.html">Divisória de Gesso Acartonado</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="planac-website.html#drywall" class="dropdown-toggle">Drywall</a>
+                <ul class="dropdown-menu">
+                    <li><a href="drywall-divisoria-page.html">Parede de Gesso Acartonado</a></li>
+                    <li><a href="planac-forro-gesso-completo.html">Forro de Gesso Acartonado</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="planac-website.html#forros" class="dropdown-toggle">Forros</a>
+                <ul class="dropdown-menu">
+                    <li><a href="planac-forro-gesso-completo.html">Gesso Acartonado</a></li>
+                    <li><a href="pvc-branco-page.html">PVC Branco</a></li>
+                    <li><a href="pvc-amadeirado-page.html">PVC Amadeirado</a></li>
+                    <li><a href="forro-vinilico-revid.html">Forro Vinílico REVID</a></li>
+                    <li class="dropdown-submenu">
+                        <a href="planac-website.html#forros-modulares" class="dropdown-toggle-sub">Modulares →</a>
+                        <ul class="dropdown-menu-sub">
+                            <li><a href="planac-gesso-modular.html">Gesso Modular</a></li>
+                            <li><a href="pvc-modular-page.html">PVC Modular</a></li>
+                            <li><a href="forrovid-page.html">Forrovid</a></li>
+                            <li><a href="mineral-page.html">Mineral</a></li>
+                            <li><a href="isopor-page.html">Isopor</a></li>
                         </ul>
-                    </div>
+                    </li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="planac-website.html#termoacustica" class="dropdown-toggle">Termoacústica</a>
+                <ul class="dropdown-menu">
+                    <li><a href="la-rocha-page.html">Lã de Rocha</a></li>
+                    <li><a href="la-vidro-page.html">Lã de Vidro</a></li>
+                    <li><a href="la-pet-page.html">Lã de PET</a></li>
+                    <li><a href="manta-termica.html">Manta Térmica</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a href="planac-website.html#portas" class="dropdown-toggle">Kit Portas</a>
+                <ul class="dropdown-menu">
+                    <li><a href="kit-porta.html">Kit Porta de Giro</a></li>
+                    <li><a href="kit-porta-correr.html">Kit Porta de Correr</a></li>
+                    <li><a href="portas-sanfonadas.html">Portas Sanfonadas</a></li>
+                </ul>
+            </li>
+            <a href="planac-website.html#rodapes">Rodapés</a>
+            <a href="planac-website.html#sobre">Sobre</a>
+            <a href="planac-website.html#contato">Contato</a>
+        </nav>
+        <div class="header-buttons">
+            <a href="https://www.instagram.com/planacdistribuidora/" target="_blank" class="instagram-btn">
+                <img src="Instagram.svg" alt="Instagram" width="35" height="35">
+            </a>
+        </div>
+        <button class="mobile-menu-btn">☰</button>
+    </div>
+</header>
 
-                    <div class="sidebar-card">
-                        <h3>Fale Conosco</h3>
-                        <p style="font-size: 1.6rem; margin-bottom: 15px;">Entre em contato para mais informações:</p>
-                        <a href="https://api.whatsapp.com/send/?phone=5543984182582&text=Olá,%20Planac!%20Gostaria%20de%20orçamento%20para%20Lã%20de%20Vidro." 
-                           target="_blank" 
-                           style="background: #20b038; color: #fff; padding: 12px 20px; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 8px; text-decoration: none;">
-                            <svg viewBox="0 0 20 20" width="20" height="20" fill="currentColor"><path d="M15.064 13.442c-.231.573-1.276 1.096-1.737 1.12-.46.024-.474.357-2.984-.734-2.51-1.09-4.02-3.743-4.14-3.914-.118-.17-.971-1.386-.925-2.61.046-1.223.716-1.8.955-2.04a.961.961 0 0 1 .68-.287c.198-.003.326-.006.472 0 .146.005.366-.031.556.474.19.506.645 1.748.703 1.875.058.127.094.273.004.436-.09.163-.135.265-.266.406-.13.14-.275.314-.392.422-.13.118-.267.248-.13.503.137.254.61 1.087 1.33 1.774.925.882 1.723 1.175 1.968 1.308.247.134.394.12.546-.041.152-.16.654-.703.83-.945.177-.243.342-.195.57-.104.226.091 1.435.739 1.681.873.246.133.41.202.47.308.058.106.04.604-.191 1.176zM10.18 0C4.76 0 .363 4.362.363 9.742c0 1.841.515 3.563 1.409 5.031L0 20l5.436-1.727a9.838 9.838 0 0 0 4.745 1.212c5.423 0 9.819-4.362 9.819-9.742C20 4.362 15.604 0 10.181 0z"></path></svg>
-                            WhatsApp
-                        </a>
-                    </div>
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div>
+<div class="mobile-menu-sidebar">
+    <div class="mobile-menu-header">
+        <h2 style="color: #fff; margin: 0; font-size: 2rem; text-shadow: 0 0 8px rgba(0,0,0,0.8); position: relative; z-index: 1;">Menu</h2>
+        <button class="mobile-menu-close">×</button>
+    </div>
+    <nav class="mobile-menu-content">
+        <ul>
+            <li class="mobile-menu-dropdown">
+                <a href="planac-website.html#divisorias">Divisórias</a>
+                <ul>
+                    <li><a href="divisoria-naval-page.html">Divisória Naval</a></li>
+                    <li><a href="drywall-divisoria-page.html">Divisória de Gesso Acartonado</a></li>
+                </ul>
+            </li>
+            <li class="mobile-menu-dropdown">
+                <a href="planac-website.html#drywall">Drywall</a>
+                <ul>
+                    <li><a href="drywall-divisoria-page.html">Parede de Gesso Acartonado</a></li>
+                    <li><a href="planac-forro-gesso-completo.html">Forro de Gesso Acartonado</a></li>
+                </ul>
+            </li>
+            <li class="mobile-menu-dropdown">
+                <a href="planac-website.html#forros">Forros</a>
+                <ul>
+                    <li><a href="planac-forro-gesso-completo.html">Gesso Acartonado</a></li>
+                    <li><a href="pvc-branco-page.html">PVC Branco</a></li>
+                    <li><a href="pvc-amadeirado-page.html">PVC Amadeirado</a></li>
+                    <li><a href="forro-vinilico-revid.html">Forro Vinílico REVID</a></li>
+                    <li class="mobile-menu-submenu">
+                        <a href="planac-website.html#forros-modulares">Modulares</a>
+                        <ul>
+                            <li><a href="planac-gesso-modular.html">Gesso Modular</a></li>
+                            <li><a href="pvc-modular-page.html">PVC Modular</a></li>
+                            <li><a href="forrovid-page.html">Forrovid</a></li>
+                            <li><a href="mineral-page.html">Mineral</a></li>
+                            <li><a href="isopor-page.html">Isopor</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li class="mobile-menu-dropdown">
+                <a href="planac-website.html#termoacustica">Termoacústica</a>
+                <ul>
+                    <li><a href="la-rocha-page.html">Lã de Rocha</a></li>
+                    <li><a href="la-vidro-page.html">Lã de Vidro</a></li>
+                    <li><a href="la-pet-page.html">Lã de PET</a></li>
+                    <li><a href="manta-termica.html">Manta Térmica</a></li>
+                </ul>
+            </li>
+            <li class="mobile-menu-dropdown">
+                <a href="planac-website.html#portas">Kit Portas</a>
+                <ul>
+                    <li><a href="kit-porta.html">Kit Porta de Giro</a></li>
+                    <li><a href="kit-porta-correr.html">Kit Porta de Correr</a></li>
+                    <li><a href="portas-sanfonadas.html">Portas Sanfonadas</a></li>
+                </ul>
+            </li>
+            <li><a href="planac-website.html#rodapes">Rodapés</a></li>
+            <li><a href="planac-website.html#sobre">Sobre</a></li>
+            <li><a href="planac-website.html#contato">Contato</a></li>
+        </ul>
+    </nav>
+</div>
+<!-- Force cache bust 1761581000 -->
 
-                    <div class="sidebar-card">
-                        <h3>Atendimento</h3>
-                        <p style="font-size: 1.6rem; margin-bottom: 10px;">📞 (43) 98418-2582</p>
-                        <p style="font-size: 1.4rem; color: #666;">Segunda a Sexta<br>8h às 17h</p>
-                        <hr style="margin: 20px 0; border: none; border-top: 1px solid #ddd;">
-                        <p style="font-size: 1.4rem; color: #666;">📍 Av. Abelio Benatti, 4912<br>Jardim do Sol<br>Londrina-PR</p>
-                    </div>
-                </aside>
+
+    <!-- Banner -->
+    <section class="service-banner">
+        
+        <div class="banner-overlay"></div>
+        <div class="container banner-content">
+            <h1 class="banner-title">Lã de Vidro</h1>
+            
+        </div>
+    </section>
+
+    <!-- Conteúdo -->
+    <section class="product-content">
+        <div class="container">
+            
+            <div class="content-block">
+                <h2>Descrição</h2>
+                <p>A Lã de Vidro é um material isolante termoacústico de altíssimo desempenho, fabricado a partir de fibras de vidro aglomeradas com resinas especiais. Considerada uma das soluções mais eficientes para isolamento térmico e acústico, a lã de vidro é amplamente utilizada na construção civil, indústria e refrigeração devido às suas excepcionais propriedades isolantes e versatilidade de aplicação.
+
+Composta por milhões de filamentos de vidro entrelaçados que formam uma estrutura fibrosa e porosa, a lã de vidro cria inúmeras células de ar que dificultam a passagem de calor e som. Este material oferece excelente relação custo-benefício, é incombustível, não absorve umidade, não apodrece e possui vida útil superior a 50 anos.
+
+A lã de vidro reduz até 95% da transmissão de ruídos e pode diminuir em até 70% a transferência de calor! Economize até 40% em energia com ar-condicionado e aquecimento. Conforto térmico e silêncio total em um único material!</p>
+            </div>
+            
+
+            
+            <div class="content-block">
+                <h2>Características</h2>
+                <ul class="features-list">
+                    <li>Início</li><li>›</li><li>Termoacústica</li><li>›</li><li>Lã de Vidro</li>
+                </ul>
+            </div>
+            
+
+            
+
+            
+            <div class="content-block">
+                <h2>Aplicações</h2>
+                <ul class="features-list">
+                    <li>Residencial: Forros, paredes, coberturas, entre-lajes</li><li>Comercial: Escritórios, lojas, shoppings, hotéis</li><li>Industrial: Galpões, fábricas, câmaras frias</li><li>Acústica: Estúdios, cinemas, teatros, auditórios</li><li>HVAC: Dutos de ar-condicionado, tubulações</li><li>Automotiva: Isolamento de veículos</li><li>Naval: Embarcações e plataformas</li><li>Frigorífica: Câmaras frias e refrigeração</li>
+                </ul>
+            </div>
+            
+
+            
+
+            
+
+            
+            <div class="content-block">
+                <h2>Normas e Certificações</h2>
+                <ul class="features-list">
+                    <li>NBR 11356 - Lã de vidro para isolamento térmico</li><li>NBR 15220 - Desempenho térmico de edificações</li><li>NBR 15575 - Desempenho de edificações habitacionais</li><li>ASTM C665 - Lã mineral (fibra de vidro)</li><li>Euroclasse A1 - Incombustibilidade</li>
+                </ul>
+            </div>
+            
+
+            <!-- Formulário de Contato/Orçamento -->
+            <div class="content-block">
+                <h2>Solicite um Orçamento</h2>
+                <div class="contact-buttons">
+                    <a href="https://api.whatsapp.com/send/?phone=5543984182582&text=Olá!%20Gostaria%20de%20um%20orçamento%20para%20L%C3%A3%20de%20Vidro"
+                       target="_blank"
+                       class="cta-button">
+                        Solicitar via WhatsApp
+                    </a>
+                    <a href="index.html#contato" class="cta-button secondary">
+                        Formulário de Contato
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="cta-section">
-        <div class="container">
-            <h2>Interessado em Lã de Vidro?</h2>
-            <p>Solicite um orçamento e garanta conforto térmico e acústico!</p>
-            <a href="#orcamento" class="btn-primary">Solicitar Orçamento Agora</a>
-        </div>
-    </section>
+    <footer>
+    <div class="container">
+        <div class="footer-content">
+            <!-- Ícones desktop com números -->
+            <div class="footer-buttons-desktop">
+                <a href="tel:4330285316" class="footer-phone-btn">
+                    <img src="Telefone.svg" alt="Telefone" width="35" height="35">
+                    <span class="footer-phone-number">(43) 3028-5316</span>
+                </a>
+                <a href="https://api.whatsapp.com/send/?phone=5543984182582&text=Olá,%20Planac!%20Vim%20pelo%20site." target="_blank" class="footer-whatsapp-btn">
+                    <img src="Whats.svg" alt="WhatsApp" width="35" height="35">
+                    <span class="footer-phone-number">(43) 98418-2582</span>
+                </a>
+                <a href="https://maps.app.goo.gl/w3o1SpMrhzDG3CPaA?g_st=aw" target="_blank" class="footer-location-btn">
+                    <img src="Localização Atualizado.svg" alt="Localização" width="35" height="35">
+                    <span class="footer-address">Rua Abélio Benatti, 4912 - Londrina PR</span>
+                </a>
+            </div>
 
-    <section class="quote-form-section" id="orcamento">
-        <div class="container">
-            <div class="quote-form-container">
-                <h2>Solicite seu Orçamento</h2>
-                <form onsubmit="handleQuote(event)">
-                    <div class="form-group">
-                        <label for="nome">Nome Completo *</label>
-                        <input type="text" id="nome" name="nome" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">E-mail *</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="telefone">Telefone/WhatsApp *</label>
-                        <input type="tel" id="telefone" name="telefone" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="cidade">Cidade *</label>
-                        <input type="text" id="cidade" name="cidade" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="tipo">Tipo de Projeto</label>
-                        <select id="tipo" name="tipo">
-                            <option value="">Selecione...</option>
-                            <option value="residencial">Residencial</option>
-                            <option value="comercial">Comercial</option>
-                            <option value="industrial">Industrial</option>
-                            <option value="outro">Outro</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="mensagem">Detalhes do Projeto *</label>
-                        <textarea id="mensagem" name="mensagem" placeholder="Área aproximada, densidade desejada, aplicação..." required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit">🚀 Enviar via WhatsApp</button>
-                    </div>
-                </form>
+            <!-- Ícones mobile sem números -->
+            <div class="footer-icons-mobile">
+                <a href="tel:4330285316" class="footer-icon-btn">
+                    <img src="Telefone.svg" alt="Telefone" width="36" height="36">
+                </a>
+                <a href="https://maps.app.goo.gl/w3o1SpMrhzDG3CPaA?g_st=aw" target="_blank" class="footer-icon-btn">
+                    <img src="Localização Atualizado.svg" alt="Localização" width="36" height="36">
+                </a>
+                <a href="https://api.whatsapp.com/send/?phone=5543984182582&text=Olá,%20Planac!%20Vim%20pelo%20site." target="_blank" class="footer-icon-btn">
+                    <img src="Whats.svg" alt="WhatsApp" width="36" height="36">
+                </a>
+                <a href="https://www.instagram.com/planacdistribuidora/" target="_blank" class="footer-icon-btn">
+                    <img src="Instagram.svg" alt="Instagram" width="36" height="36">
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</footer>
+    <a href="https://api.whatsapp.com/send/?phone=5543984182582&text=Olá,%20Planac!%20Vim%20pelo%20site." target="_blank" class="whatsapp-float">
+    <img src="whatsapp-float.svg" alt="WhatsApp">
+</a>
 
-    <script>
-        document.getElementById('telefone').addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            
-            if (value.length > 10) {
-                value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-            } else if (value.length > 6) {
-                value = value.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-            } else if (value.length > 2) {
-                value = value.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-            } else {
-                value = value.replace(/^(\d*)/, '($1');
-            }
-            
-            e.target.value = value;
-        });
-
-        function handleQuote(e) {
-            e.preventDefault();
-            const nome = document.getElementById('nome').value;
-            const email = document.getElementById('email').value;
-            const telefone = document.getElementById('telefone').value;
-            const cidade = document.getElementById('cidade').value;
-            const tipo = document.getElementById('tipo').value;
-            const mensagem = document.getElementById('mensagem').value;
-            
-            const whatsappMsg = `*Orçamento - Lã de Vidro*\n\n` +
-                `*Nome:* ${nome}\n` +
-                `*E-mail:* ${email}\n` +
-                `*Telefone:* ${telefone}\n` +
-                `*Cidade:* ${cidade}\n` +
-                `*Tipo:* ${tipo || 'Não especificado'}\n\n` +
-                `*Detalhes:*\n${mensagem}`;
-            
-            const whatsappURL = `https://api.whatsapp.com/send/?phone=5543984182582&text=${encodeURIComponent(whatsappMsg)}`;
-            
-            window.open(whatsappURL, '_blank');
-            e.target.reset();
-            alert('✅ Redirecionando para WhatsApp!');
-        }
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
-            });
-        });
-
-        document.querySelector('.mobile-menu-btn').addEventListener('click', function() {
-            alert('📱 Use os links do rodapé para navegar!');
-        });
-
-        document.querySelectorAll('.gallery-item').forEach(item => {
-            item.addEventListener('click', function() {
-                const img = this.querySelector('img');
-                window.open(img.src, '_blank');
-            });
-        });
-    </script>
-    <!-- WhatsApp Float Container -->
-    <div id="whatsapp-float-container"></div>
-
-    <!-- Footer Container -->
-    <div id="footer-container"></div>
-
-    <!-- Load Header and Footer Components -->
-    <script src="load-components.js?v=2"></script>
+    <script src="load-components.js"></script>
 </body>
 </html>
