@@ -28,7 +28,7 @@ async function fetchMenus(env) {
  */
 async function fetchProducts(env) {
   const { results } = await env.DB.prepare(`
-    SELECT * FROM products
+    SELECT * FROM pages
     WHERE status = 'PUBLICADO'
     ORDER BY ordem
   `).all();

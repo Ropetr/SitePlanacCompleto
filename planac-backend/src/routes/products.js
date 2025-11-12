@@ -46,7 +46,7 @@ products.get('/', async (c) => {
 
     let query = `
       SELECT p.*, m.nome as menu_nome, m.slug as menu_slug
-      FROM products p
+      FROM pages p
       LEFT JOIN menus m ON p.menu_id = m.id
       WHERE p.status = ?
     `;
@@ -100,7 +100,7 @@ products.get('/', async (c) => {
     }));
 
     // Total count
-    const countQuery = `SELECT COUNT(*) as total FROM products WHERE status = ?`;
+    const countQuery = `SELECT COUNT(*) as total FROM pages WHERE status = ?`;
     const { total } = await c.env.DB.prepare(countQuery).bind(status).first();
 
     return c.json({
@@ -129,7 +129,7 @@ products.get('/:slug', async (c) => {
 
     const product = await c.env.DB.prepare(`
       SELECT p.*, m.nome as menu_nome, m.slug as menu_slug
-      FROM products p
+      FROM pages p
       LEFT JOIN menus m ON p.menu_id = m.id
       WHERE p.slug = ? AND p.status = 'PUBLICADO'
     `).bind(slug).first();
@@ -221,7 +221,7 @@ products.post('/', async (c) => {
     const now = new Date().toISOString();
 
     await c.env.DB.prepare(`
-      INSERT INTO products (
+      INSERT INTO pages (
         id, nome, slug, subtitulo, descricao_curta, descricao_completa,
         caracteristicas, vantagens, aplicacoes, especificacoes, normas_certificacoes,
         imagem_banner, galeria_imagens, video_url,
@@ -286,7 +286,7 @@ products.put('/:id', async (c) => {
     const body = await c.req.json();
 
     // Buscar produto existente
-    const existing = await c.env.DB.prepare('SELECT * FROM products WHERE id = ?').bind(id).first();
+    const existing = await c.env.DB.prepare('SELECT * FROM pages WHERE id = ?').bind(id).first();
 
     if (!existing) {
       return c.json({ error: 'Produto não encontrado' }, 404);
@@ -390,7 +390,7 @@ products.put('/:id', async (c) => {
     params.push(id); // WHERE id = ?
 
     await c.env.DB.prepare(`
-      UPDATE products SET ${updates.join(', ')} WHERE id = ?
+      UPDATE pages SET ${updates.join(', ')} WHERE id = ?
     `).bind(...params).run();
 
     // Log de auditoria
@@ -427,13 +427,13 @@ products.delete('/:id', async (c) => {
     const payload = c.get('jwtPayload');
     const { id } = c.req.param();
 
-    const existing = await c.env.DB.prepare('SELECT nome FROM products WHERE id = ?').bind(id).first();
+    const existing = await c.env.DB.prepare('SELECT nome FROM pages WHERE id = ?').bind(id).first();
 
     if (!existing) {
       return c.json({ error: 'Produto não encontrado' }, 404);
     }
 
-    await c.env.DB.prepare('DELETE FROM products WHERE id = ?').bind(id).run();
+    await c.env.DB.prepare('DELETE FROM pages WHERE id = ?').bind(id).run();
 
     // Log de auditoria
     await c.env.DB.prepare(`

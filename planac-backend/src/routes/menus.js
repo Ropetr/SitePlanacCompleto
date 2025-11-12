@@ -51,7 +51,7 @@ menus.get('/', async (c) => {
       // Admin: retorna TODOS os menus (ativos e inativos)
       query = `
         SELECT m.*,
-          (SELECT COUNT(*) FROM products p WHERE p.menu_id = m.id) as produtos_count
+          (SELECT COUNT(*) FROM pages p WHERE p.menu_id = m.id) as produtos_count
         FROM menus m
         ORDER BY m.ordem ASC, m.nome ASC
       `;
@@ -59,7 +59,7 @@ menus.get('/', async (c) => {
       // Público: retorna apenas menus ativos
       query = `
         SELECT m.*,
-          (SELECT COUNT(*) FROM products p WHERE p.menu_id = m.id AND p.status = 'PUBLICADO') as produtos_count
+          (SELECT COUNT(*) FROM pages p WHERE p.menu_id = m.id AND p.status = 'PUBLICADO') as produtos_count
         FROM menus m
         WHERE m.ativo = 1
         ORDER BY m.ordem ASC, m.nome ASC
@@ -118,7 +118,7 @@ menus.get('/:slug', async (c) => {
     // Buscar produtos do menu
     const { results: products } = await c.env.DB.prepare(`
       SELECT id, nome, slug, subtitulo, imagem_banner, destaque
-      FROM products
+      FROM pages
       WHERE menu_id = ? AND status = 'PUBLICADO'
       ORDER BY destaque DESC, ordem ASC
     `).bind(menu.id).all();
@@ -257,7 +257,7 @@ menus.delete('/:id', async (c) => {
 
     // Verificar se existem produtos usando este menu
     const { count } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as count FROM products WHERE menu_id = ?'
+      'SELECT COUNT(*) as count FROM pages WHERE menu_id = ?'
     ).bind(id).first();
 
     if (count > 0) {

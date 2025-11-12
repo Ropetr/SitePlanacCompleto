@@ -15,11 +15,11 @@ dashboard.get('/', async (c) => {
   try {
     // Contar páginas (products)
     const { total: produtosTotal } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM products'
+      'SELECT COUNT(*) as total FROM pages'
     ).first();
 
     const { total: produtosPublicados } = await c.env.DB.prepare(
-      'SELECT COUNT(*) as total FROM products WHERE status = ?'
+      'SELECT COUNT(*) as total FROM pages WHERE status = ?'
     ).bind('PUBLICADO').first();
 
     // Contar menus (categories virou menus)
@@ -65,7 +65,7 @@ dashboard.get('/', async (c) => {
     // Páginas mais destacadas
     const { results: produtosPopulares } = await c.env.DB.prepare(`
       SELECT id, nome, slug, imagem_banner, destaque
-      FROM products
+      FROM pages
       WHERE status = 'PUBLICADO'
       ORDER BY destaque DESC, ordem ASC
       LIMIT 5
