@@ -53,7 +53,9 @@
       "Bash(xcopy:*)",
       "Bash(if not exist backups mkdir backups)",
       "Bash(move:*)",
-      "Bash(del .githubworkflowsdeploy-backend.yml)"
+      "Bash(del .githubworkflowsdeploy-backend.yml)",
+      "WebFetch(domain:planac-backend-api.planacacabamentos.workers.dev)",
+      "Read(//c/**)"
     ],
     "deny": [],
     "ask": []
