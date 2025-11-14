@@ -1,121 +1,130 @@
-# 📋 CHANGELOG - Sistema Planac
+# 📝 CHANGELOG – PLANAC WEBSITE V3
+Este documento segue o formato **Keep a Changelog** e a especificação **Semantic Versioning 2.0.0**.
 
-Todas as mudanças notáveis do projeto serão documentadas neste arquivo.
-
-O formato é baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/).
-
----
-
-## [1.1.0] - 11/11/2025
-
-### ✨ Adicionado
-- **Dropdown Aninhado para Submenus**
-  - Submenus agora criam dropdown dentro de dropdown no site
-  - Desktop: hover no submenu abre lista de produtos à direita
-  - Mobile: tap no submenu expande lista com animação
-  - Funciona automaticamente para qualquer submenu com produtos
-  - Classes CSS: `.dropdown-submenu`, `.dropdown-menu-sub`, `.mobile-menu-submenu`
-
-- **Auto-Deploy Completo em Todas Operações CRUD**
-  - DELETE de produtos agora aciona `triggerBuildDeploy()`
-  - DELETE de menus agora aciona `triggerBuildDeploy()`
-  - Header atualizado automaticamente em CREATE, UPDATE e DELETE
-
-### 🔧 Corrigido
-- **Renderização de Submenus sem Produtos**
-  - Submenus vazios agora aparecem como links diretos
-  - Submenus com produtos criam dropdown aninhado automaticamente
-  - Estrutura hierárquica correta: Menu → Submenu → Produtos
-
-- **Visibilidade do Submenu "Forro Modular"**
-  - Submenu agora aparece corretamente no dropdown de "Forros"
-  - 4 produtos associados renderizam em dropdown aninhado
-
-### 📝 Documentação
-- Atualizado `DOCUMENTACAO-STATUS-ATUAL.md` com informações de dropdown aninhado
-- Criado `CHANGELOG.md` para rastrear mudanças
-
-### 🛠️ Arquivos Modificados
-- `planac-backend/src/routes/build-deploy.js` - Lógica de dropdown aninhado
-- `planac-backend/src/routes/products.js` - Auto-deploy no DELETE
-- `planac-backend/src/routes/menus.js` - Auto-deploy no DELETE
+Todas as mudanças realizadas pelo Claude ou por qualquer desenvolvedor devem ser registradas aqui.
 
 ---
 
-## [1.0.0] - 10/11/2025
+## 📌 Convenções importantes
 
-### ✨ Adicionado
-- **Sistema Completo de CMS**
-  - Backend API (Cloudflare Workers + Hono.js)
-  - Admin Panel (React + Vite + TailwindCSS)
-  - Site Público (HTML estático otimizado)
+### Tipos de mudança
+- **Added** – Novo recurso adicionado
+- **Changed** – Mudanças em recursos existentes
+- **Fixed** – Correções de bugs
+- **Removed** – Funcionalidades removidas
+- **Deprecated** – Recurso ainda existe, mas será removido
+- **Security** – Correções relacionadas à segurança
 
-- **Banco de Dados D1**
-  - 8 tabelas: users, menus, products, media, quotes, contacts, audit_logs, sessions
-  - 10 menus principais
-  - 20 páginas de produtos
-
-- **Sistema de Menus Hierárquicos**
-  - Menus principais e submenus
-  - Visualização hierárquica com indentação
-  - Ícones visuais (📁 menu, 📄 submenu)
-  - Botão rápido para adicionar submenu
-
-- **Sistema de Auto-Deploy**
-  - `triggerBuildDeploy()` em CREATE e UPDATE
-  - Header dinâmico gerado e salvo em KV cache
-  - Endpoint `/api/internal/build-deploy` para rebuild manual
-
-- **Upload de Imagens**
-  - Upload para Cloudflare R2
-  - Suporte para banner e galeria
-  - Conversão automática para WebP
-
-- **Autenticação JWT**
-  - Login com email e senha
-  - Access token e refresh token
-  - Proteção de rotas admin
-
-### 🎨 Melhorias
-- **Sistema de Build Estático**
-  - `build-static-pages.js` injeta header/footer inline
-  - Eliminação de CLS (Cumulative Layout Shift)
-  - Preload automático de imagens críticas
-  - 21 páginas otimizadas geradas em `/dist`
-
-- **Dashboard Admin**
-  - Estatísticas de produtos, menus, orçamentos
-  - Visualização de orçamentos e contatos
-  - Interface responsiva
-
-### 🔐 Segurança
-- Senhas com bcrypt (12 rounds)
-- JWT com expiração configurável
-- CORS configurado
-- Logs de auditoria
+### Regras obrigatórias (Claude Code)
+Para cada mudança:
+1. A mudança deve ser previamente **aprovada** pelo usuário.
+2. Claude deve adicionar uma nova entrada no CHANGELOG.
+3. Claude **não deve alterar** entradas antigas.
+4. Cada versão deve conter data e descrição clara.
 
 ---
 
-## Tipos de Mudanças
+# 🔰 VERSÕES INICIAIS
 
-- `✨ Adicionado` - Novas funcionalidades
-- `🔧 Corrigido` - Correções de bugs
-- `🛠️ Modificado` - Mudanças em funcionalidades existentes
-- `🗑️ Removido` - Funcionalidades removidas
-- `🔐 Segurança` - Correções de vulnerabilidades
-- `📝 Documentação` - Mudanças apenas em documentação
-- `🎨 Melhorias` - Melhorias de código/performance
+## [0.0.3] – 2025-02-10
+### Added
+- Estrutura oficial do **CHANGELOG.md** revisada e substituída.
+- Seções padronizadas para uso contínuo no fluxo Claude Code + Cloudflare.
+- Categoria "Claude Automation Notes" adicionada para rastrear ações automáticas do modelo.
+
+### Changed
+- Removido CHANGELOG anterior (legacy) que estava inconsistente com o novo fluxo.
+- Padronização para Semantic Versioning (SemVer) estabelecida.
 
 ---
 
-## Links
+## [0.0.2] – 2025-02-09
+### Added
+- `README-CLAUDE.md` criado com:
+  - regras operacionais
+  - fluxo de aprovação
+  - limites de escopo
+  - formato obrigatório de tarefas
 
-- [Documentação Completa](./DOCUMENTACAO-COMPLETA.md)
-- [Status Atual](./DOCUMENTACAO-STATUS-ATUAL.md)
-- [Sistema Auto-Deploy](./SISTEMA-AUTO-DEPLOY.md)
-- [Repositório GitHub](https://github.com/Ropetr/SitePlanacCompleto)
+### Changed
+- Documentação do projeto reorganizada em arquivos específicos.
+
+---
+
+## [0.0.1] – 2025-02-08
+### Added
+- Versão inicial do Planac Website V3 importada para Cloudflare + ClaudeCode.
+- Reestruturação de pastas e importação do código original.
+- Auditoria inicial dos sistemas backend, frontend e admin.
+
+---
+
+# 🔮 FUTURAS VERSÕES (Claude deve completar e criar conforme avançarmos)
+
+## [0.1.0] – 2025-11-14
+### Added
+- **ServicePageTemplateV1** criado como template oficial para páginas de produtos/serviços
+- Sistema de padronização de páginas HTML implementado
+- CSS inline completo (420+ linhas) aplicado em todas as páginas
+- Estrutura completa com: Banner hero, Breadcrumb, Grid sidebar, CTA section, Formulário de orçamento
+- Scripts funcionais: máscaras de telefone, smooth scroll, integração WhatsApp
+- Header/footer dinâmicos via `load-components.js` em todas as páginas
+
+### Changed
+- **18 páginas HTML padronizadas** seguindo ServicePageTemplateV1:
+  - Divisórias: divisoria-naval-page.html, drywall-divisoria-page.html
+  - Forros: planac-gesso-modular.html, forro-de-gesso-modular.html, forrovid-page.html, forro-de-pvc-modular.html, forro-vinilico-revid.html, pvc-modular-page.html, pvc-amadeirado-page.html, pvc-branco-page.html, mineral-page.html, isopor-page.html
+  - Isolamentos: la-rocha-page.html, la-vidro-page.html, la-pet-page.html, manta-termica.html
+  - Portas/Rodapés: kit-porta-correr.html, rodapes.html
+- Layout de todas as páginas unificado mantendo identidade visual consistente
+- Breadcrumbs atualizados com categorias corretas (Forros, Divisórias, Isolamentos)
+- Formulários de orçamento personalizados por produto com integração WhatsApp
+
+### Fixed
+- Páginas com layout inconsistente agora seguem o mesmo padrão visual
+- Headers e footers hardcoded removidos, substituídos por carregamento dinâmico
+- Estrutura CSS padronizada eliminando duplicação de estilos
+
+## [Unreleased]
+### Added
+- *(Futuras features)*
+
+### Changed
+- *(Futuras alterações)*
+
+### Fixed
+- *(Futuros bugs)*
+
+---
+
+# 🧩 Claude Automation Notes
+Uso interno do Claude Code:
+- Toda tarefa deve gerar uma nova nota aqui, incluindo:
+  - número da tarefa
+  - arquivos alterados
+  - resumo técnico
+  - link do commit (quando publicado no GitHub)
+
+*(Claude preenche automaticamente, nunca o usuário)*
+
+---
+
+# 📎 Guia rápido para novos registros
+
+### Exemplo de registro futuro
+```markdown
+## [0.0.4] – 2025-02-11
+### Added
+- Página Settings.jsx implementada com formulários para telefones, redes sociais e endereço.
+
+### Fixed
+- Bug no header.component: carregamento duplicado resolvido.
+
+### Changed
+- Atualizado build-static-pages.js para suportar templates dinâmicos.
+```
 
 ---
 
 **Mantido por:** Claude Code Assistant
-**Projeto:** Planac Distribuidora - Sistema CMS
+**Projeto:** Planac Distribuidora - Sistema CMS V3

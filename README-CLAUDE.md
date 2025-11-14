@@ -59,14 +59,19 @@ Você **NÃO PODE**:
 As prioridades técnicas estão detalhadas em `DOCUMENTACAO-AUDITORIA-PLANAC.md`.
 Resumidamente, siga esta ORDEM:
 
-1. **BUGS CRÍTICOS**
+1. **✅ PADRONIZAÇÃO CONCLUÍDA (14/11/2025)**
+   - ✅ Header/footer dinâmicos implementados em 18 páginas de produtos
+   - ✅ ServicePageTemplateV1 criado como padrão oficial
+   - ✅ Todas as páginas agora usam `<div id="header-container"></div>` e `<div id="footer-container"></div>` com `load-components.js`
+   - ✅ CSS inline padronizado (420+ linhas)
+   - ✅ Formulários integrados ao WhatsApp
+   - ✅ Breadcrumbs corretos por categoria
+
+2. **BUGS CRÍTICOS RESTANTES**
    - Corrigir o endpoint `/api/admin/media/replace`:
      - Parar de salvar JPG/PNG fingindo que é `.webp`.
-   - Padronizar header/footer nas páginas de produto:
-     - Remover `<header>` e `<footer>` colados.
-     - Usar `<div id="header-container"></div>` e `<div id="footer-container"></div>` com `load-components.js`.
 
-2. **Configurações globais / Admin**
+3. **Configurações globais / Admin**
    - Implementar uma tela real de **Configurações (Settings)** no admin.
    - Permitir editar:
      - Logo
@@ -76,14 +81,14 @@ Resumidamente, siga esta ORDEM:
      - Horário de funcionamento
      - Texto de rodapé
 
-3. **SEO Essencial**
+4. **SEO Essencial**
    - Garantir:
      - `<meta name="description">` na home.
      - `<link rel="canonical">` em TODAS as páginas.
      - `sitemap.xml`.
      - `robots.txt` apontando para o sitemap.
 
-4. **Performance básica**
+5. **Performance básica**
    - Deixar de prometer WebP se não estiver implementado de verdade.
    - Aplicar `loading="lazy"` onde couber.
    - Manter `fetchpriority="high"` apenas em imagens realmente críticas.
