@@ -13,21 +13,25 @@ import { generateId } from '../utils/crypto.js';
 const media = new Hono();
 
 /**
- * Converte imagem para WebP usando Canvas API (Cloudflare Workers)
+ * TODO: Conversão para WebP não implementada
+ *
+ * IMPORTANTE: Esta função é um STUB e NÃO realiza conversão real.
+ * Atualmente, apenas retorna o buffer original sem nenhuma transformação.
+ *
+ * Para implementar conversão real, considere:
+ * 1. Cloudflare Image Resizing (via URL transforms)
+ * 2. Sharp (requer Workers com Node.js compat)
+ * 3. Serviço externo de conversão
+ *
+ * Status: Desativada - arquivos são salvos no formato original
  */
 async function convertToWebP(arrayBuffer, originalType) {
-  try {
-    // Para Workers, precisamos usar a API de imagens do Cloudflare
-    // que faz conversão automática para WebP
-    return {
-      buffer: arrayBuffer,
-      converted: false,
-      note: 'Use Cloudflare Image Resizing service for WebP conversion'
-    };
-  } catch (error) {
-    console.error('Erro na conversão:', error);
-    return { buffer: arrayBuffer, converted: false };
-  }
+  // NÃO FAZ CONVERSÃO - apenas documenta que não está implementado
+  return {
+    buffer: arrayBuffer,
+    converted: false,
+    note: 'WebP conversion not implemented - file saved in original format'
+  };
 }
 
 /**
@@ -180,16 +184,17 @@ media.post('/replace', async (c) => {
       return c.json({ error: 'Arquivo muito grande. Máximo: 10MB' }, 400);
     }
 
-    // Gerar nome único para o novo arquivo (sempre .webp)
+    // Gerar nome único preservando a extensão REAL do arquivo
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);
-    const fileName = `${timestamp}-${randomStr}.webp`;
+    const extension = file.name.split('.').pop();
+    const fileName = `${timestamp}-${randomStr}.${extension}`;
 
-    // Upload do novo arquivo para R2
+    // Upload do novo arquivo para R2 com contentType REAL
     const arrayBuffer = await file.arrayBuffer();
     await c.env.R2_IMAGES.put(fileName, arrayBuffer, {
       httpMetadata: {
-        contentType: 'image/webp',
+        contentType: file.type, // Usa o tipo REAL do arquivo
       },
     });
 
@@ -221,7 +226,7 @@ media.post('/replace', async (c) => {
       mediaId,
       file.name,
       fileName,
-      'image/webp',
+      file.type, // Salva o mime_type REAL no banco
       file.size,
       publicUrl,
       payload.id
