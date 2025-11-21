@@ -166,11 +166,12 @@ export default function Settings() {
             <div className="md:col-span-2">
               <ImageUpload
                 label="Logo do Site"
+                imageType="logo"
                 value={formData.logo_url}
                 onChange={(url) => setFormData(prev => ({ ...prev, logo_url: url }))}
               />
               <p className="text-xs text-gray-500 mt-1">
-                Recomendado: Imagem em formato SVG ou PNG com fundo transparente
+                Recomendado: PNG com fundo transparente. Será otimizado automaticamente para web.
               </p>
             </div>
           </div>

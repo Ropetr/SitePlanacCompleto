@@ -13,6 +13,18 @@ import { generateId } from '../utils/crypto.js';
 const media = new Hono();
 
 /**
+ * Mapeamento de dimensões por tipo de imagem
+ */
+const IMAGE_DIMENSIONS = {
+  logo: { desktop: 500, mobile: 400, quality: 90 },      // Logos: pequenas, alta qualidade
+  banner: { desktop: 1920, mobile: 720, quality: 85 },   // Banners: grandes, full-width
+  gallery: { desktop: 1200, mobile: 600, quality: 85 },  // Galeria: médias
+  thumbnail: { desktop: 400, mobile: 300, quality: 80 }, // Miniaturas: pequenas
+  content: { desktop: 1000, mobile: 500, quality: 85 },  // Conteúdo: médias
+  default: { desktop: 1920, mobile: 720, quality: 85 },  // Padrão: como banner
+};
+
+/**
  * Obtém dimensões da imagem a partir do ArrayBuffer
  * Suporta: JPEG, PNG, GIF, WebP
  */
@@ -67,21 +79,24 @@ async function getImageDimensions(arrayBuffer) {
 
 /**
  * Converte e redimensiona imagem para WebP usando Cloudflare Image Resizing.
- * Gera duas versões otimizadas: desktop (máx 1920px) e mobile (máx 720px).
+ * Gera duas versões otimizadas baseadas no tipo de imagem.
  *
  * REGRAS DE REDIMENSIONAMENTO:
  * - Mantém proporção original (aspect ratio)
  * - NUNCA faz upscale (aumentar imagem)
- * - Se largura > 1920px → desktop = 1920px
- * - Se largura <= 1920px → desktop = largura original
- * - Se largura > 720px → mobile = 720px
- * - Se largura <= 720px → mobile = largura original
+ * - Usa dimensões específicas por tipo (logo, banner, gallery, etc)
+ * - Se imagem for menor que target → mantém tamanho original
+ *
+ * @param {ArrayBuffer} arrayBuffer - Buffer da imagem original
+ * @param {string} originalType - MIME type (image/jpeg, image/png, etc)
+ * @param {Object} env - Cloudflare environment bindings
+ * @param {string} imageType - Tipo da imagem: 'logo', 'banner', 'gallery', 'thumbnail', 'content'
  *
  * Retorno:
  * - { desktopBuffer, mobileBuffer, widthOriginal, heightOriginal, converted: true }
  * - { desktopBuffer: null, mobileBuffer: null, widthOriginal, heightOriginal, converted: false }
  */
-async function convertToWebPResponsive(arrayBuffer, originalType, env) {
+async function convertToWebPResponsive(arrayBuffer, originalType, env, imageType = 'default') {
   try {
     // Obter dimensões originais
     const { width: widthOriginal, height: heightOriginal } = await getImageDimensions(arrayBuffer);
@@ -112,12 +127,16 @@ async function convertToWebPResponsive(arrayBuffer, originalType, env) {
       },
     });
 
-    // 2) Calcular larguras ideais (sem upscale)
-    const desktopWidth = Math.min(widthOriginal, 1920);
-    const mobileWidth = Math.min(widthOriginal, 720);
+    // 2) Obter dimensões alvo baseadas no tipo de imagem
+    const dimensions = IMAGE_DIMENSIONS[imageType] || IMAGE_DIMENSIONS.default;
+    const quality = dimensions.quality;
 
-    // 3) Gerar versão DESKTOP (máx 1920px)
-    const desktopUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=85,width=${desktopWidth},fit=scale-down/${tempFileName}`;
+    // 3) Calcular larguras ideais (sem upscale)
+    const desktopWidth = Math.min(widthOriginal, dimensions.desktop);
+    const mobileWidth = Math.min(widthOriginal, dimensions.mobile);
+
+    // 4) Gerar versão DESKTOP
+    const desktopUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=${quality},width=${desktopWidth},fit=scale-down/${tempFileName}`;
     const desktopResponse = await fetch(desktopUrl);
 
     if (!desktopResponse.ok) {
@@ -126,8 +145,8 @@ async function convertToWebPResponsive(arrayBuffer, originalType, env) {
 
     const desktopBuffer = await desktopResponse.arrayBuffer();
 
-    // 4) Gerar versão MOBILE (máx 720px)
-    const mobileUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=85,width=${mobileWidth},fit=scale-down/${tempFileName}`;
+    // 5) Gerar versão MOBILE
+    const mobileUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=${quality},width=${mobileWidth},fit=scale-down/${tempFileName}`;
     const mobileResponse = await fetch(mobileUrl);
 
     if (!mobileResponse.ok) {
@@ -136,20 +155,21 @@ async function convertToWebPResponsive(arrayBuffer, originalType, env) {
 
     const mobileBuffer = await mobileResponse.arrayBuffer();
 
-    // 5) Apagar arquivo temporário
+    // 6) Apagar arquivo temporário
     try {
       await env.R2_IMAGES.delete(tempFileName);
     } catch (deleteError) {
       console.warn('Não foi possível deletar arquivo temporário:', deleteError);
     }
 
-    // 6) Retornar buffers convertidos
+    // 7) Retornar buffers convertidos
     return {
       desktopBuffer,
       mobileBuffer,
       widthOriginal,
       heightOriginal,
       converted: true,
+      imageType, // Retornar tipo usado
     };
   } catch (error) {
     console.error('Erro ao converter imagem para WebP responsivo:', error);
@@ -188,6 +208,7 @@ media.post('/upload', async (c) => {
     const payload = c.get('jwtPayload');
     const formData = await c.req.formData();
     const file = formData.get('file');
+    const imageType = formData.get('imageType') || 'default'; // Tipo: logo, banner, gallery, etc
 
     if (!file || !(file instanceof File)) {
       return c.json({ error: 'Arquivo não fornecido' }, 400);
@@ -205,9 +226,9 @@ media.post('/upload', async (c) => {
       return c.json({ error: 'Arquivo muito grande. Máximo: 10MB' }, 400);
     }
 
-    // Converter para WebP responsivo (desktop + mobile)
+    // Converter para WebP responsivo (desktop + mobile) com tipo específico
     const arrayBuffer = await file.arrayBuffer();
-    const conversion = await convertToWebPResponsive(arrayBuffer, file.type, c.env);
+    const conversion = await convertToWebPResponsive(arrayBuffer, file.type, c.env, imageType);
 
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);
@@ -338,6 +359,7 @@ media.post('/replace', async (c) => {
     const file = formData.get('file');
     const oldUrl = formData.get('oldUrl'); // URL da imagem antiga (desktop)
     const oldMobileUrl = formData.get('oldMobileUrl'); // URL da versão mobile antiga
+    const imageType = formData.get('imageType') || 'default'; // Tipo: logo, banner, gallery, etc
 
     if (!file || !(file instanceof File)) {
       return c.json({ error: 'Arquivo não fornecido' }, 400);
@@ -355,9 +377,9 @@ media.post('/replace', async (c) => {
       return c.json({ error: 'Arquivo muito grande. Máximo: 10MB' }, 400);
     }
 
-    // Converter para WebP responsivo (desktop + mobile)
+    // Converter para WebP responsivo (desktop + mobile) com tipo específico
     const arrayBuffer = await file.arrayBuffer();
-    const conversion = await convertToWebPResponsive(arrayBuffer, file.type, c.env);
+    const conversion = await convertToWebPResponsive(arrayBuffer, file.type, c.env, imageType);
 
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);

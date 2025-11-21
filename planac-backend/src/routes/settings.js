@@ -106,8 +106,14 @@ settings.post('/', async (c) => {
       data.grupo || null
     ).run();
 
-    // Invalidar cache KV
-    await c.env.KV_CACHE.delete('settings:all');
+    // Invalidar cache KV (se existir)
+    if (c.env.KV_CACHE) {
+      try {
+        await c.env.KV_CACHE.delete('settings:all');
+      } catch (e) {
+        console.warn('Falha ao limpar KV_CACHE (settings:all):', e);
+      }
+    }
 
     return c.json({
       success: true,
@@ -133,9 +139,15 @@ settings.put('/:chave', async (c) => {
       UPDATE settings SET valor = ?, updated_at = CURRENT_TIMESTAMP WHERE chave = ?
     `).bind(valor, chave).run();
 
-    // Invalidar cache
-    await c.env.KV_CACHE.delete('settings:all');
-    await c.env.KV_CACHE.delete(`setting:${chave}`);
+    // Invalidar cache (se KV estiver configurado)
+    if (c.env.KV_CACHE) {
+      try {
+        await c.env.KV_CACHE.delete('settings:all');
+        await c.env.KV_CACHE.delete(`setting:${chave}`);
+      } catch (e) {
+        console.warn('Falha ao limpar KV_CACHE das settings:', e);
+      }
+    }
 
     return c.json({
       success: true,

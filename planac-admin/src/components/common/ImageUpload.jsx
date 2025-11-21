@@ -9,6 +9,7 @@ export default function ImageUpload({
   onChange,
   label = 'Imagem',
   className = '',
+  imageType = 'default', // Tipo: 'logo', 'banner', 'gallery', 'thumbnail', 'content'
   // Novos props para suportar versões responsivas
   onDataChange, // Callback que recebe { desktop_url, mobile_url, width, height }
 }) {
@@ -51,6 +52,7 @@ export default function ImageUpload({
     try {
       const formData = new FormData();
       formData.append('file', file);
+      formData.append('imageType', imageType); // Enviar tipo de imagem
 
       // Se já existe uma imagem, enviar URLs antigas para serem deletadas
       const oldDesktopUrl = imageData.desktop_url || value;
@@ -185,7 +187,12 @@ export default function ImageUpload({
             </span>
             <br />
             <span className="text-blue-600 text-[11px]">
-              Gera versões Desktop (máx 1920px) e Mobile (máx 720px) mantendo proporção
+              {imageType === 'logo' && 'Otimizado para logos (máx 500px desktop, 400px mobile)'}
+              {imageType === 'banner' && 'Otimizado para banners (máx 1920px desktop, 720px mobile)'}
+              {imageType === 'gallery' && 'Otimizado para galeria (máx 1200px desktop, 600px mobile)'}
+              {imageType === 'thumbnail' && 'Otimizado para miniaturas (máx 400px desktop, 300px mobile)'}
+              {imageType === 'content' && 'Otimizado para conteúdo (máx 1000px desktop, 500px mobile)'}
+              {imageType === 'default' && 'Gera versões Desktop (máx 1920px) e Mobile (máx 720px)'}
             </span>
           </p>
 
