@@ -62,7 +62,7 @@ settings.get('/', async (c) => {
 // ===========================================
 // GET /api/admin/settings - Listar todas (ADMIN)
 // ===========================================
-settings.get('/admin/settings', async (c) => {
+settings.get('/', async (c) => {
   try {
     const { results } = await c.env.DB.prepare(`
       SELECT * FROM settings ORDER BY grupo, chave
@@ -82,7 +82,7 @@ settings.get('/admin/settings', async (c) => {
 // ===========================================
 // POST /api/admin/settings - Criar configuração (ADMIN)
 // ===========================================
-settings.post('/admin/settings', async (c) => {
+settings.post('/', async (c) => {
   try {
     const body = await c.req.json();
 
@@ -124,7 +124,7 @@ settings.post('/admin/settings', async (c) => {
 // ===========================================
 // PUT /api/admin/settings/:chave - Atualizar configuração (ADMIN)
 // ===========================================
-settings.put('/admin/settings/:chave', async (c) => {
+settings.put('/:chave', async (c) => {
   try {
     const { chave } = c.req.param();
     const { valor } = await c.req.json();
