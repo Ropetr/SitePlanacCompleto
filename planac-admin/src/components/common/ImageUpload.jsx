@@ -143,7 +143,13 @@ export default function ImageUpload({ value, onChange, label = 'Imagem', classNa
           <p className="text-xs text-gray-500 mt-1">
             JPG, PNG, WebP ou GIF. Máximo 10MB.
             <br />
-            <span className="text-green-600">✓ Salvo automaticamente em WebP otimizado</span>
+            <span className="text-green-600 font-semibold">
+              ✓ Tenta converter automaticamente para WebP otimizado
+            </span>
+            <br />
+            <span className="text-blue-600 text-[11px]">
+              Quando a conversão não estiver disponível, o arquivo é salvo no formato original
+            </span>
           </p>
         </div>
 

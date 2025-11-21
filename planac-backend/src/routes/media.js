@@ -13,25 +13,63 @@ import { generateId } from '../utils/crypto.js';
 const media = new Hono();
 
 /**
- * TODO: Conversão para WebP não implementada
+ * Tenta converter uma imagem para WebP usando Cloudflare Image Resizing.
  *
- * IMPORTANTE: Esta função é um STUB e NÃO realiza conversão real.
- * Atualmente, apenas retorna o buffer original sem nenhuma transformação.
- *
- * Para implementar conversão real, considere:
- * 1. Cloudflare Image Resizing (via URL transforms)
- * 2. Sharp (requer Workers com Node.js compat)
- * 3. Serviço externo de conversão
- *
- * Status: Desativada - arquivos são salvos no formato original
+ * Retorno:
+ * - { buffer: ArrayBuffer, converted: true }  -> conversão OK (buffer é WebP)
+ * - { buffer: ArrayBuffer, converted: false } -> conversão falhou, usar original
  */
-async function convertToWebP(arrayBuffer, originalType) {
-  // NÃO FAZ CONVERSÃO - apenas documenta que não está implementado
-  return {
-    buffer: arrayBuffer,
-    converted: false,
-    note: 'WebP conversion not implemented - file saved in original format'
-  };
+async function convertToWebP(arrayBuffer, originalType, env) {
+  try {
+    // Se já for WebP, não faz nada
+    if (originalType === 'image/webp') {
+      return {
+        buffer: arrayBuffer,
+        converted: false,
+      };
+    }
+
+    const tempId = Date.now() + '-' + Math.random().toString(36).substring(7);
+    const extFromType = originalType?.split('/')?.[1] || 'bin';
+    const tempFileName = `temp-${tempId}.${extFromType}`;
+
+    // 1) Upload temporário da imagem original no R2
+    await env.R2_IMAGES.put(tempFileName, arrayBuffer, {
+      httpMetadata: {
+        contentType: originalType || 'application/octet-stream',
+      },
+    });
+
+    // 2) Monta URL com Image Resizing para converter para WebP
+    const optimizedUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=85/${tempFileName}`;
+
+    const response = await fetch(optimizedUrl);
+    if (!response.ok) {
+      throw new Error(`Image Resizing failed with status ${response.status}`);
+    }
+
+    const webpBuffer = await response.arrayBuffer();
+
+    // 3) Apaga o arquivo temporário original
+    try {
+      await env.R2_IMAGES.delete(tempFileName);
+    } catch (deleteError) {
+      console.warn('Não foi possível deletar arquivo temporário:', deleteError);
+    }
+
+    // 4) Retorna buffer já convertido
+    return {
+      buffer: webpBuffer,
+      converted: true,
+    };
+  } catch (error) {
+    console.error('Erro ao converter imagem para WebP:', error);
+    // Se der erro, devolve o original para não quebrar nada
+    return {
+      buffer: arrayBuffer,
+      converted: false,
+    };
+  }
 }
 
 /**
@@ -72,22 +110,41 @@ media.post('/upload', async (c) => {
       return c.json({ error: 'Arquivo muito grande. Máximo: 10MB' }, 400);
     }
 
-    // Gerar nome único para o arquivo
+    // Converter para WebP (se possível)
+    const arrayBuffer = await file.arrayBuffer();
+    const conversion = await convertToWebP(arrayBuffer, file.type, c.env);
+
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);
-    const extension = file.name.split('.').pop();
+
+    let extension;
+    let contentType;
+    let bufferToSave;
+
+    if (conversion.converted) {
+      // Conversão OK -> salva como WebP de verdade
+      extension = 'webp';
+      contentType = 'image/webp';
+      bufferToSave = conversion.buffer;
+    } else {
+      // Conversão falhou ou não está disponível -> salva original
+      const originalExt = file.name && file.name.includes('.')
+        ? file.name.split('.').pop()
+        : 'bin';
+
+      extension = originalExt;
+      contentType = file.type || 'application/octet-stream';
+      bufferToSave = arrayBuffer;
+    }
+
     const fileName = `${timestamp}-${randomStr}.${extension}`;
 
-    // Upload para Cloudflare R2
-    const arrayBuffer = await file.arrayBuffer();
-    await c.env.R2_IMAGES.put(fileName, arrayBuffer, {
+    await c.env.R2_IMAGES.put(fileName, bufferToSave, {
       httpMetadata: {
-        contentType: file.type,
+        contentType,
       },
     });
 
-    // URL pública do arquivo
-    // Substitua pelo seu domínio R2 público ou Custom Domain
     const publicUrl = `https://planac-images.r2.dev/${fileName}`;
 
     // Salvar registro no banco
@@ -184,22 +241,40 @@ media.post('/replace', async (c) => {
       return c.json({ error: 'Arquivo muito grande. Máximo: 10MB' }, 400);
     }
 
-    // Gerar nome único preservando a extensão REAL do arquivo
+    // Converter para WebP (se possível)
+    const arrayBuffer = await file.arrayBuffer();
+    const conversion = await convertToWebP(arrayBuffer, file.type, c.env);
+
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);
-    const extension = file.name.split('.').pop();
+
+    let extension;
+    let contentType;
+    let bufferToSave;
+
+    if (conversion.converted) {
+      extension = 'webp';
+      contentType = 'image/webp';
+      bufferToSave = conversion.buffer;
+    } else {
+      const originalExt = file.name && file.name.includes('.')
+        ? file.name.split('.').pop()
+        : 'bin';
+
+      extension = originalExt;
+      contentType = file.type || 'application/octet-stream';
+      bufferToSave = arrayBuffer;
+    }
+
     const fileName = `${timestamp}-${randomStr}.${extension}`;
 
-    // Upload do novo arquivo para R2 com contentType REAL
-    const arrayBuffer = await file.arrayBuffer();
-    await c.env.R2_IMAGES.put(fileName, arrayBuffer, {
+    await c.env.R2_IMAGES.put(fileName, bufferToSave, {
       httpMetadata: {
-        contentType: file.type, // Usa o tipo REAL do arquivo
+        contentType,
       },
     });
 
-    // URL pública do novo arquivo
-    const publicUrl = `https://pub-63c4447c03264f5397d9b5cf2daf1a44.r2.dev/${fileName}`;
+    const publicUrl = `https://planac-images.r2.dev/${fileName}`;
 
     // Deletar imagem antiga se existir
     if (oldUrl) {
