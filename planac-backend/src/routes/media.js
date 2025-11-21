@@ -136,7 +136,7 @@ async function convertToWebPResponsive(arrayBuffer, originalType, env, imageType
     const mobileWidth = Math.min(widthOriginal, dimensions.mobile);
 
     // 4) Gerar versão DESKTOP
-    const desktopUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=${quality},width=${desktopWidth},fit=scale-down/${tempFileName}`;
+    const desktopUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/cdn-cgi/image/format=webp,quality=${quality},width=${desktopWidth},fit=scale-down/${tempFileName}`;
     const desktopResponse = await fetch(desktopUrl);
 
     if (!desktopResponse.ok) {
@@ -147,7 +147,7 @@ async function convertToWebPResponsive(arrayBuffer, originalType, env, imageType
     const desktopBuffer = await desktopResponse.arrayBuffer();
 
     // 5) Gerar versão MOBILE
-    const mobileUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=${quality},width=${mobileWidth},fit=scale-down/${tempFileName}`;
+    const mobileUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/cdn-cgi/image/format=webp,quality=${quality},width=${mobileWidth},fit=scale-down/${tempFileName}`;
     const mobileResponse = await fetch(mobileUrl);
 
     if (!mobileResponse.ok) {
@@ -245,14 +245,14 @@ media.post('/upload', async (c) => {
       await c.env.R2_IMAGES.put(desktopFileName, conversion.desktopBuffer, {
         httpMetadata: { contentType: 'image/webp' },
       });
-      desktopUrl = `https://planac-images.r2.dev/${desktopFileName}`;
+      desktopUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/${desktopFileName}`;
 
       // Salvar versão MOBILE
       const mobileFileName = `${timestamp}-${randomStr}-mobile.webp`;
       await c.env.R2_IMAGES.put(mobileFileName, conversion.mobileBuffer, {
         httpMetadata: { contentType: 'image/webp' },
       });
-      mobileUrl = `https://planac-images.r2.dev/${mobileFileName}`;
+      mobileUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/${mobileFileName}`;
 
       console.log(`✅ Imagem convertida: ${conversion.widthOriginal}x${conversion.heightOriginal} -> desktop.webp + mobile.webp`);
 
@@ -285,7 +285,7 @@ media.post('/upload', async (c) => {
         },
       });
 
-      const publicUrl = `https://planac-images.r2.dev/${fileName}`;
+      const publicUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/${fileName}`;
       desktopUrl = publicUrl;
       mobileUrl = publicUrl;
 
@@ -415,14 +415,14 @@ media.post('/replace', async (c) => {
       await c.env.R2_IMAGES.put(desktopFileName, conversion.desktopBuffer, {
         httpMetadata: { contentType: 'image/webp' },
       });
-      desktopUrl = `https://planac-images.r2.dev/${desktopFileName}`;
+      desktopUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/${desktopFileName}`;
 
       // Salvar versão MOBILE
       const mobileFileName = `${timestamp}-${randomStr}-mobile.webp`;
       await c.env.R2_IMAGES.put(mobileFileName, conversion.mobileBuffer, {
         httpMetadata: { contentType: 'image/webp' },
       });
-      mobileUrl = `https://planac-images.r2.dev/${mobileFileName}`;
+      mobileUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/${mobileFileName}`;
 
       console.log(`✅ Imagem convertida: ${conversion.widthOriginal}x${conversion.heightOriginal} -> desktop.webp + mobile.webp`);
 
@@ -455,7 +455,7 @@ media.post('/replace', async (c) => {
         },
       });
 
-      const publicUrl = `https://planac-images.r2.dev/${fileName}`;
+      const publicUrl = `https://planac-backend-api.planacacabamentos.workers.dev/images/${fileName}`;
       desktopUrl = publicUrl;
       mobileUrl = publicUrl;
 

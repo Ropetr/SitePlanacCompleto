@@ -128,6 +128,48 @@ app.route('/api/contacts', contactRoutes);
 app.route('/api/internal/build-deploy', buildDeployRoutes);
 
 // ===========================================
+// ROTA PÚBLICA PARA SERVIR IMAGENS DO R2
+// ===========================================
+// Serve imagens do R2 através do Worker (contorna problemas de domínio público)
+app.get('/images/:filename', async (c) => {
+  try {
+    const filename = c.req.param('filename');
+
+    // Buscar arquivo do R2
+    const object = await c.env.R2_IMAGES.get(filename);
+
+    if (!object) {
+      return c.json({ error: 'Imagem não encontrada' }, 404);
+    }
+
+    // Obter Content-Type dos metadados ou inferir da extensão
+    const ext = filename.split('.').pop().toLowerCase();
+    const contentTypeMap = {
+      'webp': 'image/webp',
+      'png': 'image/png',
+      'jpg': 'image/jpeg',
+      'jpeg': 'image/jpeg',
+      'gif': 'image/gif',
+    };
+
+    const contentType = object.httpMetadata?.contentType || contentTypeMap[ext] || 'application/octet-stream';
+
+    // Retornar imagem com headers corretos
+    return new Response(object.body, {
+      headers: {
+        'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=31536000', // 1 ano de cache
+        'ETag': object.httpEtag || '',
+      },
+    });
+
+  } catch (error) {
+    console.error('Erro ao servir imagem:', error);
+    return c.json({ error: 'Erro ao carregar imagem' }, 500);
+  }
+});
+
+// ===========================================
 // MIDDLEWARE JWT - Protege rotas admin
 // ===========================================
 
