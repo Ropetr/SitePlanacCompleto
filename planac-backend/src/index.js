@@ -170,6 +170,69 @@ app.get('/images/:filename', async (c) => {
 });
 
 // ===========================================
+// ROTA PÚBLICA PARA SERVIR PÁGINAS DINÂMICAS
+// ===========================================
+// Serve páginas HTML do KV Cache (fallback quando arquivo estático não existe)
+app.get('/:slug.html', async (c) => {
+  try {
+    const slug = c.req.param('slug');
+    const cacheKey = `page:${slug}`;
+
+    // Tentar buscar do KV Cache
+    const cachedHTML = await c.env.SITE_CACHE.get(cacheKey);
+
+    if (cachedHTML) {
+      console.log(`✅ Servindo página dinâmica do cache: ${slug}`);
+      return new Response(cachedHTML, {
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'public, max-age=3600', // 1 hora de cache
+          'X-Served-By': 'Worker-KV-Cache',
+        },
+      });
+    }
+
+    // Se não existe no cache, buscar do banco e gerar
+    const page = await c.env.DB.prepare(`
+      SELECT * FROM pages WHERE slug = ? AND status = 'PUBLICADO'
+    `).bind(slug).first();
+
+    if (!page) {
+      // Página não encontrada - retornar 404
+      return c.notFound();
+    }
+
+    // Gerar HTML dinamicamente
+    const { generatePageHTML } = await import('./utils/page-builder.js');
+    const html = await generatePageHTML(page, c.env);
+
+    // Salvar no cache para próximas requisições
+    await c.env.SITE_CACHE.put(cacheKey, html, {
+      metadata: {
+        pageId: page.id,
+        slug: page.slug,
+        status: page.status,
+        generatedAt: new Date().toISOString()
+      }
+    });
+
+    console.log(`🔄 Página gerada dinamicamente e cacheada: ${slug}`);
+
+    return new Response(html, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'public, max-age=3600',
+        'X-Served-By': 'Worker-Generated',
+      },
+    });
+
+  } catch (error) {
+    console.error('Erro ao servir página dinâmica:', error);
+    return c.json({ error: 'Erro ao carregar página' }, 500);
+  }
+});
+
+// ===========================================
 // MIDDLEWARE JWT - Protege rotas admin
 // ===========================================
 

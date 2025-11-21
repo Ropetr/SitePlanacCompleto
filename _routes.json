@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "description": "Rotas do Cloudflare Pages - serve HTML estático, fallback para Worker",
+  "include": [
+    "/*.html"
+  ],
+  "exclude": []
+}

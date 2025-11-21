@@ -306,9 +306,18 @@ products.put('/:id', async (c) => {
 
     // Atualizar slug se o nome mudou
     let slug = existing.slug;
+    let slugChanged = false;
+
     if (data.nome && data.nome !== existing.nome) {
       const baseSlug = slugify(data.nome);
       slug = await generateUniqueSlug(c.env.DB, 'pages', baseSlug, id);
+      slugChanged = slug !== existing.slug;
+
+      // Se slug mudou, invalidar cache da página antiga
+      if (slugChanged) {
+        await deleteCachedPage(existing.slug, c.env);
+        console.log(`🔄 Slug mudou de '${existing.slug}' para '${slug}' - cache antigo removido`);
+      }
     }
 
     // Preparar campos para update
