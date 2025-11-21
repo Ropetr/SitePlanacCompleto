@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Package, Plus, Edit2, Trash2, Search, Filter, Eye } from 'lucide-react';
+import { Package, Plus, Edit2, Trash2, Search, Filter, Eye, RefreshCw } from 'lucide-react';
 import ProductModal from '../components/pages/ProductModal';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
@@ -8,6 +8,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [rebuilding, setRebuilding] = useState(false);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [showModal, setShowModal] = useState(false);
@@ -87,6 +88,25 @@ export default function Products() {
     fetchProducts();
   };
 
+  const handleRebuild = async () => {
+    if (!confirm('Deseja reconstruir o header do site com as páginas atualizadas?')) return;
+
+    setRebuilding(true);
+    try {
+      const response = await axios.post(`${API_URL}/api/admin/build-deploy`);
+      if (response.data.success) {
+        alert('✅ Header reconstruído com sucesso! As mudanças estarão visíveis no site em alguns segundos.');
+      } else {
+        alert('⚠️ Rebuild concluído mas com avisos. Verifique o console.');
+      }
+    } catch (error) {
+      console.error('Erro ao rebuild:', error);
+      alert('❌ Erro ao reconstruir header: ' + (error.response?.data?.error || error.message));
+    } finally {
+      setRebuilding(false);
+    }
+  };
+
   const getStatusBadge = (status) => {
     const colors = {
       PUBLICADO: 'bg-green-100 text-green-800',
@@ -108,16 +128,27 @@ export default function Products() {
             </h1>
             <p className="text-gray-600 mt-1">Gerencie as páginas do seu site</p>
           </div>
-          <button
-            onClick={() => {
-              setSelectedProduct(null);
-              setShowModal(true);
-            }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
-          >
-            <Plus className="w-5 h-5" />
-            Nova Página
-          </button>
+          <div className="flex gap-3">
+            <button
+              onClick={handleRebuild}
+              disabled={rebuilding}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Reconstruir header do site com as páginas atualizadas"
+            >
+              <RefreshCw className={`w-5 h-5 ${rebuilding ? 'animate-spin' : ''}`} />
+              {rebuilding ? 'Reconstruindo...' : 'Rebuild Header'}
+            </button>
+            <button
+              onClick={() => {
+                setSelectedProduct(null);
+                setShowModal(true);
+              }}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-700 transition"
+            >
+              <Plus className="w-5 h-5" />
+              Nova Página
+            </button>
+          </div>
         </div>
 
         {/* Filters */}

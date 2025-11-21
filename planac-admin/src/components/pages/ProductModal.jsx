@@ -128,6 +128,17 @@ export default function ProductModal({ product, onClose }) {
     }));
   };
 
+  const triggerRebuild = async () => {
+    try {
+      console.log('🔄 Acionando rebuild do header...');
+      await axios.post(`${API_URL}/api/admin/build-deploy`);
+      console.log('✅ Rebuild acionado com sucesso');
+    } catch (error) {
+      console.warn('⚠️ Erro ao acionar rebuild (não crítico):', error);
+      // Não bloqueia o fluxo, apenas loga o erro
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -140,10 +151,14 @@ export default function ProductModal({ product, onClose }) {
         // Criar
         await axios.post(`${API_URL}/api/admin/products`, formData);
       }
+
+      // Acionar rebuild automático do header
+      await triggerRebuild();
+
       onClose();
     } catch (error) {
-      console.error('Erro ao salvar produto:', error);
-      alert(error.response?.data?.error || 'Erro ao salvar produto');
+      console.error('Erro ao salvar página:', error);
+      alert(error.response?.data?.error || 'Erro ao salvar página');
     } finally {
       setLoading(false);
     }
