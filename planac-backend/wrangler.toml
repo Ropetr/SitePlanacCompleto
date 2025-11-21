@@ -54,6 +54,7 @@ id = "e8d8225292f9453db316a0a6566dec7d" # Usando mesmo KV do cache
 # - JWT_REFRESH_SECRET
 # - ADMIN_EMAIL
 # - ADMIN_PASSWORD
+# - GITHUB_TOKEN (para disparar GitHub Actions - rebuild automático)
 
 # ============================================
 # CONFIGURAÇÕES DE DEPLOY

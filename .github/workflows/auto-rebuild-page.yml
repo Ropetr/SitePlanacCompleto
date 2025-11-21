@@ -1,0 +1,94 @@
+name: Auto Rebuild Page
+
+# Dispara quando o Worker envia webhook
+on:
+  repository_dispatch:
+    types: [rebuild-page]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Slug da página para rebuild'
+        required: true
+        type: string
+
+jobs:
+  rebuild-page:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Get slug from event
+        id: get-slug
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "slug=${{ github.event.client_payload.slug }}" >> $GITHUB_OUTPUT
+          else
+            echo "slug=${{ github.event.inputs.slug }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fetch page data and generate HTML
+        id: generate
+        run: |
+          SLUG="${{ steps.get-slug.outputs.slug }}"
+          echo "🔨 Gerando HTML para slug: $SLUG"
+
+          # Buscar dados da página via API
+          API_URL="https://planac-backend-api.planacacabamentos.workers.dev"
+          RESPONSE=$(curl -s "$API_URL/api/products/$SLUG")
+
+          # Verificar se página existe
+          if echo "$RESPONSE" | grep -q '"error"'; then
+            echo "❌ Erro: Página não encontrada"
+            exit 1
+          fi
+
+          # Executar script Node.js para gerar HTML
+          node auto-rebuild-page.js "$SLUG"
+
+          echo "✅ HTML gerado com sucesso"
+
+      - name: Commit and push changes
+        run: |
+          SLUG="${{ steps.get-slug.outputs.slug }}"
+
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # Verificar se há mudanças
+          if git diff --quiet "${SLUG}.html"; then
+            echo "ℹ️ Nenhuma mudança detectada em ${SLUG}.html"
+            exit 0
+          fi
+
+          git add "${SLUG}.html"
+          git commit -m "chore: Auto-rebuild de ${SLUG}
+
+Atualização automática via Admin Panel → GitHub Actions
+
+🤖 Generated with [Claude Code](https://claude.com/claude-code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>"
+
+          git push
+
+      - name: Notify success
+        if: success()
+        run: |
+          echo "✅ Rebuild concluído com sucesso!"
+          echo "🚀 Cloudflare Pages iniciará deploy automático"
+
+      - name: Notify failure
+        if: failure()
+        run: |
+          echo "❌ Erro no rebuild - verifique os logs acima"

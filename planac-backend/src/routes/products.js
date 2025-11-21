@@ -9,6 +9,7 @@ import { generateId } from '../utils/crypto.js';
 import { validate, productSchema } from '../utils/validators.js';
 import { slugify, generateUniqueSlug } from '../utils/slugify.js';
 import { rebuildPage, deleteCachedPage } from '../utils/page-builder.js';
+import { dispatchPageRebuild } from '../utils/github-dispatcher.js';
 
 const products = new Hono();
 
@@ -262,11 +263,18 @@ products.post('/', async (c) => {
       JSON.stringify({ nome: data.nome, slug })
     ).run();
 
-    // 🚀 Rebuild página automaticamente
+    // 🚀 Rebuild página automaticamente (KV Cache)
     await rebuildPage(productId, c.env);
 
     // 🚀 Acionar build do header/footer (mantém para atualizar menu)
     triggerBuildDeploy(c.env);
+
+    // 🚀 Disparar GitHub Action para gerar HTML estático
+    if (c.env.GITHUB_TOKEN) {
+      dispatchPageRebuild(slug, c.env.GITHUB_TOKEN)
+        .then(() => console.log(`✅ GitHub Action disparada para: ${slug}`))
+        .catch(err => console.error(`⚠️ Erro ao disparar GitHub Action:`, err));
+    }
 
     return c.json({
       success: true,
@@ -418,11 +426,18 @@ products.put('/:id', async (c) => {
       JSON.stringify(data)
     ).run();
 
-    // 🚀 Rebuild página automaticamente
+    // 🚀 Rebuild página automaticamente (KV Cache)
     await rebuildPage(id, c.env);
 
     // 🚀 Acionar build do header/footer (mantém para atualizar menu)
     triggerBuildDeploy(c.env);
+
+    // 🚀 Disparar GitHub Action para gerar HTML estático
+    if (c.env.GITHUB_TOKEN) {
+      dispatchPageRebuild(slug, c.env.GITHUB_TOKEN)
+        .then(() => console.log(`✅ GitHub Action disparada para: ${slug}`))
+        .catch(err => console.error(`⚠️ Erro ao disparar GitHub Action:`, err));
+    }
 
     return c.json({
       success: true,
