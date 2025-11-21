@@ -8,11 +8,7 @@ import Products from './pages/Products';
 import Menus from './pages/Menus';
 import Quotes from './pages/Quotes';
 import Contacts from './pages/Contacts';
-
-// Placeholder pages
-function Settings() {
-  return <div className="text-2xl font-bold">Configurações - Em breve</div>;
-}
+import Settings from './pages/Settings';
 
 export default function App() {
   return (
