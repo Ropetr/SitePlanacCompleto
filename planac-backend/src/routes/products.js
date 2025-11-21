@@ -194,7 +194,7 @@ products.post('/', async (c) => {
 
     // Gerar slug único
     const baseSlug = slugify(data.nome);
-    const slug = await generateUniqueSlug(c.env.DB, 'products', baseSlug);
+    const slug = await generateUniqueSlug(c.env.DB, 'pages', baseSlug);
 
     // Helper para preparar campos de array/texto
     const prepareArrayField = (field) => {
@@ -308,7 +308,7 @@ products.put('/:id', async (c) => {
     let slug = existing.slug;
     if (data.nome && data.nome !== existing.nome) {
       const baseSlug = slugify(data.nome);
-      slug = await generateUniqueSlug(c.env.DB, 'products', baseSlug, id);
+      slug = await generateUniqueSlug(c.env.DB, 'pages', baseSlug, id);
     }
 
     // Preparar campos para update
