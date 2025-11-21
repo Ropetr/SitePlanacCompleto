@@ -140,6 +140,7 @@ async function convertToWebPResponsive(arrayBuffer, originalType, env, imageType
     const desktopResponse = await fetch(desktopUrl);
 
     if (!desktopResponse.ok) {
+      console.warn(`⚠️ Image Resizing não está disponível (status ${desktopResponse.status}). Cloudflare Image Resizing precisa ser habilitado no R2.`);
       throw new Error(`Image Resizing (desktop) failed with status ${desktopResponse.status}`);
     }
 
@@ -257,20 +258,38 @@ media.post('/upload', async (c) => {
 
     } else {
       // ❌ Conversão falhou -> salvar original (fallback)
+      console.warn(`⚠️ Conversão WebP falhou. Salvando imagem original.`);
+      console.warn(`   Motivo: Cloudflare Image Resizing não está habilitado no bucket R2.`);
+
       const originalExt = file.name && file.name.includes('.')
-        ? file.name.split('.').pop()
+        ? file.name.split('.').pop().toLowerCase()
         : 'jpg';
 
       const fileName = `${timestamp}-${randomStr}.${originalExt}`;
+
+      // Salvar com Content-Type correto e cache headers
+      const contentTypeMap = {
+        'png': 'image/png',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'gif': 'image/gif',
+        'webp': 'image/webp'
+      };
+
+      const contentType = contentTypeMap[originalExt] || file.type || 'application/octet-stream';
+
       await c.env.R2_IMAGES.put(fileName, arrayBuffer, {
-        httpMetadata: { contentType: file.type || 'application/octet-stream' },
+        httpMetadata: {
+          contentType,
+          cacheControl: 'public, max-age=31536000',
+        },
       });
 
       const publicUrl = `https://planac-images.r2.dev/${fileName}`;
       desktopUrl = publicUrl;
       mobileUrl = publicUrl;
 
-      console.warn(`⚠️ Conversão falhou, salvando original: ${fileName}`);
+      console.log(`✅ Imagem original salva: ${fileName} (${conversion.widthOriginal}x${conversion.heightOriginal}px)`);
     }
 
     // Salvar registro no banco com URLs responsivas
@@ -409,20 +428,38 @@ media.post('/replace', async (c) => {
 
     } else {
       // ❌ Conversão falhou -> salvar original (fallback)
+      console.warn(`⚠️ Conversão WebP falhou. Salvando imagem original.`);
+      console.warn(`   Motivo: Cloudflare Image Resizing não está habilitado no bucket R2.`);
+
       const originalExt = file.name && file.name.includes('.')
-        ? file.name.split('.').pop()
+        ? file.name.split('.').pop().toLowerCase()
         : 'jpg';
 
       const fileName = `${timestamp}-${randomStr}.${originalExt}`;
+
+      // Salvar com Content-Type correto e cache headers
+      const contentTypeMap = {
+        'png': 'image/png',
+        'jpg': 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'gif': 'image/gif',
+        'webp': 'image/webp'
+      };
+
+      const contentType = contentTypeMap[originalExt] || file.type || 'application/octet-stream';
+
       await c.env.R2_IMAGES.put(fileName, arrayBuffer, {
-        httpMetadata: { contentType: file.type || 'application/octet-stream' },
+        httpMetadata: {
+          contentType,
+          cacheControl: 'public, max-age=31536000',
+        },
       });
 
       const publicUrl = `https://planac-images.r2.dev/${fileName}`;
       desktopUrl = publicUrl;
       mobileUrl = publicUrl;
 
-      console.warn(`⚠️ Conversão falhou, salvando original: ${fileName}`);
+      console.log(`✅ Imagem original salva: ${fileName} (${conversion.widthOriginal}x${conversion.heightOriginal}px)`);
     }
 
     // Deletar imagens antigas se existirem (desktop + mobile)
