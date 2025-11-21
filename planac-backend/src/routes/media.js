@@ -13,18 +13,90 @@ import { generateId } from '../utils/crypto.js';
 const media = new Hono();
 
 /**
- * Tenta converter uma imagem para WebP usando Cloudflare Image Resizing.
+ * Obtém dimensões da imagem a partir do ArrayBuffer
+ * Suporta: JPEG, PNG, GIF, WebP
+ */
+async function getImageDimensions(arrayBuffer) {
+  try {
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    // Detectar tipo de imagem pelos magic bytes
+    const isJPEG = uint8Array[0] === 0xFF && uint8Array[1] === 0xD8;
+    const isPNG = uint8Array[0] === 0x89 && uint8Array[1] === 0x50;
+    const isGIF = uint8Array[0] === 0x47 && uint8Array[1] === 0x49;
+    const isWebP = uint8Array[0] === 0x52 && uint8Array[1] === 0x49;
+
+    if (isPNG && uint8Array.length >= 24) {
+      // PNG: bytes 16-19 = width, 20-23 = height (big-endian)
+      const width = (uint8Array[16] << 24) | (uint8Array[17] << 16) | (uint8Array[18] << 8) | uint8Array[19];
+      const height = (uint8Array[20] << 24) | (uint8Array[21] << 16) | (uint8Array[22] << 8) | uint8Array[23];
+      return { width, height };
+    }
+
+    if (isGIF && uint8Array.length >= 10) {
+      // GIF: bytes 6-7 = width, 8-9 = height (little-endian)
+      const width = uint8Array[6] | (uint8Array[7] << 8);
+      const height = uint8Array[8] | (uint8Array[9] << 8);
+      return { width, height };
+    }
+
+    if (isJPEG) {
+      // JPEG: procurar por SOF0 marker (0xFFC0)
+      for (let i = 2; i < uint8Array.length - 8; i++) {
+        if (uint8Array[i] === 0xFF && uint8Array[i + 1] === 0xC0) {
+          const height = (uint8Array[i + 5] << 8) | uint8Array[i + 6];
+          const width = (uint8Array[i + 7] << 8) | uint8Array[i + 8];
+          return { width, height };
+        }
+      }
+    }
+
+    if (isWebP && uint8Array.length >= 30) {
+      // WebP: bytes 26-27 = width, 28-29 = height (little-endian, +1)
+      const width = ((uint8Array[27] << 8) | uint8Array[26]) + 1;
+      const height = ((uint8Array[29] << 8) | uint8Array[28]) + 1;
+      return { width, height };
+    }
+
+    return { width: 0, height: 0 };
+  } catch (error) {
+    console.error('Erro ao obter dimensões da imagem:', error);
+    return { width: 0, height: 0 };
+  }
+}
+
+/**
+ * Converte e redimensiona imagem para WebP usando Cloudflare Image Resizing.
+ * Gera duas versões otimizadas: desktop (máx 1920px) e mobile (máx 720px).
+ *
+ * REGRAS DE REDIMENSIONAMENTO:
+ * - Mantém proporção original (aspect ratio)
+ * - NUNCA faz upscale (aumentar imagem)
+ * - Se largura > 1920px → desktop = 1920px
+ * - Se largura <= 1920px → desktop = largura original
+ * - Se largura > 720px → mobile = 720px
+ * - Se largura <= 720px → mobile = largura original
  *
  * Retorno:
- * - { buffer: ArrayBuffer, converted: true }  -> conversão OK (buffer é WebP)
- * - { buffer: ArrayBuffer, converted: false } -> conversão falhou, usar original
+ * - { desktopBuffer, mobileBuffer, widthOriginal, heightOriginal, converted: true }
+ * - { desktopBuffer: null, mobileBuffer: null, widthOriginal, heightOriginal, converted: false }
  */
-async function convertToWebP(arrayBuffer, originalType, env) {
+async function convertToWebPResponsive(arrayBuffer, originalType, env) {
   try {
-    // Se já for WebP, não faz nada
-    if (originalType === 'image/webp') {
+    // Obter dimensões originais
+    const { width: widthOriginal, height: heightOriginal } = await getImageDimensions(arrayBuffer);
+
+    if (!widthOriginal || !heightOriginal) {
+      throw new Error('Não foi possível determinar dimensões da imagem');
+    }
+
+    // Se já for WebP E estiver nas dimensões ideais, não converte
+    if (originalType === 'image/webp' && widthOriginal <= 1920) {
       return {
-        buffer: arrayBuffer,
+        desktopBuffer: arrayBuffer,
+        mobileBuffer: widthOriginal <= 720 ? arrayBuffer : null,
+        widthOriginal,
+        heightOriginal,
         converted: false,
       };
     }
@@ -40,33 +112,56 @@ async function convertToWebP(arrayBuffer, originalType, env) {
       },
     });
 
-    // 2) Monta URL com Image Resizing para converter para WebP
-    const optimizedUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=85/${tempFileName}`;
+    // 2) Calcular larguras ideais (sem upscale)
+    const desktopWidth = Math.min(widthOriginal, 1920);
+    const mobileWidth = Math.min(widthOriginal, 720);
 
-    const response = await fetch(optimizedUrl);
-    if (!response.ok) {
-      throw new Error(`Image Resizing failed with status ${response.status}`);
+    // 3) Gerar versão DESKTOP (máx 1920px)
+    const desktopUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=85,width=${desktopWidth},fit=scale-down/${tempFileName}`;
+    const desktopResponse = await fetch(desktopUrl);
+
+    if (!desktopResponse.ok) {
+      throw new Error(`Image Resizing (desktop) failed with status ${desktopResponse.status}`);
     }
 
-    const webpBuffer = await response.arrayBuffer();
+    const desktopBuffer = await desktopResponse.arrayBuffer();
 
-    // 3) Apaga o arquivo temporário original
+    // 4) Gerar versão MOBILE (máx 720px)
+    const mobileUrl = `https://planac-images.r2.dev/cdn-cgi/image/format=webp,quality=85,width=${mobileWidth},fit=scale-down/${tempFileName}`;
+    const mobileResponse = await fetch(mobileUrl);
+
+    if (!mobileResponse.ok) {
+      throw new Error(`Image Resizing (mobile) failed with status ${mobileResponse.status}`);
+    }
+
+    const mobileBuffer = await mobileResponse.arrayBuffer();
+
+    // 5) Apagar arquivo temporário
     try {
       await env.R2_IMAGES.delete(tempFileName);
     } catch (deleteError) {
       console.warn('Não foi possível deletar arquivo temporário:', deleteError);
     }
 
-    // 4) Retorna buffer já convertido
+    // 6) Retornar buffers convertidos
     return {
-      buffer: webpBuffer,
+      desktopBuffer,
+      mobileBuffer,
+      widthOriginal,
+      heightOriginal,
       converted: true,
     };
   } catch (error) {
-    console.error('Erro ao converter imagem para WebP:', error);
-    // Se der erro, devolve o original para não quebrar nada
+    console.error('Erro ao converter imagem para WebP responsivo:', error);
+
+    // Fallback: tentar obter dimensões mesmo que conversão falhe
+    const { width, height } = await getImageDimensions(arrayBuffer);
+
     return {
-      buffer: arrayBuffer,
+      desktopBuffer: null,
+      mobileBuffer: null,
+      widthOriginal: width || 0,
+      heightOriginal: height || 0,
       converted: false,
     };
   }
@@ -110,69 +205,87 @@ media.post('/upload', async (c) => {
       return c.json({ error: 'Arquivo muito grande. Máximo: 10MB' }, 400);
     }
 
-    // Converter para WebP (se possível)
+    // Converter para WebP responsivo (desktop + mobile)
     const arrayBuffer = await file.arrayBuffer();
-    const conversion = await convertToWebP(arrayBuffer, file.type, c.env);
+    const conversion = await convertToWebPResponsive(arrayBuffer, file.type, c.env);
 
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);
 
-    let extension;
-    let contentType;
-    let bufferToSave;
+    let desktopUrl = null;
+    let mobileUrl = null;
 
-    if (conversion.converted) {
-      // Conversão OK -> salva como WebP de verdade
-      extension = 'webp';
-      contentType = 'image/webp';
-      bufferToSave = conversion.buffer;
+    if (conversion.converted && conversion.desktopBuffer && conversion.mobileBuffer) {
+      // ✅ Conversão OK -> salvar versões desktop e mobile como WebP
+
+      // Salvar versão DESKTOP
+      const desktopFileName = `${timestamp}-${randomStr}-desktop.webp`;
+      await c.env.R2_IMAGES.put(desktopFileName, conversion.desktopBuffer, {
+        httpMetadata: { contentType: 'image/webp' },
+      });
+      desktopUrl = `https://planac-images.r2.dev/${desktopFileName}`;
+
+      // Salvar versão MOBILE
+      const mobileFileName = `${timestamp}-${randomStr}-mobile.webp`;
+      await c.env.R2_IMAGES.put(mobileFileName, conversion.mobileBuffer, {
+        httpMetadata: { contentType: 'image/webp' },
+      });
+      mobileUrl = `https://planac-images.r2.dev/${mobileFileName}`;
+
+      console.log(`✅ Imagem convertida: ${conversion.widthOriginal}x${conversion.heightOriginal} -> desktop.webp + mobile.webp`);
+
     } else {
-      // Conversão falhou ou não está disponível -> salva original
+      // ❌ Conversão falhou -> salvar original (fallback)
       const originalExt = file.name && file.name.includes('.')
         ? file.name.split('.').pop()
-        : 'bin';
+        : 'jpg';
 
-      extension = originalExt;
-      contentType = file.type || 'application/octet-stream';
-      bufferToSave = arrayBuffer;
+      const fileName = `${timestamp}-${randomStr}.${originalExt}`;
+      await c.env.R2_IMAGES.put(fileName, arrayBuffer, {
+        httpMetadata: { contentType: file.type || 'application/octet-stream' },
+      });
+
+      const publicUrl = `https://planac-images.r2.dev/${fileName}`;
+      desktopUrl = publicUrl;
+      mobileUrl = publicUrl;
+
+      console.warn(`⚠️ Conversão falhou, salvando original: ${fileName}`);
     }
 
-    const fileName = `${timestamp}-${randomStr}.${extension}`;
-
-    await c.env.R2_IMAGES.put(fileName, bufferToSave, {
-      httpMetadata: {
-        contentType,
-      },
-    });
-
-    const publicUrl = `https://planac-images.r2.dev/${fileName}`;
-
-    // Salvar registro no banco
+    // Salvar registro no banco com URLs responsivas
     const mediaId = generateId();
 
     await c.env.DB.prepare(`
       INSERT INTO media (
         id, nome_original, nome_arquivo, tipo, mime_type, tamanho,
-        url, uploaded_by_id, created_at
-      ) VALUES (?, ?, ?, 'IMAGEM', ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        url, desktop_url, mobile_url, width_original, height_original,
+        uploaded_by_id, created_at
+      ) VALUES (?, ?, ?, 'IMAGEM', ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       mediaId,
       file.name,
-      fileName,
+      `${timestamp}-${randomStr}`, // base name sem extensão
       file.type,
       file.size,
-      publicUrl,
+      desktopUrl, // url principal = desktop
+      desktopUrl,
+      mobileUrl,
+      conversion.widthOriginal || 0,
+      conversion.heightOriginal || 0,
       payload.id
     ).run();
 
     return c.json({
       success: true,
-      message: 'Imagem enviada com sucesso',
+      message: 'Imagem enviada e otimizada com sucesso',
       data: {
         id: mediaId,
-        url: publicUrl,
-        nome: fileName,
-        tamanho: file.size,
+        url: desktopUrl,
+        desktop_url: desktopUrl,
+        mobile_url: mobileUrl,
+        width_original: conversion.widthOriginal,
+        height_original: conversion.heightOriginal,
+        converted: conversion.converted,
       },
     }, 201);
 
@@ -223,7 +336,8 @@ media.post('/replace', async (c) => {
     const payload = c.get('jwtPayload');
     const formData = await c.req.formData();
     const file = formData.get('file');
-    const oldUrl = formData.get('oldUrl'); // URL da imagem antiga
+    const oldUrl = formData.get('oldUrl'); // URL da imagem antiga (desktop)
+    const oldMobileUrl = formData.get('oldMobileUrl'); // URL da versão mobile antiga
 
     if (!file || !(file instanceof File)) {
       return c.json({ error: 'Arquivo não fornecido' }, 400);
@@ -241,50 +355,77 @@ media.post('/replace', async (c) => {
       return c.json({ error: 'Arquivo muito grande. Máximo: 10MB' }, 400);
     }
 
-    // Converter para WebP (se possível)
+    // Converter para WebP responsivo (desktop + mobile)
     const arrayBuffer = await file.arrayBuffer();
-    const conversion = await convertToWebP(arrayBuffer, file.type, c.env);
+    const conversion = await convertToWebPResponsive(arrayBuffer, file.type, c.env);
 
     const timestamp = Date.now();
     const randomStr = Math.random().toString(36).substring(7);
 
-    let extension;
-    let contentType;
-    let bufferToSave;
+    let desktopUrl = null;
+    let mobileUrl = null;
+    let filesDeleted = 0;
 
-    if (conversion.converted) {
-      extension = 'webp';
-      contentType = 'image/webp';
-      bufferToSave = conversion.buffer;
+    if (conversion.converted && conversion.desktopBuffer && conversion.mobileBuffer) {
+      // ✅ Conversão OK -> salvar versões desktop e mobile como WebP
+
+      // Salvar versão DESKTOP
+      const desktopFileName = `${timestamp}-${randomStr}-desktop.webp`;
+      await c.env.R2_IMAGES.put(desktopFileName, conversion.desktopBuffer, {
+        httpMetadata: { contentType: 'image/webp' },
+      });
+      desktopUrl = `https://planac-images.r2.dev/${desktopFileName}`;
+
+      // Salvar versão MOBILE
+      const mobileFileName = `${timestamp}-${randomStr}-mobile.webp`;
+      await c.env.R2_IMAGES.put(mobileFileName, conversion.mobileBuffer, {
+        httpMetadata: { contentType: 'image/webp' },
+      });
+      mobileUrl = `https://planac-images.r2.dev/${mobileFileName}`;
+
+      console.log(`✅ Imagem convertida: ${conversion.widthOriginal}x${conversion.heightOriginal} -> desktop.webp + mobile.webp`);
+
     } else {
+      // ❌ Conversão falhou -> salvar original (fallback)
       const originalExt = file.name && file.name.includes('.')
         ? file.name.split('.').pop()
-        : 'bin';
+        : 'jpg';
 
-      extension = originalExt;
-      contentType = file.type || 'application/octet-stream';
-      bufferToSave = arrayBuffer;
+      const fileName = `${timestamp}-${randomStr}.${originalExt}`;
+      await c.env.R2_IMAGES.put(fileName, arrayBuffer, {
+        httpMetadata: { contentType: file.type || 'application/octet-stream' },
+      });
+
+      const publicUrl = `https://planac-images.r2.dev/${fileName}`;
+      desktopUrl = publicUrl;
+      mobileUrl = publicUrl;
+
+      console.warn(`⚠️ Conversão falhou, salvando original: ${fileName}`);
     }
 
-    const fileName = `${timestamp}-${randomStr}.${extension}`;
-
-    await c.env.R2_IMAGES.put(fileName, bufferToSave, {
-      httpMetadata: {
-        contentType,
-      },
-    });
-
-    const publicUrl = `https://planac-images.r2.dev/${fileName}`;
-
-    // Deletar imagem antiga se existir
+    // Deletar imagens antigas se existirem (desktop + mobile)
     if (oldUrl) {
       const oldFileName = extractFileNameFromUrl(oldUrl);
       if (oldFileName) {
         try {
           await c.env.R2_IMAGES.delete(oldFileName);
-          console.log(`✅ Imagem antiga deletada: ${oldFileName}`);
+          filesDeleted++;
+          console.log(`✅ Imagem desktop antiga deletada: ${oldFileName}`);
         } catch (error) {
-          console.warn(`⚠️ Não foi possível deletar imagem antiga: ${oldFileName}`, error);
+          console.warn(`⚠️ Não foi possível deletar desktop antiga: ${oldFileName}`, error);
+        }
+      }
+    }
+
+    if (oldMobileUrl && oldMobileUrl !== oldUrl) {
+      const oldMobileFileName = extractFileNameFromUrl(oldMobileUrl);
+      if (oldMobileFileName) {
+        try {
+          await c.env.R2_IMAGES.delete(oldMobileFileName);
+          filesDeleted++;
+          console.log(`✅ Imagem mobile antiga deletada: ${oldMobileFileName}`);
+        } catch (error) {
+          console.warn(`⚠️ Não foi possível deletar mobile antiga: ${oldMobileFileName}`, error);
         }
       }
     }
@@ -295,27 +436,35 @@ media.post('/replace', async (c) => {
     await c.env.DB.prepare(`
       INSERT INTO media (
         id, nome_original, nome_arquivo, tipo, mime_type, tamanho,
-        url, uploaded_by_id, created_at
-      ) VALUES (?, ?, ?, 'IMAGEM', ?, ?, ?, ?, CURRENT_TIMESTAMP)
+        url, desktop_url, mobile_url, width_original, height_original,
+        uploaded_by_id, created_at
+      ) VALUES (?, ?, ?, 'IMAGEM', ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)
     `).bind(
       mediaId,
       file.name,
-      fileName,
-      file.type, // Salva o mime_type REAL no banco
+      `${timestamp}-${randomStr}`, // base name sem extensão
+      file.type,
       file.size,
-      publicUrl,
+      desktopUrl, // url principal = desktop
+      desktopUrl,
+      mobileUrl,
+      conversion.widthOriginal || 0,
+      conversion.heightOriginal || 0,
       payload.id
     ).run();
 
     return c.json({
       success: true,
-      message: 'Imagem substituída com sucesso',
+      message: 'Imagem substituída e otimizada com sucesso',
       data: {
         id: mediaId,
-        url: publicUrl,
-        nome: fileName,
-        tamanho: file.size,
-        oldFileDeleted: !!oldUrl,
+        url: desktopUrl,
+        desktop_url: desktopUrl,
+        mobile_url: mobileUrl,
+        width_original: conversion.widthOriginal,
+        height_original: conversion.heightOriginal,
+        converted: conversion.converted,
+        oldFilesDeleted: filesDeleted,
       },
     }, 201);
 

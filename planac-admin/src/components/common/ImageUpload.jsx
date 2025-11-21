@@ -1,12 +1,25 @@
 import { useState, useRef } from 'react';
-import { Upload, X, Loader2, Image as ImageIcon } from 'lucide-react';
+import { Upload, X, Loader2, Monitor, Smartphone, Image as ImageIcon } from 'lucide-react';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
 
-export default function ImageUpload({ value, onChange, label = 'Imagem', className = '' }) {
+export default function ImageUpload({
+  value,
+  onChange,
+  label = 'Imagem',
+  className = '',
+  // Novos props para suportar versões responsivas
+  onDataChange, // Callback que recebe { desktop_url, mobile_url, width, height }
+}) {
   const [uploading, setUploading] = useState(false);
   const [preview, setPreview] = useState(value || '');
+  const [imageData, setImageData] = useState({
+    desktop_url: value || '',
+    mobile_url: value || '',
+    width_original: 0,
+    height_original: 0,
+  });
   const fileInputRef = useRef(null);
 
   const handleFileSelect = async (e) => {
@@ -39,12 +52,16 @@ export default function ImageUpload({ value, onChange, label = 'Imagem', classNa
       const formData = new FormData();
       formData.append('file', file);
 
-      // Se já existe uma imagem, enviar URL antiga para ser deletada
-      const oldImageUrl = value;
-      const endpoint = oldImageUrl ? '/api/admin/media/replace' : '/api/admin/media/upload';
+      // Se já existe uma imagem, enviar URLs antigas para serem deletadas
+      const oldDesktopUrl = imageData.desktop_url || value;
+      const oldMobileUrl = imageData.mobile_url;
+      const endpoint = oldDesktopUrl ? '/api/admin/media/replace' : '/api/admin/media/upload';
 
-      if (oldImageUrl) {
-        formData.append('oldUrl', oldImageUrl);
+      if (oldDesktopUrl) {
+        formData.append('oldUrl', oldDesktopUrl);
+      }
+      if (oldMobileUrl && oldMobileUrl !== oldDesktopUrl) {
+        formData.append('oldMobileUrl', oldMobileUrl);
       }
 
       const response = await axios.post(`${API_URL}${endpoint}`, formData, {
@@ -54,15 +71,35 @@ export default function ImageUpload({ value, onChange, label = 'Imagem', classNa
       });
 
       if (response.data.success) {
-        const imageUrl = response.data.data.url;
-        setPreview(imageUrl);
-        onChange(imageUrl);
+        const data = response.data.data;
+
+        // Atualizar estado local
+        const newImageData = {
+          desktop_url: data.desktop_url || data.url,
+          mobile_url: data.mobile_url || data.url,
+          width_original: data.width_original || 0,
+          height_original: data.height_original || 0,
+        };
+
+        setImageData(newImageData);
+        setPreview(newImageData.desktop_url);
+
+        // Compatibilidade: onChange mantém comportamento antigo (URL principal)
+        onChange(newImageData.desktop_url);
+
+        // Novo callback para dados completos
+        if (onDataChange) {
+          onDataChange(newImageData);
+        }
 
         // Log de sucesso
-        if (oldImageUrl && response.data.data.oldFileDeleted) {
-          console.log('✅ Imagem antiga deletada e nova imagem salva');
-        } else {
-          console.log('✅ Nova imagem salva');
+        console.log(`✅ Imagem otimizada: ${newImageData.width_original}x${newImageData.height_original}px`);
+        console.log(`   Desktop: ${newImageData.desktop_url}`);
+        console.log(`   Mobile: ${newImageData.mobile_url}`);
+        console.log(`   Conversão: ${data.converted ? 'WebP ✓' : 'Original'}`);
+
+        if (data.oldFilesDeleted > 0) {
+          console.log(`   Arquivos antigos deletados: ${data.oldFilesDeleted}`);
         }
       } else {
         alert('Erro ao fazer upload da imagem');
@@ -144,13 +181,32 @@ export default function ImageUpload({ value, onChange, label = 'Imagem', classNa
             JPG, PNG, WebP ou GIF. Máximo 10MB.
             <br />
             <span className="text-green-600 font-semibold">
-              ✓ Tenta converter automaticamente para WebP otimizado
+              ✓ Converte automaticamente para WebP otimizado
             </span>
             <br />
             <span className="text-blue-600 text-[11px]">
-              Quando a conversão não estiver disponível, o arquivo é salvo no formato original
+              Gera versões Desktop (máx 1920px) e Mobile (máx 720px) mantendo proporção
             </span>
           </p>
+
+          {/* Info sobre versões geradas */}
+          {imageData.width_original > 0 && (
+            <div className="mt-2 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <p className="text-xs font-medium text-gray-700 mb-2">
+                📊 Dimensões originais: {imageData.width_original}x{imageData.height_original}px
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="flex items-center gap-1 text-xs text-gray-600">
+                  <Monitor className="w-3 h-3" />
+                  <span>Desktop (≤1920px)</span>
+                </div>
+                <div className="flex items-center gap-1 text-xs text-gray-600">
+                  <Smartphone className="w-3 h-3" />
+                  <span>Mobile (≤720px)</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* URL manual input */}

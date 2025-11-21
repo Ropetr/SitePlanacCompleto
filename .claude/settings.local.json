@@ -58,7 +58,14 @@
       "Read(//c/**)",
       "Bash(node remove-duplicate-styles.js:*)",
       "Bash(node add-css-version.js:*)",
-      "Bash(node list-products.js:*)"
+      "Bash(node list-products.js:*)",
+      "Bash(node sync-pages-from-db.js:*)",
+      "Bash(git reset:*)",
+      "Bash(git restore:*)",
+      "Bash(for file in forro-de-gesso-modular.html planac-gesso-modular.html forro-de-pvc-modular.html forrovid-page.html forro-vinilico-revid.html isopor-page.html mineral-page.html pvc-amadeirado-page.html pvc-branco-page.html pvc-modular-page.html la-rocha-page.html la-vidro-page.html la-pet-page.html manta-termica.html kit-porta-correr.html rodapes.html)",
+      "Bash(do echo -n \"$file: \")",
+      "Bash(done)",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": []
